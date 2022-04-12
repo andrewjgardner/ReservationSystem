@@ -350,5 +350,5 @@ MigrationBackup/
 .ionide/
 
 
-/ReservationSystemDemo2/Migrations
-/ReservationSystemDemo2/appsettings.json
+Migrations/
+appsettings.json
