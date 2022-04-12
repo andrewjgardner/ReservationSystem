@@ -14,6 +14,9 @@ namespace ReservationSystem.Data
             SeedArea();
             SeedTables();
             SeedSittingType();
+            SeedReservation();
+            SeedReservationOrigin();
+
         }
         private void SeedRestaurant()
         {
@@ -252,5 +255,76 @@ namespace ReservationSystem.Data
                     Description = "Dinner"
                 });
         }
+
+        private void SeedReservation()
+        {
+            _modelBuilder.Entity<Reservation>()
+                .HasData(new Reservation
+                {
+                    Id = 1,
+                    StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
+                    NoOfPeople = 3,
+                    SittingId = 1,
+                    ReservationStatusId = 1,
+                    ReservationOriginId = 1,
+                    CustomerId = 1,
+                }, new Reservation
+                {
+                    Id = 2,
+                    StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
+                    NoOfPeople = 4,
+                    SittingId = 2,
+                    ReservationStatusId = 2,
+                    ReservationOriginId = 2,
+                    CustomerId = 2,
+                }, new Reservation
+                {
+                    Id = 3,
+                    StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
+                    NoOfPeople = 5,
+                    SittingId = 3,
+                    ReservationStatusId = 3,
+                    ReservationOriginId = 3,
+                    CustomerId = 3,
+                });
+        }
+
+        private void SeedReservationOrigin()
+        {
+            _modelBuilder.Entity<ReservationOrigin>()
+                .HasData(new ReservationOrigin
+                {
+                    Id = 1,
+                    Description = "Online"
+                }, new ReservationOrigin
+                {
+                    Id = 2,
+                    Description = "Phone"
+                }, new ReservationOrigin
+                {
+                    Id = 3,
+                    Description = "Walk-in"
+                });
+        }
+
+        private void SeedReservationStatus()
+        {
+            _modelBuilder.Entity<ReservationStatus>()
+                .HasData(new ReservationStatus
+                {
+                    Id = 1,
+                    Description = "Pending"
+                }, new ReservationStatus
+                {
+                    Id = 2,
+                    Description = "Confirmed"
+                }, new ReservationStatus
+                {
+                    Id = 3,
+                    Description = "Cancelled"
+                });
+        }
+
+
     }
 }
