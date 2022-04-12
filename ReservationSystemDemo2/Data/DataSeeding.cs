@@ -16,6 +16,10 @@ namespace ReservationSystem.Data
             SeedSittingType();
             SeedReservation();
             SeedReservationOrigin();
+            SeedCustomer();
+            SeedEmployee();
+            SeedPerson();
+            SeedReservationStatus();
 
         }
         private void SeedRestaurant()
@@ -324,6 +328,83 @@ namespace ReservationSystem.Data
                     Description = "Cancelled"
                 });
         }
+
+        private void SeedPerson()
+        {
+            _modelBuilder.Entity<Person>()
+                .HasData(new Person
+                {
+                    Id = 1,
+                    FirstName = "Damien",
+                    LastName = "Antonietti",
+                    PhoneNumber = "015723892",
+                    RestaurantId = 1
+                    
+                }, new Person
+                {
+                    Id = 2,
+                    FirstName = "Andrew",
+                    LastName = "Gardner",
+                    PhoneNumber = "015656165",
+                    RestaurantId = 1
+                }, new Person
+                {
+                    Id = 3,
+                    FirstName = "Brendan",
+                    LastName = "Chappell",
+                    PhoneNumber = "015723832",
+                    RestaurantId = 1
+                }, new Person
+                {
+                    Id = 4,
+                    FirstName = "Conor",
+                    LastName = "O'Neill",
+                    PhoneNumber = "015725832",
+                    RestaurantId = 1
+                });
+        }
+        
+        private void SeedEmployee()
+        {
+            _modelBuilder.Entity<Employee>()
+                .HasData(new Employee
+                {
+                    Id = 1,
+                }, new Employee
+                {
+                    Id = 2,
+                }, new Employee
+                {
+                    Id = 3,
+                }, new Employee
+                {
+                    Id = 4,
+                });
+        }
+
+        private void SeedCustomer()
+        {
+            _modelBuilder.Entity<Customer>()
+                .HasData(new Customer
+                {
+                    Id = 1,
+                    Email = "d.d@d.com"
+                }, new Customer
+                {
+                    Id = 2,
+                    Email = "c.c@c.com"
+                }, new Customer
+                {
+                    Id = 3,
+                    Email = "b.b@b.com"
+
+                }, new Customer
+                {
+                    Id = 4,
+                    Email = "a.a@a.com"
+                });
+        }
+        
 
 
     }
