@@ -18,7 +18,7 @@
         public Customer Customer { get; set; }
         public int CustomerId { get; set; }
 
-        public List<Table> Tables { get; set; } = new List<Table>();
+        public List<ReservationTable> ReservationTables { get; set; } = new List<ReservationTable>();
 
     }
 }
