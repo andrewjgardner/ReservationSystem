@@ -12,20 +12,7 @@ namespace ReservationSystem.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
-
-
-
-
-            builder.Entity<Table>().HasOne(a => a.Area).WithMany(a => a.Tables).OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Reservation>()
-                .HasMany(r => r.Tables).WithMany(t => t.Reservations)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ReservationTables",
-                    rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
-                    rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
-
+            _ = new ApplicationModelBuilder(builder);
             base.OnModelCreating(builder);
         }
 

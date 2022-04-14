@@ -9,13 +9,19 @@ namespace ReservationSystem.Data
         public ApplicationModelBuilder(ModelBuilder modelBuilder)
         {
             _modelBuilder = modelBuilder;
+            ModelArea();
+            ModelPerson();
+            ModelRestaurant();
+            ModelSitting();
+            ModelTable();
+            ModelReservation();
         }
-        
+
         private void ModelArea()
         {
             _modelBuilder.Entity<Area>().HasOne(a => a.Restaurant).WithMany(r => r.Areas).OnDelete(DeleteBehavior.Restrict);
         }
-        
+
         private void ModelPerson()
         {
             _modelBuilder.Entity<Person>().HasOne(p => p.Restaurant).WithMany(r => r.People).OnDelete(DeleteBehavior.Restrict);
@@ -33,6 +39,21 @@ namespace ReservationSystem.Data
         {
             _modelBuilder.Entity<Sitting>().HasOne(s => s.Restaurant).WithMany(r => r.Sittings).OnDelete(DeleteBehavior.Restrict);
             _modelBuilder.Entity<Sitting>().HasOne(s => s.SittingType).WithMany(st => st.Sittings).OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ModelTable()
+        {
+            _modelBuilder.Entity<Table>().HasOne(a => a.Area).WithMany(a => a.Tables).OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void ModelReservation()
+        {
+            _modelBuilder.Entity<Reservation>()
+                .HasMany(r => r.Tables).WithMany(t => t.Reservations)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ReservationTables",
+                    rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
+                    rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
         }
     }
 }
