@@ -16,6 +16,7 @@ namespace ReservationSystem.Data
             SeedSittingType();
             SeedSitting();
             SeedReservation();
+            SeedReservationTable();
             SeedReservationOrigin();
             SeedCustomer();
             SeedEmployee();
@@ -249,15 +250,18 @@ namespace ReservationSystem.Data
                 .HasData(new SittingType
                 {
                     Id = 1,
-                    Description = "Breakfast"
+                    Description = "Breakfast",
+                    ResDuration = 45
                 }, new SittingType
                 {
                     Id = 2,
-                    Description = "Lunch"
+                    Description = "Lunch",
+                    ResDuration = 60
                 }, new SittingType
                 {
                     Id = 3,
-                    Description = "Dinner"
+                    Description = "Dinner",
+                    ResDuration = 90
                 });
         }
 
@@ -270,21 +274,28 @@ namespace ReservationSystem.Data
                     Title = "Breakfast",
                     StartTime = new DateTime(2020, 04, 13, 7, 0, 0),
                     EndTime = new DateTime(2020, 04, 13, 11, 30, 0),
-                    Capacity = 100
+                    Capacity = 100,
+                    RestaurantId = 1,
+                    SittingTypeId = 1,
+                    ResDuration = 45
                 }, new Sitting
                 {
                     Id = 2,
                     Title = "Lunch",
                     StartTime = new DateTime(2020, 04, 13, 12, 0, 0),
                     EndTime = new DateTime(2020, 04, 13, 15, 30, 0),
-                    Capacity = 100
+                    Capacity = 100,
+                    RestaurantId = 1,
+                    SittingTypeId = 2
                 }, new Sitting
                 {
                     Id = 3,
                     Title = "Dinner",
                     StartTime = new DateTime(2020, 04, 13, 18, 0, 0),
                     EndTime = new DateTime(2020, 04, 13, 21, 30, 0),
-                    Capacity = 100
+                    Capacity = 100,
+                    RestaurantId = 1,
+                    SittingTypeId = 3
                 });
         }
 
@@ -319,6 +330,36 @@ namespace ReservationSystem.Data
                     ReservationOriginId = 3,
                     CustomerId = 3,
                 });
+        }
+
+        private void SeedReservationTable()
+        {
+            _modelBuilder.Entity<ReservationTable>()
+                 .HasData(new ReservationTable
+                 {
+                     ReservationId = 1,
+                     TableId = 3
+                 }, new ReservationTable
+                 {
+                     ReservationId = 1,
+                     TableId = 4
+                 }, new ReservationTable
+                 {
+                     ReservationId = 2,
+                     TableId = 25
+                 }, new ReservationTable
+                 {
+                     ReservationId = 3,
+                     TableId = 13
+                 }, new ReservationTable
+                 {
+                     ReservationId = 3,
+                     TableId = 14
+                 }, new ReservationTable
+                 {
+                     ReservationId = 3,
+                     TableId = 15
+                 });
         }
 
         private void SeedReservationOrigin()
@@ -367,46 +408,66 @@ namespace ReservationSystem.Data
                     LastName = "Antonietti",
                     PhoneNumber = "015723892",
                     RestaurantId = 1
-                    
+
                 }, new Person
                 {
-                    Id = 2,
+                    Id = 4,
                     FirstName = "Andrew",
                     LastName = "Gardner",
                     PhoneNumber = "015656165",
                     RestaurantId = 1
                 }, new Person
                 {
-                    Id = 3,
+                    Id = 7,
                     FirstName = "Brendan",
                     LastName = "Chappell",
                     PhoneNumber = "015723832",
                     RestaurantId = 1
                 }, new Person
                 {
-                    Id = 4,
+                    Id = 9,
                     FirstName = "Conor",
                     LastName = "O'Neill",
                     PhoneNumber = "015725832",
                     RestaurantId = 1
                 });
         }
-        
+
         private void SeedEmployee()
         {
             _modelBuilder.Entity<Employee>()
                 .HasData(new Employee
                 {
-                    Id = 1,
-                }, new Employee
-                {
                     Id = 2,
+                    EmployeeId = 1,
+                    FirstName = "Kaleena",
+                    LastName = "Byrne",
+                    PhoneNumber = "023457123",
+                    RestaurantId = 1
                 }, new Employee
                 {
                     Id = 3,
+                    EmployeeId = 2,
+                    FirstName = "Kathleen",
+                    LastName = "Smith",
+                    PhoneNumber = "0298833412",
+                    RestaurantId = 1
                 }, new Employee
                 {
-                    Id = 4,
+                    Id = 10,
+                    EmployeeId = 3,
+                    FirstName = "Jim",
+                    LastName = "Jones",
+                    PhoneNumber = "023465123",
+                    RestaurantId = 1
+                }, new Employee
+                {
+                    Id = 11,
+                    EmployeeId = 4,
+                    FirstName = "John",
+                    LastName = "Doe",
+                    PhoneNumber = "023465153",
+                    RestaurantId = 1
                 });
         }
 
@@ -415,24 +476,40 @@ namespace ReservationSystem.Data
             _modelBuilder.Entity<Customer>()
                 .HasData(new Customer
                 {
-                    Id = 1,
+                    Id = 5,
+                    FirstName = "Emily",
+                    LastName = "Smith",
+                    PhoneNumber = "023462343",
+                    RestaurantId = 1,
                     Email = "d.d@d.com"
                 }, new Customer
                 {
-                    Id = 2,
+                    Id = 6,
+                    FirstName = "Frederique",
+                    LastName = "Corbyn",
+                    PhoneNumber = "0232341789",
+                    RestaurantId = 1,
                     Email = "c.c@c.com"
                 }, new Customer
                 {
-                    Id = 3,
+                    Id = 8,
+                    FirstName = "John",
+                    LastName = "Smith",
+                    PhoneNumber = "3644253462",
+                    RestaurantId = 1,
                     Email = "b.b@b.com"
 
                 }, new Customer
                 {
-                    Id = 4,
+                    Id = 12,
+                    FirstName = "William",
+                    LastName = "Kemshell",
+                    PhoneNumber = "023456789",
+                    RestaurantId = 1,
                     Email = "a.a@a.com"
                 });
         }
-        
+
 
 
     }

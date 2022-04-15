@@ -2,6 +2,7 @@
 {
     public class Employee : Person
     {
-        public int Id { get; set; }
+        //Added placeholder property so employee would have a unique column
+        public int EmployeeId { get; set; }
     }
 }
