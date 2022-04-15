@@ -26,9 +26,9 @@ namespace ReservationSystem.Controllers
             List<SittingsVM> sittingsVM = sittings.Select(s => new SittingsVM
             {
                 SittingID = s.Id,
-                Date = s.StartTime.ToShortDateString(),
-                StartTime = s.StartTime.ToShortTimeString(),
-                EndTime = s.EndTime.ToShortTimeString(),
+                Date = s.StartTime,
+                StartTime = s.StartTime,
+                EndTime = s.EndTime,
                 Title = s.Title
             }).ToList();
 
