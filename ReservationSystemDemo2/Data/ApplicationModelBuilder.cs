@@ -49,6 +49,8 @@ namespace ReservationSystem.Data
 
         private void ModelReservation()
         {
+            //Model building for database only entity 
+
             //_modelBuilder.Entity<Reservation>()
             //    .HasMany(r => r.Tables).WithMany(t => t.Reservations)
             //    .UsingEntity<Dictionary<string, object>>(
