@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ReservationSystem.Models.Reservation.SittingsVM>
+
+@{
+	ViewData["Title"] = "Sittings";
+}
+
+<div class="container">
+
+	<h1>Sittings</h1>
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Date)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.StartTime)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.EndTime)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Title)
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Date)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.StartTime)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.EndTime)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Title)
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
