@@ -1,54 +1,40 @@
+using Microsoft.AspNetCore.Mvc;
+using ReservationSystem.Controllers;
 using ReservationSystem.Data;
+using ReservationSystem.Models.Reservation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ReservationSystemTests;
 
-public class ReservationControllerTests
+public class ReservationControllerTests : IClassFixture<TestDatabaseFixture>
 {
+
+    public ReservationControllerTests(TestDatabaseFixture fixture)
+    {
+        Fixture = fixture;
+    }
+
+    public TestDatabaseFixture Fixture { get; }
+
     [Fact]
-    public void Sittings_ReturnsAViewResult_WithAListOfSittings()
+    public async void GetSitting()
     {
         //Arrange
-        var mockSittings = GetTestSittings();
-        
+        using var context = Fixture.CreateContext();
+        var controller = new ReservationController(context);
 
         //Act
+        var result = await controller.Sittings();
 
+        //Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        var model = Assert.IsAssignableFrom<IEnumerable<SittingsVM>>(
+            viewResult.ViewData.Model);
+        Assert.Equal(3, model.Count());
     }
 
 
-    private List<Sitting> GetTestSittings()
-    {
-        var sittings = new List<Sitting>();
-        sittings.Add(new Sitting
-        {
-            Id = 1,
-            Title = "Test One",
-            StartTime = new DateTime(2022, 05, 20, 8, 30, 00),
-            EndTime = new DateTime(2022, 05, 20, 12, 00, 0),
-            Capacity = 100,
-            ResDuration = 45
-        });
-        sittings.Add(new Sitting
-        {
-            Id = 2,
-            Title = "Test Two",
-            StartTime = new DateTime(2022, 05, 20, 13, 30, 00),
-            EndTime = new DateTime(2022, 05, 20, 16, 00, 0),
-            Capacity = 100,
-            ResDuration = 60
-        });
-        sittings.Add(new Sitting
-        {
-            Id = 3,
-            Title = "Test Three",
-            StartTime = new DateTime(2022, 05, 20, 18, 00, 00),
-            EndTime = new DateTime(2022, 05, 20, 22, 00, 00),
-            Capacity = 110,
-            ResDuration = 90
-        });
-        return sittings;
-    }
 }
