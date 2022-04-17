@@ -7,7 +7,7 @@ namespace ReservationSystem.Data
     {
         private readonly Action<ModelBuilder> _dataConfigurer;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, Action<ModelBuilder> dataConfigurer = null )
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, Action<ModelBuilder> dataConfigurer = null)
             : base(options)
         {
             _dataConfigurer = dataConfigurer;
@@ -16,7 +16,7 @@ namespace ReservationSystem.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             _ = new ApplicationModelBuilder(builder);
-            
+
             if (_dataConfigurer is not null)
             {
                 _dataConfigurer(builder);

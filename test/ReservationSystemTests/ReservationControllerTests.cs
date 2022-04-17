@@ -20,7 +20,7 @@ public class ReservationControllerTests : IClassFixture<TestDatabaseFixture>
     public TestDatabaseFixture Fixture { get; }
 
     [Fact]
-    public async void GetSitting()
+    public async void Sitting_ReturnsAViewResult_WithAListOfSittings()
     {
         //Arrange
         using var context = Fixture.CreateContext();
@@ -33,7 +33,7 @@ public class ReservationControllerTests : IClassFixture<TestDatabaseFixture>
         var viewResult = Assert.IsType<ViewResult>(result);
         var model = Assert.IsAssignableFrom<IEnumerable<SittingsVM>>(
             viewResult.ViewData.Model);
-        Assert.Equal(3, model.Count());
+        Assert.Equal(4, model.Count());
     }
 
 

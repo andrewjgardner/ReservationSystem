@@ -298,6 +298,15 @@ namespace ReservationSystemTests
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 3
+                }, new Sitting
+                {
+                    Id = 4,
+                    Title = "Dinner",
+                    StartTime = new DateTime(2020, 04, 13, 18, 0, 0),
+                    EndTime = new DateTime(2020, 04, 13, 21, 30, 0),
+                    Capacity = 100,
+                    RestaurantId = 1,
+                    SittingTypeId = 3
                 });
         }
 
