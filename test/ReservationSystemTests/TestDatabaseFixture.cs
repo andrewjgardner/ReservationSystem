@@ -12,11 +12,17 @@ namespace ReservationSystemTests
     {
         private const string ConnectionString = @"Server=(localdb)\mssqllocaldb;Database=ReservationSystemTests;Trusted_Connection=True";
 
+        private readonly DbContextOptions<ApplicationDbContext> _contextOptions;
+
         private static readonly object _lock = new();
         private static bool _databaseInitialized;
 
         public TestDatabaseFixture()
         {
+            _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlServer(ConnectionString)
+                .Options;
+
             lock (_lock)
             {
                 if (!_databaseInitialized)
@@ -33,10 +39,9 @@ namespace ReservationSystemTests
         }
 
         public ApplicationDbContext CreateContext()
-            => new ApplicationDbContext(
-                new DbContextOptionsBuilder<ApplicationDbContext>()
-                    .UseSqlServer(ConnectionString)
-                    .Options);
-
+            => new ApplicationDbContext(_contextOptions, (context, modelBuilder) =>
+            {
+                  
+            });
     }
 }

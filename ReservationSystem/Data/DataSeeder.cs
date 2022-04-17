@@ -2,12 +2,12 @@
 
 namespace ReservationSystem.Data
 {
-    public class DataSeeding
+    public class DataSeeder 
     {
 
         ModelBuilder _modelBuilder;
 
-        public DataSeeding(ModelBuilder modelBuilder)
+        public DataSeeder(ModelBuilder modelBuilder)
         {
             _modelBuilder = modelBuilder;
             SeedRestaurant();
@@ -24,7 +24,7 @@ namespace ReservationSystem.Data
             SeedReservationStatus();
 
         }
-        private void SeedRestaurant()
+        public void SeedRestaurant()
         {
             _modelBuilder.Entity<Restaurant>()
                 .HasData(new Restaurant
@@ -35,7 +35,7 @@ namespace ReservationSystem.Data
                     PhoneNumber = "12345678"
                 });
         }
-        private void SeedArea()
+        public void SeedArea()
         {
             _modelBuilder.Entity<Area>()
                 .HasData(new Area
@@ -56,7 +56,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedTables()
+        public void SeedTables()
         {
             _modelBuilder.Entity<Table>()
                 .HasData(new Table
@@ -244,7 +244,7 @@ namespace ReservationSystem.Data
         }
 
 
-        private void SeedSittingType()
+        public void SeedSittingType()
         {
             _modelBuilder.Entity<SittingType>()
                 .HasData(new SittingType
@@ -265,7 +265,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedSitting()
+        public void SeedSitting()
         {
             _modelBuilder.Entity<Sitting>()
                 .HasData(new Sitting
@@ -299,7 +299,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedReservation()
+        public void SeedReservation()
         {
             _modelBuilder.Entity<Reservation>()
                 .HasData(new Reservation
@@ -332,7 +332,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedReservationTable()
+        public void SeedReservationTable()
         {
             _modelBuilder.Entity<ReservationTable>()
                  .HasData(new ReservationTable
@@ -362,7 +362,7 @@ namespace ReservationSystem.Data
                  });
         }
 
-        private void SeedReservationOrigin()
+        public void SeedReservationOrigin()
         {
             _modelBuilder.Entity<ReservationOrigin>()
                 .HasData(new ReservationOrigin
@@ -380,7 +380,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedReservationStatus()
+        public void SeedReservationStatus()
         {
             _modelBuilder.Entity<ReservationStatus>()
                 .HasData(new ReservationStatus
@@ -398,7 +398,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedPerson()
+        public void SeedPerson()
         {
             _modelBuilder.Entity<Person>()
                 .HasData(new Person
@@ -433,7 +433,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedEmployee()
+        public void SeedEmployee()
         {
             _modelBuilder.Entity<Employee>()
                 .HasData(new Employee
@@ -471,7 +471,7 @@ namespace ReservationSystem.Data
                 });
         }
 
-        private void SeedCustomer()
+        public void SeedCustomer()
         {
             _modelBuilder.Entity<Customer>()
                 .HasData(new Customer

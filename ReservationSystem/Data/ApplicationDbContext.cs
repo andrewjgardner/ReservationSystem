@@ -5,16 +5,10 @@ namespace ReservationSystem.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-        }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            _ = new ApplicationModelBuilder(builder);
-            _ = new DataSeeding(builder);
-            base.OnModelCreating(builder);
         }
 
         public DbSet<Area> Areas { get; set; }
@@ -28,5 +22,13 @@ namespace ReservationSystem.Data
         public DbSet<SittingType> SittingTypes { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<ReservationTable> ReservationTables { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            _ = new ApplicationModelBuilder(builder);
+            _ = new DataSeeder(builder);
+
+            base.OnModelCreating(builder);
+        }
     }
 }
