@@ -4,12 +4,12 @@ using System;
 
 namespace ReservationSystemTests
 {
-    public class TestDataSeeding
+    public class TestDataSeeder
     {
 
         ModelBuilder _modelBuilder;
 
-        public TestDataSeeding(ModelBuilder modelBuilder)
+        public TestDataSeeder(ModelBuilder modelBuilder)
         {
             _modelBuilder = modelBuilder;
             SeedRestaurant();
@@ -32,7 +32,7 @@ namespace ReservationSystemTests
                 .HasData(new Restaurant
                 {
                     Id = 1,
-                    Name = "Bean Scene",
+                    Name = "MEME SCENE",
                     Address = "12 Springfield rd",
                     PhoneNumber = "12345678"
                 });

@@ -39,9 +39,6 @@ namespace ReservationSystemTests
         }
 
         public ApplicationDbContext CreateContext()
-            => new ApplicationDbContext(_contextOptions, (context, modelBuilder) =>
-            {
-                  
-            });
+            => new ApplicationDbContext(_contextOptions, (modelBuilder) => new TestDataSeeder(modelBuilder));
     }
 }
