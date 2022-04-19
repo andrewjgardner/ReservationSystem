@@ -2,8 +2,14 @@
 using ReservationSystem.Data;
 using System;
 
-namespace ReservationSystemTests
+namespace ReservationSystemTests.Utilities
 {
+    public enum TestType
+    {
+        Null,
+        Write
+    }
+
     public class TestDataSeeder
     {
 
@@ -16,16 +22,30 @@ namespace ReservationSystemTests
             SeedArea();
             SeedTables();
             SeedSittingType();
+            SeedReservationOrigin();
+            SeedReservationStatus();
             SeedSitting();
             SeedReservation();
             SeedReservationTable();
-            SeedReservationOrigin();
+            SeedPerson();
             SeedCustomer();
             SeedEmployee();
-            SeedPerson();
-            SeedReservationStatus();
-
         }
+
+        public TestDataSeeder(ModelBuilder modelBuilder, TestType type)
+        {
+            _modelBuilder = modelBuilder;
+            if (type == TestType.Write)
+            {
+                SeedRestaurant();
+                SeedArea();
+                SeedTables();
+                SeedSittingType();
+                SeedReservationOrigin();
+                SeedReservationStatus();
+            }
+        }
+
         private void SeedRestaurant()
         {
             _modelBuilder.Entity<Restaurant>()

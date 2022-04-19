@@ -24,6 +24,7 @@ namespace ReservationSystem.Data
             SeedReservationStatus();
 
         }
+
         public void SeedRestaurant()
         {
             _modelBuilder.Entity<Restaurant>()
