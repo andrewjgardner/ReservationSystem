@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ReservationSystem.Models.Reservation.SittingsVM>
+﻿@using System.Security.Policy
+@model IEnumerable<ReservationSystem.Models.Reservation.SittingsVM>
 
 @{
 	ViewData["Title"] = "Sittings";
@@ -21,12 +22,15 @@
 				<th>
 					@Html.DisplayNameFor(model => model.Title)
 				</th>
+				<th>
+					Book Reservation
+				</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in Model)
-			{
-			<tr>
+			{	
+			<tr> 
 				<td>
 					@Html.DisplayFor(modelItem => item.Date)
 				</td>
@@ -38,6 +42,9 @@
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Title)
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("ReservationForm", "Reservation", new {sittingId = item.SittingID})'">Select Sitting</button>
 				</td>
 			</tr>
 			}
