@@ -61,5 +61,23 @@ namespace ReservationSystemTests.ReservationControllerTests
                 viewResult.ViewData.Model);
             Assert.Equal(4, model.Count());
         }
+        
+        [Fact]
+        public async void ReservationForm_ReturnsSittingNotFoundWhenSittingIsNotFound()
+        {
+            //Arrange
+            int testSittingId = -1;
+            using var context = CreateContext();
+            PostCreationSeeding.InitializeDbForRead(context);
+            var controller = new ReservationController(context);
+
+            //Act
+            var result = await controller.ReservationForm(testSittingId);
+
+            //Assert
+            var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal(testSittingId, notFoundObjectResult.Value);
+
+        } 
     }
 }
