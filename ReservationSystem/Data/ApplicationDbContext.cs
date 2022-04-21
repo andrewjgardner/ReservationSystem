@@ -29,6 +29,7 @@ namespace ReservationSystem.Data
             base.OnModelCreating(builder);
         }
         public DbSet<Area> Areas { get; set; }
+        public DbSet<Person> People { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
