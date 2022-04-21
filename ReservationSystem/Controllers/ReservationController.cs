@@ -35,5 +35,20 @@ namespace ReservationSystem.Controllers
             return View(sittingsVM);
         }
 
+        public async Task<IActionResult> ReservationForm(int sittingId)
+        {
+            var sittings =  await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
+
+            var reservationForm = new ReservationFormVM
+            {
+                Date = sittings.StartTime,
+                SittingId = sittingId,
+                StartTime = sittings.StartTime,
+                EndTime = sittings.EndTime,
+            };
+               
+            return View(reservationForm);
+        }
+
     }
 }

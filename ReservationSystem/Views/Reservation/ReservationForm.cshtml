@@ -1,0 +1,42 @@
+﻿@model ReservationSystem.Models.Reservation.ReservationFormVM
+
+@{
+	ViewData["Title"] = "ReservationForm";
+	var start = Model.StartTime.ToString("hh:mm");
+	var end = Model.EndTime.ToString("hh:mm");
+}
+<h1 class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
+<h1>@Model.StartTime - @Model.EndTime</h1>
+<div class="col-md-6 offset-md-3">
+	<form>
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+		</div>
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+		</div>
+		<div class="form-group">
+			<label for="phone">Phone</label>
+			<input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your phone" required >
+		</div>
+		<div class="form-group">
+			<label for="time">Time</label>
+			<input type="time" class="form-control" id="time" name="time" placeholder="Enter your time" min="@start" max="@end">
+		</div>
+		<div class="form-group">
+			<label for="people">People</label>
+			<input type="number" class="form-control" id="people" name="people" placeholder="Enter number of people" required>
+		</div>
+		<div class="form-group">
+			<label for="comments">Comments</label>
+			<textarea class="form-control" id="comments" name="comments" placeholder="Enter your comments here"></textarea>
+		</div>
+		<div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+		
+		<input type="hidden" asp-for=SittingId />
+	</form>
+</div>
