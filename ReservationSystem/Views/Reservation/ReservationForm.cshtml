@@ -8,7 +8,7 @@
 <h1 class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
 <h1>@Model.StartTime - @Model.EndTime</h1>
 <div class="col-md-6 offset-md-3">
-	<form>
+	<form asp-action=Receipt>
 		<div class="form-group">
 			<label for="name">Name</label>
 			<input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
@@ -26,8 +26,8 @@
 			<input type="time" class="form-control" id="time" name="time" placeholder="Enter your time" min="@start" max="@end">
 		</div>
 		<div class="form-group">
-			<label for="people">People</label>
-			<input type="number" class="form-control" id="people" name="people" placeholder="Enter number of people" required>
+			<label for="numpeople">People</label>
+			<input type="number" class="form-control" id="numpeople" name="numpeople" placeholder="Enter number of people" required>
 		</div>
 		<div class="form-group">
 			<label for="comments">Comments</label>

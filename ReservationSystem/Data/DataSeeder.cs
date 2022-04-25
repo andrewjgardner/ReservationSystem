@@ -307,6 +307,7 @@ namespace ReservationSystem.Data
                 {
                     Id = 1,
                     StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
+                    Comments = "By the balcony, please.",
                     NoOfPeople = 3,
                     SittingId = 1,
                     ReservationStatusId = 1,
@@ -316,6 +317,7 @@ namespace ReservationSystem.Data
                 {
                     Id = 2,
                     StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
+                    Comments = "",
                     NoOfPeople = 4,
                     SittingId = 2,
                     ReservationStatusId = 2,
@@ -325,6 +327,7 @@ namespace ReservationSystem.Data
                 {
                     Id = 3,
                     StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
+                    Comments= "",
                     NoOfPeople = 5,
                     SittingId = 3,
                     ReservationStatusId = 3,

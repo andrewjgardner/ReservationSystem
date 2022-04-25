@@ -5,6 +5,8 @@
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
         public int NoOfPeople { get; set; }
+        
+        public string Comments { get; set; }
 
         public Sitting Sitting { get; set; }
         public int SittingId { get; set; }
