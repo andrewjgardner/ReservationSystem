@@ -41,6 +41,5 @@ namespace ReservationSystem.Data
         public DbSet<SittingType> SittingTypes { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<ReservationTable> ReservationTables { get; set; }
-        public DbSet<ReservationSystem.Models.Reservation.ReceiptVM> ReceiptVM { get; set; }
     }
 }
