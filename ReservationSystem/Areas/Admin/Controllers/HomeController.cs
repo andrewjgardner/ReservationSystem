@@ -43,7 +43,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             //TODO: Get Restaurant from Employee ID
             int restaurantId = 1;
 
-            var sittingtypes = await _context.SittingTypes.ToArrayAsync();
+            var sittingtypes = await _context.SittingTypes.ToListAsync();
 
             var sitting = new SittingsCreateVM
             {

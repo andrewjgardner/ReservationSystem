@@ -2,11 +2,13 @@
 
 @{
 	ViewData["Title"] = "Add Sitting";
+	var x = Model.SittingTypes;
 }
 <h1 class="display-4 text-primary pb-4 fw-4">Add Sitting</h1>
 
 <div class="col-md-6 offset-md-3">
 	<form>
+		<p>Restaurant Id: </p> @Model.RestaurantId 
 		<div class="form-group">
 			<label for="name">Name</label>
 			<input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
@@ -25,10 +27,12 @@
 		</div>
 
 		<div class="form-group">
+			<p>Sitting Type: </p>
 			<select asp-for=SittingTypeId asp-items=Model.SittingTypes></select>
 		</div>
 		<div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
+		<input type="hidden" asp-for=RestaurantId />
 	</form>
 </div>
