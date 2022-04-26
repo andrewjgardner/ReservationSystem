@@ -57,31 +57,33 @@ namespace ReservationSystem.Controllers
             var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
             var customer = await _context.Customers.Where(c => c.PhoneNumber == reservationForm.Phone).FirstOrDefaultAsync();
 
+
             if (customer == null)
             {
-                var names = reservationForm.Name.Split(' ');
-                if (names.Length==1)
-                {
-                    //Temporary hack
-                    //TODO: Change reservation form to have separate first and last name entries
-                    names = new string[] { names[0], "Anonymous" };
-                }
-                //TODO: Make it so that the restaurant is tracked through the control flow
                 customer = new Customer
                 {
                     Email = reservationForm.Email,
                     PhoneNumber = reservationForm.Phone,
-                    FirstName = names[0],
-                    LastName = names[1],
-                    RestaurantId = 1
+                    FirstName = reservationForm.FirstName,
+                    LastName = reservationForm.LastName,
+                    RestaurantId = sitting.RestaurantId
                 };
             }
 
+            string? comments = reservationForm.Comments;
+
+            if (comments==null)
+            {
+                comments = "";
+            }
+
+            DateTime arrival = reservationForm.Date.Date.Add(reservationForm.Time.TimeOfDay);
+
             var reservation = new Reservation
             {
-                StartTime = reservationForm.Time,
+                StartTime = arrival,
                 NoOfPeople = reservationForm.NumPeople,
-                Comments = reservationForm.Comments,
+                Comments = comments,
                 SittingId = reservationForm.SittingId,
                 Sitting = sitting,
                 ReservationStatus = reservationstatus,
