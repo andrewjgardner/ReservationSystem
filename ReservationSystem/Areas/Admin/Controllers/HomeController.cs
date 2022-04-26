@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
 using ReservationSystem.Models.Reservation;
 
@@ -24,7 +26,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Sittings()
         {
             var sittings = await _context.Sittings.Include(s => s.SittingType).ToArrayAsync();
-            List<AdminSittingsVM> sittingsVM = sittings.Select(s => new AdminSittingsVM
+            List<SittingsListVM> sittingsVM = sittings.Select(s => new SittingsListVM
             {
                 SittingID = s.Id,
                 Date = s.StartTime,
@@ -34,6 +36,22 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }).ToList();
 
             return View(sittingsVM);
+        }
+
+        public async Task<IActionResult> AddSitting()
+        {
+            //TODO: Get Restaurant from Employee ID
+            int restaurantId = 1;
+
+            var sittingtypes = await _context.SittingTypes.ToArrayAsync();
+
+            var sitting = new SittingsCreateVM
+            {
+                SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
+                RestaurantId = restaurantId
+            };
+
+            return View(sitting);
         }
     }
 }

@@ -1,0 +1,34 @@
+﻿@model ReservationSystem.Areas.Admin.Models.SittingsCreateVM
+
+@{
+	ViewData["Title"] = "Add Sitting";
+}
+<h1 class="display-4 text-primary pb-4 fw-4">Add Sitting</h1>
+
+<div class="col-md-6 offset-md-3">
+	<form>
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
+		</div>
+		<div class="form-group">
+			<label for="date">Date</label>
+			<input type="date" class="form-control" id="date" name="date" required>
+		</div>
+		<div class="form-group">
+			<label for="starttime">Start Time</label>
+			<input type="time" class="form-control" id="starttime" name="starttime">
+		</div>
+		<div class="form-group">
+			<label for="endtime">End Time</label>
+			<input type="time" class="form-control" id="endtime" name="endtime">
+		</div>
+
+		<div class="form-group">
+			<select asp-for=SittingTypeId asp-items=Model.SittingTypes></select>
+		</div>
+		<div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+	</form>
+</div>

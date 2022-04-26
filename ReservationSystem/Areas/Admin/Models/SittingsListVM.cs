@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ReservationSystem.Models.Reservation
+namespace ReservationSystem.Areas.Admin.Models
 {
-    public class AdminSittingsVM
+    public class SittingsListVM
     {
         public int SittingID { get; set; }
 
