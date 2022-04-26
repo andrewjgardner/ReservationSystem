@@ -1,0 +1,53 @@
+﻿@using System.Security.Policy
+@model IEnumerable<ReservationSystem.Areas.Admin.Models.SittingsListVM>
+
+@{
+	ViewData["Title"] = "Sittings";
+}
+
+<div class="container text-center">
+	<h1 class="display-4 text-primary pb-4 fw-4">Sittings</h1>
+	<table class="table table-hover table-striped" >
+		<thead class="table-primary">
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Date)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.StartTime)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.EndTime)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Title)
+				</th>
+				<th>
+					Close Reservation
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{	
+			<tr> 
+				<td>
+					@Html.DisplayFor(modelItem => item.Date)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StartTime)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EndTime)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Title)
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary">Close Sitting</button>
+				</td>
+			</tr>
+			}
+		</tbody>
+	</table>
+</div>
