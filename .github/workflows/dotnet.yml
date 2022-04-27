@@ -25,7 +25,7 @@ jobs:
     - name: Test
       uses: zyborg/dotnet-tests-report@v1
       with:
-        project_path: test
+        project_path: test/ReservationSystemTests
         report_name: test_all_in_project
         report_title: All tests in project
         github_token: ${{ secrets.GITHUB_TOKEN }}
