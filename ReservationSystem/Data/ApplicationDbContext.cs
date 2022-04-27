@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ReservationSystem.Data.Identity;
 using ReservationSystem.Models.Reservation;
 
 namespace ReservationSystem.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly Action<ModelBuilder> _dataConfigurer;
 
