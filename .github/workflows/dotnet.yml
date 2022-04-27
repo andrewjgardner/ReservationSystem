@@ -23,20 +23,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --logger "trx;logfilename=dotnet-results-${{ env.dotnet_version }}.trx"
-    - name: Upload dotnet test results
-      uses: actions/upload-artifact@v3
+      uses: zyborg/dotnet-tests-report@v1
       with:
-        name: dotnet-results-${{ env.dotnet_version }}
-        path: TestResults/dotnet-results-${{ env.dotnet_version }}.trx
-      # Use always() to always run this step to publish test results when there are test failures
-      if: ${{ always() }}
-      
-    - name: Test Report
-      uses: dorny/test-reporter@v1
-      if: success() || failure()    # run this step even if previous step failed
-      with:
-        name: xUnit Tests           
-        path: TestResults/dotnet-results-${{ env.dotnet_version }}.trx
-        reporter: dotnet-trx        
-      
+        project_path: test
+        report_name: test_all_in_project
+        report_title: All tests in project
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        
