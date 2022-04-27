@@ -23,12 +23,12 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --logger trx --results-directory "TestResults-${{ env.dotnet_version }}"
+      run: dotnet test --logger "trx;logfilename=dotnet-results-${{ env.dotnet_version }}.trx"
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v3
       with:
         name: dotnet-results-${{ env.dotnet_version }}
-        path: TestResults-${{ env.dotnet_version }}
+        path: TestResults
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
       
@@ -37,6 +37,6 @@ jobs:
       if: success() || failure()    # run this step even if previous step failed
       with:
         name: xUnit Tests           
-        path: TestResults-${{ env.dotnet_version }}
+        path: TestResults/dotnet-results-${{ env.dotnet_version }}.trx
         reporter: dotnet-trx        
       
