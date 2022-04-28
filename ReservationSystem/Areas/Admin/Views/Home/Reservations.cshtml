@@ -1,0 +1,54 @@
+﻿@using System.Security.Policy
+@model IEnumerable<ReservationSystem.Areas.Admin.Models.ReservationListVM>
+
+@{
+	ViewData["Title"] = "Reservations";
+}
+
+<div class="container text-center">
+	<h1 class="display-4 text-primary pb-4 fw-4">Reservations</h1>
+	<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="AddReservation">Add Reservation</a>
+	<table class="table table-hover table-striped" >
+		<thead class="table-primary">
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.ResId)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Date)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.ReservationStatus)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.SittingId)
+				</th>
+				<th>
+					Edit Reservation
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{	
+			<tr> 
+				<td>
+					@Html.DisplayFor(modelItem => item.ResId)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Date)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ReservationStatus)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.SittingId)
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary">Edit Reservation</button>
+				</td>
+			</tr>
+			}
+		</tbody>
+	</table>
+</div>
