@@ -7,7 +7,11 @@
 }
 
 <h1 class="display-4 text-primary pb-4 fw-4">Add Sitting</h1>
+@if(Model.SittingId != 0)
+{
 <h1>@Model.StartTime - @Model.EndTime</h1>
+}
+
 <div class="col-md-6 offset-md-3">
 	<form asp-area=Admin asp-controller=Home asp-action=SaveReservation>
 		<div class="form-group">

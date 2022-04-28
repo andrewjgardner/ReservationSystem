@@ -103,38 +103,32 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             return View(reservationsVm);
         }
-        public async Task<IActionResult> AddReservationResView()
+
+        public async Task<IActionResult> AddReservation(int? sittingId)
         {
-            var sittings = await _context.Sittings.ToListAsync();
+            
+            
             var reservationStatus = await _context.ReservationStatuses.ToListAsync();
             var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
 
             var reservation = new ReservationsCreateVM
             {
-                Sittings = new SelectList(sittings,"Id","StartTime"),
                 ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
                 ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
             };
-
-            return View(reservation);
-        }
-
-        public async Task<IActionResult> AddReservation(int sittingId)
-        {
-            var sitting = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
-            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
-            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
-
-            var reservation = new ReservationsCreateVM
+            if (sittingId.HasValue)
             {
-                SittingId = sittingId,
-                StartTime = sitting.StartTime,
-                EndTime = sitting.EndTime,
-                Date = sitting.StartTime,
-                ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
-                ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
-            };
-
+                var sitting = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
+                reservation.SittingId = (int)sittingId;
+                reservation.StartTime = sitting.StartTime;
+                reservation.EndTime = sitting.EndTime;
+                reservation.Date = sitting.StartTime;
+            }
+            else
+            {
+                var sittings = await _context.Sittings.ToListAsync();
+                reservation.Sittings = new SelectList(sittings, "Id", "StartTime");
+            }
             return View(reservation);
         }
 
