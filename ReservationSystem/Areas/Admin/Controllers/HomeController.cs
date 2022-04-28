@@ -44,12 +44,16 @@ namespace ReservationSystem.Areas.Admin.Controllers
             //TODO: Get Restaurant from Employee ID
             int restaurantId = 1;
 
+            var restaurant = await _context.Restaurants.Where(r => r.Id == restaurantId).FirstOrDefaultAsync();
+
             var sittingtypes = await _context.SittingTypes.ToListAsync();
 
             var sitting = new SittingsCreateVM
             {
                 SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
-                RestaurantId = restaurantId
+                RestaurantId = restaurantId,
+                Capacity = restaurant.DefaultCapacity,
+                IsClosed = false
             };
 
             return View(sitting);
@@ -156,5 +160,28 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return RedirectToAction("Reservations");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SaveSitting(SittingsCreateVM sittingform)
+        {
+            var sittingtype = await _context.SittingTypes.Where(st => st.Id == sittingform.SittingTypeId).FirstOrDefaultAsync();
+            var sitting = new Sitting
+            {
+                Title = sittingform.Title,
+                StartTime = sittingform.StartTime,
+                EndTime = sittingform.EndTime,
+                Capacity = sittingform.Capacity,
+                IsClosed = sittingform.IsClosed,
+                SittingTypeId = sittingform.SittingTypeId,
+                RestaurantId = sittingform.RestaurantId,
+                SittingType = sittingtype,
+                ResDuration = sittingtype.ResDuration                
+            };
+
+            _context.Sittings.Add(sitting);
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("Sittings");
+        }
     }
 }
