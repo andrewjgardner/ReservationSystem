@@ -132,7 +132,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(reservation);
         }
 
-        public async Task<IActionResult>SaveReservation(ReservationsCreateVM reservationForm)
+        public async Task<IActionResult> SaveReservation(ReservationsCreateVM reservationForm)
         {
             var sittinngs = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
             var restaruantId = 1;
@@ -174,6 +174,18 @@ namespace ReservationSystem.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("SittingDetails",new {sittingId = sittinngs.Id});
+        }
+
+        public async Task<IActionResult> EditReservation(int reservationId)
+        {
+            var reservations = await _context.Reservations.Where(r => r.Id == reservationId).Include(c=> c.Customer).FirstOrDefaultAsync();
+
+            var reservationEdit = new ReservationEditVM
+            {
+              FirstName = reservations.Customer.FirstName
+            };
+
+            return View(reservationEdit);
         }
 
         [HttpPost]

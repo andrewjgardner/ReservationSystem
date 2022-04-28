@@ -44,7 +44,7 @@
 					@Html.DisplayFor(modelItem => item.SittingId)
 				</td>
 				<td>
-					<button type="button" class="btn btn-primary">Edit Reservation</button>
+					<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="EditReservation" asp-route-reservationId = "@item.ResId" >Edit Reservation</a>
 				</td>
 			</tr>
 			}
