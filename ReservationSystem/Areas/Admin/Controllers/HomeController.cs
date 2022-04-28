@@ -25,14 +25,15 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
         public async Task<IActionResult> Sittings()
         {
-            var sittings = await _context.Sittings.Include(s => s.SittingType).ToArrayAsync();
+            var sittings = await _context.Sittings.Include(s => s.SittingType).Include(s=>s.Reservations).ToArrayAsync();
             List<SittingsListVM> sittingsVM = sittings.Select(s => new SittingsListVM
             {
                 SittingID = s.Id,
                 Date = s.StartTime,
                 StartTime = s.StartTime,
                 EndTime = s.EndTime,
-                Title = s.Title
+                Title = s.Title,
+                PercentFull = s.PercentFull()
             }).ToList();
 
             return View(sittingsVM);
@@ -52,6 +53,36 @@ namespace ReservationSystem.Areas.Admin.Controllers
             };
 
             return View(sitting);
+        }
+
+        public async Task<IActionResult> SittingDetails(int sittingId)
+        {
+            var sitting = await _context.Sittings.Where(s => s.Id == sittingId).Include(s=>s.SittingType).Include(s=>s.Reservations).ThenInclude(r=>r.Customer).FirstOrDefaultAsync();
+            var reservations = new List<ReservationListVM>();
+
+            foreach (Reservation reservation in sitting.Reservations)
+            {
+                var reservationVM = new ReservationListVM
+                {
+                    StartTime = reservation.StartTime,
+                    Name = reservation.Customer.FullName(),
+                    Phone = reservation.Customer.PhoneNumber,
+                    Comments = reservation.Comments,
+                    NumPeople = reservation.NoOfPeople
+                };
+                reservations.Add(reservationVM);
+            }
+
+            var sittingVM = new SittingDetailsVM
+            {
+                Date = sitting.StartTime.Date,
+                StartTime = sitting.StartTime,
+                EndTime = sitting.EndTime,
+                Title = sitting.Title,
+                SittingType = sitting.SittingType.Description,
+                Reservations = reservations
+            };
+            return View(sittingVM);
         }
 
         public async Task<IActionResult> Reservations()
