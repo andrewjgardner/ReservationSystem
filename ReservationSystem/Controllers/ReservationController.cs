@@ -20,9 +20,17 @@ namespace ReservationSystem.Controllers
             _context = context;
         }
 
+        public List<Sitting> GetSittings()
+        {
+            //Currently, just shows all open sittings where the end time is in the future
+            //We may want to make this more complex, e.g. by specifying that Sittings should be displayed if there is more than an hour left before the sitting ends
+            //Also, sort by date, so that closer dates are first
+            return _context.Sittings.Where(s => !s.IsClosed).Where(s => s.EndTime > DateTime.Now).Include(s => s.SittingType).ToList();
+        }
+
         public async Task<IActionResult> Sittings()
         {
-            var sittings = await _context.Sittings.Include(s => s.SittingType).ToArrayAsync();
+            var sittings = GetSittings();
             List<SittingsVM> sittingsVM = sittings.Select(s => new SittingsVM
             {
                 SittingID = s.Id,
