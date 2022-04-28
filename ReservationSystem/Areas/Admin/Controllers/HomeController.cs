@@ -75,6 +75,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             var sittingVM = new SittingDetailsVM
             {
+                SittingId = sittingId,
                 Date = sitting.StartTime.Date,
                 StartTime = sitting.StartTime,
                 EndTime = sitting.EndTime,
@@ -98,7 +99,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             return View(reservationsVm);
         }
-        public async Task<IActionResult> AddReservation()
+        public async Task<IActionResult> AddReservationResView()
         {
             var sittings = await _context.Sittings.ToListAsync();
             var reservationStatus = await _context.ReservationStatuses.ToListAsync();
@@ -114,8 +115,28 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(reservation);
         }
 
+        public async Task<IActionResult> AddReservation(int sittingId)
+        {
+            var sitting = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
+            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
+            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
+
+            var reservation = new ReservationsCreateVM
+            {
+                SittingId = sittingId,
+                StartTime = sitting.StartTime,
+                EndTime = sitting.EndTime,
+                Date = sitting.StartTime,
+                ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
+                ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
+            };
+
+            return View(reservation);
+        }
+
         public async Task<IActionResult>SaveReservation(ReservationsCreateVM reservationForm)
         {
+            var sittinngs = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
             var restaruantId = 1;
             var customer = await _context.Customers.Where(c => c.PhoneNumber == reservationForm.Phone).FirstOrDefaultAsync();
             //var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
@@ -139,10 +160,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
             {
                 comments = "";
             }
+            DateTime arrival = reservationForm.Date.Date.Add(reservationForm.Time.TimeOfDay);
 
             var reservation = new Reservation
             {
-                StartTime = reservationForm.StartTime,
+                StartTime = arrival,
                 NoOfPeople = reservationForm.NumPeople,
                 Comments = comments,
                 SittingId = reservationForm.SittingId,
@@ -153,7 +175,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Reservations");
+            return RedirectToAction("SittingDetails",new {sittingId = sittinngs.Id});
         }
 
     }

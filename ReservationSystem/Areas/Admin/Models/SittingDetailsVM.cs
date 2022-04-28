@@ -22,6 +22,7 @@ namespace ReservationSystem.Areas.Admin.Models
         public string SittingType { get; set; }
 
         public List<SittingReservationListVM> Reservations { get; set; }
+        public int SittingId { get; set; }
     }
 
     public class SittingReservationListVM
