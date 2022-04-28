@@ -313,7 +313,7 @@ namespace ReservationSystem.Data
                     SittingId = 1,
                     ReservationStatusId = 1,
                     ReservationOriginId = 1,
-                    CustomerId = 1,
+                    CustomerId = 5,
                 }, new Reservation
                 {
                     Id = 2,
@@ -323,7 +323,7 @@ namespace ReservationSystem.Data
                     SittingId = 2,
                     ReservationStatusId = 2,
                     ReservationOriginId = 2,
-                    CustomerId = 2,
+                    CustomerId = 8,
                 }, new Reservation
                 {
                     Id = 3,
@@ -333,7 +333,7 @@ namespace ReservationSystem.Data
                     SittingId = 3,
                     ReservationStatusId = 3,
                     ReservationOriginId = 3,
-                    CustomerId = 3,
+                    CustomerId = 6,
                 });
         }
 
