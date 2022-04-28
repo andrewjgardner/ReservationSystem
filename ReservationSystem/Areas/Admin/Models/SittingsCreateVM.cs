@@ -25,5 +25,9 @@ namespace ReservationSystem.Areas.Admin.Models
         public int SittingTypeId { get; set; }
 
         public int RestaurantId { get; set; }
+
+        public int Capacity { get; set; }
+
+        public bool IsClosed { get; set; }
     }
 }

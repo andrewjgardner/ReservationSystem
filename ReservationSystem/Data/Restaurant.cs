@@ -14,5 +14,7 @@
 
         public List<Sitting> Sittings { get; set; } = new List<Sitting>();
 
+        public int DefaultCapacity { get; set; }
+
     }
 }
