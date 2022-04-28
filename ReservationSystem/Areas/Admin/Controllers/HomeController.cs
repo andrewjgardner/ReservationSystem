@@ -53,5 +53,19 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             return View(sitting);
         }
+
+        public async Task<IActionResult> Reservations()
+        {
+            var reservation = await _context.Reservations.Include(r => r.ReservationStatus).ToArrayAsync();
+            List<ReservationListVM> reservationsVm = reservation.Select(r => new ReservationListVM
+            {
+                ResId = r.Id,
+                Date = r.StartTime,
+                ReservationStatus = reservation.Select(r => r.ReservationStatus.Description).Where()
+                SittingId = r.SittingId
+            }).ToList();
+
+            return View(reservationsVm);
+        }
     }
 }
