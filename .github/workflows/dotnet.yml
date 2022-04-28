@@ -1,0 +1,32 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  dotnet_version: '6.0.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      uses: zyborg/dotnet-tests-report@v1
+      with:
+        project_path: test/ReservationSystemTests
+        report_name: test_all_in_project
+        report_title: All tests in project
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        

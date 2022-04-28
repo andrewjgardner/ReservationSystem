@@ -14,5 +14,7 @@ namespace ReservationSystem.Data
 
         public Restaurant Restaurant { get; set; }
         public int RestaurantId { get; set; }
+
+        public string FullName() { return FirstName + " " + LastName; }
     }
 }
