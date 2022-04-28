@@ -1,4 +1,6 @@
-﻿namespace ReservationSystem.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace ReservationSystem.Data
 {
     public class Reservation
     {
@@ -22,5 +24,11 @@
 
         public List<ReservationTable> ReservationTables { get; set; } = new List<ReservationTable>();
 
+        public IEnumerable<Table> Tables(ApplicationDbContext context)
+        {
+            var reservationtables = context.ReservationTables.Where(rt => rt.ReservationId == this.Id).Include(rt => rt.Table).ToList();
+            var tables = reservationtables.Select(rt => rt.Table);
+            return tables;
+        }
     }
 }
