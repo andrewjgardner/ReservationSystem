@@ -20,5 +20,8 @@ namespace ReservationSystem.Areas.Admin.Models
         [Display(Name = "Name")]
         public string? Title { get; set; }
 
+        [Display(Name = "Percent Full")]
+        public int PercentFull { get; set; }
+
     }
 }

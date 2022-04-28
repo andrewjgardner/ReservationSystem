@@ -17,5 +17,15 @@
         public int SittingTypeId { get; set; }
 
         public List<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+        public int PercentFull()
+        {
+            int customers = 0;
+            foreach (Reservation reservation in Reservations)
+            {
+                customers += reservation.NoOfPeople;
+            }
+            return 100 * customers / Capacity;
+        }
     }
 }
