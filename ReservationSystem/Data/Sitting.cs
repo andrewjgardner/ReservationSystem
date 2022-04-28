@@ -20,12 +20,12 @@
 
         public int PercentFull()
         {
-            int customers = 0;
-            foreach (Reservation reservation in Reservations)
+            int peoplebooked = 0;
+            foreach(Reservation reservation in this.Reservations)
             {
-                customers += reservation.NoOfPeople;
+                peoplebooked += reservation.NoOfPeople;
             }
-            return 100 * customers / Capacity;
+            return 100 * peoplebooked / Capacity;
         }
     }
 }

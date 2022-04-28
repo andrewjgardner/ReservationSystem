@@ -25,7 +25,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
         public async Task<IActionResult> Sittings()
         {
-            var sittings = await _context.Sittings.Include(s => s.SittingType).ToArrayAsync();
+            var sittings = await _context.Sittings.Include(s => s.SittingType).Include(s=>s.Reservations).ToArrayAsync();
             List<SittingsListVM> sittingsVM = sittings.Select(s => new SittingsListVM
             {
                 SittingID = s.Id,
@@ -67,7 +67,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     StartTime = reservation.StartTime,
                     Name = reservation.Customer.FullName(),
                     Phone = reservation.Customer.PhoneNumber,
-                    Comments = reservation.Comments
+                    Comments = reservation.Comments,
+                    NumPeople = reservation.NoOfPeople
                 };
                 reservations.Add(reservationVM);
             }

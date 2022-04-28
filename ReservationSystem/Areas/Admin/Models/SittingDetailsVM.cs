@@ -36,6 +36,9 @@ namespace ReservationSystem.Areas.Admin.Models
         [Display(Name = "Customer Phone")]
         public string Phone { get; set; }
 
+        [Display(Name = "Number of People")]
+        public int NumPeople { get; set; }
+
         [Display(Name = "Comments")]
         public string Comments { get; set; }
     }

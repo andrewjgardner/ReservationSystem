@@ -24,6 +24,9 @@
 					@Html.DisplayNameFor(model => model.Title)
 				</th>
 				<th>
+					@Html.DisplayNameFor(model => model.PercentFull)
+				</th>
+				<th>
 					View Sittings Details
 				</th>
 				<th>
@@ -46,6 +49,9 @@
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Title)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.PercentFull)
 				</td>
 				<td>
 					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("SittingDetails", "Home", new {sittingId = item.SittingID})'">View Details</button>
