@@ -6,24 +6,25 @@
     <title>@ViewData["Title"] - ReservationSystem</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/homePage.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ReservationSystem.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ReservationSystem</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                <img src="~/images/bean-scene-logo.png" style="width: 40px; height: 30px; object-fit:cover" alt="bean-scene-logo">
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Book Reservation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">About Us</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -32,14 +33,54 @@
         </nav>
     </header>
     <div class="container-fluid m-0 p-0">
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - ReservationSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container h-100 py-4">
+            @*<div class="p-2">
+                &copy; 2022 - ReservationSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>*@
+            <div class="row row-cols-4 row-cols-lg-3">
+                <div class="col">
+                    <h4>Contact Us</h4>
+                    <div class="mb-3">
+                        <p>Bookings</p>
+                        <p>Bookings@BeanScene.com.au</p>
+                    </div>
+                    <div class="mb-3">
+                        <p>Business Enquiries</p>
+                        <p>Enquiries@BeanScene.com.au</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <h4>Contact Us</h4>
+                    <div class="mb-3">
+                        <a href="">Privacy</a>
+                    </div>
+                    <div class="mb-3">
+                        <a href="">Venues</a>
+                    </div>
+                    <div class="mb-3">
+                        <a href="">Menu</a>
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <img src="~/images/bean-scene-logo.png" class="w-25" alt="bean-scene-logo">
+                    <p>Bean Scene</p>
+                    <br/>
+                    <div>
+                        <img src="~/images/facebook-logo.png" style="width: 40px; height: 40px;" alt="facebook-logo" class="me-1">
+                        <img src="~/images/instagram-logo.png" style="width: 40px; height: 40px;" alt="instagram-logo" class="ms-1">
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="text-center">
+                Website by Bit By Byte 2022 &copy;
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
