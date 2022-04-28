@@ -58,11 +58,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> SittingDetails(int sittingId)
         {
             var sitting = await _context.Sittings.Where(s => s.Id == sittingId).Include(s=>s.SittingType).Include(s=>s.Reservations).ThenInclude(r=>r.Customer).FirstOrDefaultAsync();
-            var reservations = new List<ReservationListVM>();
+            var reservations = new List<SittingReservationListVM>();
 
             foreach (Reservation reservation in sitting.Reservations)
             {
-                var reservationVM = new ReservationListVM
+                var reservationVM = new SittingReservationListVM
                 {
                     StartTime = reservation.StartTime,
                     Name = reservation.Customer.FullName(),

@@ -21,10 +21,10 @@ namespace ReservationSystem.Areas.Admin.Models
         [Display(Name = "Sitting Type")]
         public string SittingType { get; set; }
 
-        public List<ReservationListVM> Reservations { get; set; }
+        public List<SittingReservationListVM> Reservations { get; set; }
     }
 
-    public class ReservationListVM
+    public class SittingReservationListVM
     {
         [DisplayFormat(DataFormatString = "{0:t}")]
         [Display(Name = "Arrival time")]
