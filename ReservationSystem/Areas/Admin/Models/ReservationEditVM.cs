@@ -30,5 +30,6 @@ namespace ReservationSystem.Areas.Admin.Models
 
         public SelectList Sittings { get; set; }
         public int SittingId { get; set; }
+
     }
 }

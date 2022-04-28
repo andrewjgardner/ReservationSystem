@@ -13,37 +13,33 @@
 	<form asp-area=Admin asp-controller=Home asp-action=EditReservation>
 		<div class="form-group">
 			<label for="firstName">First Name</label>
-			<input type="text" class="form-control" id="firstName" name="firstName" placeholder="@Model.FirstName" required>
+			<input type="text" class="form-control" id="firstName" name="firstName" value="@Model.FirstName" required>
 		</div>
 		<div class="form-group">
 			<label for="lastName">Last Name</label>
-			<input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
+			<input type="text" class="form-control" id="lastName" name="lastName" value="@Model.LastName" required>
 		</div>
 		<div class="form-group">
 			<label for="email">Email</label>
-			<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+			<input type="email" class="form-control" id="email" name="email" value="@Model.Email">
 		</div>
 		<div class="form-group">
 			<label for="phone">Phone Number</label>
-			<input type="number" class="form-control" id="phone" name="phone" placeholder="Enter Phonenumber">
+			<input type="number" class="form-control" id="phone" name="phone" value="@Model.Phone">
 		</div>
 		<div class="form-group">
 			<label for="time">Time</label>
-			<input type="time" class="form-control" id="time" name="time">
+			<input type="time" class="form-control" id="time" value="@Model.Time">
 		</div>
 
 		<div class="form-group">
 			<p>Reservation Status: </p>
-			<select asp-for=ReservationStatusId asp-items=Model.ReservationStatus></select>
+			<select asp-for=ReservationStatusId asp-items=Model.ReservationStatus>
+			</select>
 		</div>
 		<div class="form-group">
 			<p>Reservation Origin: </p>
 			<select asp-for=ReservationOriginId asp-items=Model.ReservationOrigin></select>
-		</div>
-
-		<div class="form-group">
-			<p>Sitting: </p>
-			<select asp-for=SittingId asp-items=Model.Sittings></select>
 		</div>
 
 		<div>

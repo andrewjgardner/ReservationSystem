@@ -179,10 +179,21 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> EditReservation(int reservationId)
         {
             var reservations = await _context.Reservations.Where(r => r.Id == reservationId).Include(c=> c.Customer).FirstOrDefaultAsync();
+            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
+            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
 
             var reservationEdit = new ReservationEditVM
             {
-              FirstName = reservations.Customer.FirstName
+              FirstName = reservations.Customer.FirstName,
+              LastName = reservations.Customer.LastName,
+              Email = reservations.Customer.Email,
+              Phone = reservations.Customer.PhoneNumber,
+              Time = reservations.StartTime,
+              ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
+              ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
+              ReservationStatusId = reservations.ReservationStatusId,
+              ReservationOriginId = reservations.ReservationOriginId
+              
             };
 
             return View(reservationEdit);
