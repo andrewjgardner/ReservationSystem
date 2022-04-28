@@ -33,7 +33,8 @@ namespace ReservationSystem.Data
                     Id = 1,
                     Name = "Bean Scene",
                     Address = "12 Springfield rd",
-                    PhoneNumber = "12345678"
+                    PhoneNumber = "12345678",
+                    DefaultCapacity = 100
                 });
         }
         public void SeedArea()
