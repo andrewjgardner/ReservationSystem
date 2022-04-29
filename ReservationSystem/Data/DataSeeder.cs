@@ -274,8 +274,8 @@ namespace ReservationSystem.Data
                 {
                     Id = 1,
                     Title = "Breakfast",
-                    StartTime = new DateTime(2020, 04, 13, 7, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 11, 30, 0),
+                    StartTime = new DateTime(2022, 07, 13, 7, 0, 0),
+                    EndTime = new DateTime(2022, 07, 13, 11, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 1,
@@ -284,8 +284,8 @@ namespace ReservationSystem.Data
                 {
                     Id = 2,
                     Title = "Lunch",
-                    StartTime = new DateTime(2020, 04, 13, 12, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 15, 30, 0),
+                    StartTime = new DateTime(2022, 07, 13, 12, 0, 0),
+                    EndTime = new DateTime(2022, 07, 13, 15, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 2
@@ -293,8 +293,8 @@ namespace ReservationSystem.Data
                 {
                     Id = 3,
                     Title = "Dinner",
-                    StartTime = new DateTime(2020, 04, 13, 18, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 21, 30, 0),
+                    StartTime = new DateTime(2022, 07, 13, 18, 0, 0),
+                    EndTime = new DateTime(2022, 07, 13, 21, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 3
@@ -313,7 +313,7 @@ namespace ReservationSystem.Data
                     SittingId = 1,
                     ReservationStatusId = 1,
                     ReservationOriginId = 1,
-                    CustomerId = 1,
+                    CustomerId = 5,
                 }, new Reservation
                 {
                     Id = 2,
@@ -323,7 +323,7 @@ namespace ReservationSystem.Data
                     SittingId = 2,
                     ReservationStatusId = 2,
                     ReservationOriginId = 2,
-                    CustomerId = 2,
+                    CustomerId = 8,
                 }, new Reservation
                 {
                     Id = 3,
@@ -333,7 +333,7 @@ namespace ReservationSystem.Data
                     SittingId = 3,
                     ReservationStatusId = 3,
                     ReservationOriginId = 3,
-                    CustomerId = 3,
+                    CustomerId = 6,
                 });
         }
 
