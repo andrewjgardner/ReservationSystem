@@ -32,10 +32,10 @@ namespace ReservationSystem.Services
 
         public async Task<Person> FindOrCreatePersonAsync(int restaurantId, string phoneNumber, string firstName, string lastName, string email)
         {
-            var person = await _context.People.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber);
-            if (person == null)
+            var customer = await _context.Customers.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber);
+            if (customer == null )
             {
-                person = new Customer 
+                customer = new Customer 
                 {
                     PhoneNumber = phoneNumber,
                     FirstName = firstName,
@@ -43,10 +43,10 @@ namespace ReservationSystem.Services
                     Email = email,
                     RestaurantId = restaurantId
                 };
-                _context.People.Add(person);
+                _context.People.Add(customer);
                 await _context.SaveChangesAsync();
             }
-            return person;
+            return customer;
         }
     }
 }
