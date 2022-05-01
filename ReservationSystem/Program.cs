@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
+builder.Services.AddTransient<AdminSeed>();
 
 var app = builder.Build();
 
@@ -58,6 +60,12 @@ app.MapControllerRoute(
 
 
 app.MapRazorPages();
+
+using(var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider.GetService<AdminSeed>();
+    await service.SeedAdmin();
+}
 
 app.Run();
 

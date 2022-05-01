@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReservationSystem.Data
@@ -545,7 +546,6 @@ namespace ReservationSystem.Data
                     NormalizedName = Roles.Member.ToString().ToUpper()
                 });
         }
-
 
 
     }
