@@ -12,7 +12,7 @@ namespace ReservationSystem.Services
             _context = context;
         }
 
-        public async Task<Person> FindOrCreatePersonAsync(int restaurantId, string phoneNumber, string firstName, string lastName)
+        public async Task<Person> FindOrCreatePersonAsync(int restaurantId, string phoneNumber, string firstName, string lastName, string email)
         {
             var person = await _context.People.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber);
             if (person == null)
@@ -22,6 +22,7 @@ namespace ReservationSystem.Services
                     PhoneNumber = phoneNumber,
                     FirstName = firstName,
                     LastName = lastName,
+                    Email = email,
                     RestaurantId = restaurantId
                 };
                 _context.People.Add(person);
@@ -30,7 +31,7 @@ namespace ReservationSystem.Services
             return person;
         }
 
-        public async Task<Person> FindOrCreatePersonAsync(int restaurantId, string phoneNumber, string firstName, string lastName, string email)
+        public async Task<Customer> FindOrCreateCustomerAsync(int restaurantId, string phoneNumber, string firstName, string lastName, string email)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber);
             if (customer == null )

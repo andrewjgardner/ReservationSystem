@@ -66,7 +66,7 @@ namespace ReservationSystem.Controllers
             var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
             var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
             var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
-            var customer = await _personService.FindOrCreatePersonAsync(1,reservationForm.Phone,reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
+            var customer = await _personService.FindOrCreateCustomerAsync(1,reservationForm.Phone,reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
 
             string? comments = reservationForm.Comments;
 

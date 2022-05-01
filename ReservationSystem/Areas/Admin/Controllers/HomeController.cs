@@ -142,7 +142,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             //var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
             //var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
 
-            var customer = await _personService.FindOrCreatePersonAsync(restaruantId, reservationForm.Phone, reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
+            var customer = await _personService.FindOrCreateCustomerAsync(restaruantId, reservationForm.Phone, reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
 
             string? comments = reservationForm.Comments;
 
@@ -160,7 +160,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 SittingId = reservationForm.SittingId,
                 ReservationStatusId = reservationForm.ReservationStatusId,
                 ReservationOriginId = reservationForm.ReservationOriginId,
-                Customer = (Customer)customer
+                Customer = customer
             };
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
