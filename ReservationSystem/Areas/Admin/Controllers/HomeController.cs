@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
@@ -9,6 +10,7 @@ using ReservationSystem.Services;
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
 
@@ -137,7 +139,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
         public async Task<IActionResult>SaveReservation(ReservationsCreateVM reservationForm)
         {
-            var sittinngs = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
+            var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
             var restaruantId = 1;
             //var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
             //var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
@@ -146,10 +148,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             string? comments = reservationForm.Comments;
 
-            if (comments == null)
-            {
-                comments = "";
-            }
             DateTime arrival = reservationForm.Date.Date.Add(reservationForm.Time.TimeOfDay);
 
             var reservation = new Reservation
@@ -165,7 +163,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("SittingDetails",new {sittingId = sittinngs.Id});
+            return RedirectToAction("SittingDetails",new {sittingId = sitting.Id});
         }
 
         [HttpPost]
