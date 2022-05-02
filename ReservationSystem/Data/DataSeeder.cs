@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ReservationSystem.Data
 {
-    public class DataSeeder 
+    public class DataSeeder
     {
 
         ModelBuilder _modelBuilder;
@@ -22,6 +24,7 @@ namespace ReservationSystem.Data
             SeedEmployee();
             SeedPerson();
             SeedReservationStatus();
+            SeedRoles();
 
         }
 
@@ -328,7 +331,7 @@ namespace ReservationSystem.Data
                 {
                     Id = 3,
                     StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
-                    Comments= "",
+                    Comments = "",
                     NoOfPeople = 5,
                     SittingId = 3,
                     ReservationStatusId = 3,
@@ -412,6 +415,7 @@ namespace ReservationSystem.Data
                     FirstName = "Damien",
                     LastName = "Antonietti",
                     PhoneNumber = "015723892",
+                    Email = "g@g.com",
                     RestaurantId = 1
 
                 }, new Person
@@ -420,6 +424,7 @@ namespace ReservationSystem.Data
                     FirstName = "Andrew",
                     LastName = "Gardner",
                     PhoneNumber = "015656165",
+                    Email = "h@h.com",
                     RestaurantId = 1
                 }, new Person
                 {
@@ -427,6 +432,7 @@ namespace ReservationSystem.Data
                     FirstName = "Brendan",
                     LastName = "Chappell",
                     PhoneNumber = "015723832",
+                    Email = "j@j.com",
                     RestaurantId = 1
                 }, new Person
                 {
@@ -434,6 +440,7 @@ namespace ReservationSystem.Data
                     FirstName = "Conor",
                     LastName = "O'Neill",
                     PhoneNumber = "015725832",
+                    Email = "k@k.com",
                     RestaurantId = 1
                 });
         }
@@ -448,6 +455,7 @@ namespace ReservationSystem.Data
                     FirstName = "Kaleena",
                     LastName = "Byrne",
                     PhoneNumber = "023457123",
+                    Email = "t@k.com",
                     RestaurantId = 1
                 }, new Employee
                 {
@@ -456,6 +464,7 @@ namespace ReservationSystem.Data
                     FirstName = "Kathleen",
                     LastName = "Smith",
                     PhoneNumber = "0298833412",
+                    Email = "ok@k.com",
                     RestaurantId = 1
                 }, new Employee
                 {
@@ -464,6 +473,7 @@ namespace ReservationSystem.Data
                     FirstName = "Jim",
                     LastName = "Jones",
                     PhoneNumber = "023465123",
+                    Email = "pat@k.com",
                     RestaurantId = 1
                 }, new Employee
                 {
@@ -471,6 +481,7 @@ namespace ReservationSystem.Data
                     EmployeeId = 4,
                     FirstName = "John",
                     LastName = "Doe",
+                    Email = "johndoe@k.com",
                     PhoneNumber = "023465153",
                     RestaurantId = 1
                 });
@@ -486,7 +497,7 @@ namespace ReservationSystem.Data
                     LastName = "Smith",
                     PhoneNumber = "023462343",
                     RestaurantId = 1,
-                    Email = "d.d@d.com"
+                    Email = "emilyd@d.com"
                 }, new Customer
                 {
                     Id = 6,
@@ -515,6 +526,26 @@ namespace ReservationSystem.Data
                 });
         }
 
+        private void SeedRoles()
+        {
+            _modelBuilder.Entity<IdentityRole>()
+                .HasData(new IdentityRole
+                {
+                    Id = "1",
+                    Name = Roles.Admin.ToString(),
+                    NormalizedName = Roles.Admin.ToString().ToUpper()
+                }, new IdentityRole
+                {
+                    Id = "2",
+                    Name = Roles.Employee.ToString(),
+                    NormalizedName = Roles.Employee.ToString().ToUpper()
+                }, new IdentityRole
+                {
+                    Id = "3",
+                    Name = Roles.Member.ToString(),
+                    NormalizedName = Roles.Member.ToString().ToUpper()
+                });
+        }
 
 
     }

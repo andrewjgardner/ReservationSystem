@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Controllers;
 using ReservationSystem.Data;
 using ReservationSystem.Models.Reservation;
+using ReservationSystem.Services;
 using ReservationSystemTests.Utilities;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace ReservationSystemTests.ReservationControllerTests
         private readonly DbConnection _connection;
         protected DbContextOptions<ApplicationDbContext> _contextOptions;
         private readonly ApplicationDbContext _context;
+        private readonly PersonService _personService;
 
         public ReadTests()
         {
@@ -33,6 +35,8 @@ namespace ReservationSystemTests.ReservationControllerTests
 
             _context = CreateContext();
             _context.Database.EnsureCreated();
+
+            _personService = new PersonService(_context);
         }
 
         public void Dispose()
@@ -50,7 +54,7 @@ namespace ReservationSystemTests.ReservationControllerTests
             //Arrange
             using var context = CreateContext();
             PostCreationSeeding.InitializeDbForRead(context);
-            var controller = new ReservationController(context);
+            var controller = new ReservationController(context, _personService);
 
             //Act
             var result = await controller.Sittings();
@@ -69,7 +73,7 @@ namespace ReservationSystemTests.ReservationControllerTests
             int testSittingId = -1;
             using var context = CreateContext();
             PostCreationSeeding.InitializeDbForRead(context);
-            var controller = new ReservationController(context);
+            var controller = new ReservationController(context, _personService);
 
             //Act
             var result = await controller.ReservationForm(testSittingId);

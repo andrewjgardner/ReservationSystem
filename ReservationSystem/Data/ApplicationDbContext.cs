@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Models.Reservation;
 
@@ -29,6 +30,7 @@ namespace ReservationSystem.Data
 
             base.OnModelCreating(builder);
         }
+
         public DbSet<Area> Areas { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<Customer> Customers { get; set; }

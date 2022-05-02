@@ -76,5 +76,9 @@ namespace ReservationSystem.Data
                 .HasForeignKey(rt => rt.TableId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+
+        private void ModelUserTable()
+        {
+        }
     }
 }
