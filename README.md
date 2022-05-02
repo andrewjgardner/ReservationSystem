@@ -1,5 +1,7 @@
 # ReservationSystem
 
+## Appsettings.json
+````
 {
   "AllowedHosts": "*",
   "ConnectionStrings": {

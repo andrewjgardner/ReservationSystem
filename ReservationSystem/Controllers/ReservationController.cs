@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data;
 using ReservationSystem.Models.Reservation;
+using ReservationSystem.Services;
 
 namespace ReservationSystem.Controllers
 {
     public class ReservationController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly PersonService _personService;
 
-        public ReservationController(ApplicationDbContext context)
+        public ReservationController(ApplicationDbContext context, PersonService personService)
         {
             _context = context;
+            _personService = personService;
         }
 
         public List<Sitting> GetSittings()
@@ -60,30 +63,13 @@ namespace ReservationSystem.Controllers
 
         public async Task<IActionResult> Receipt(ReservationFormVM reservationForm)
         {
+            var restaurantId = 1; 
             var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
             var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
             var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
-            var customer = await _context.Customers.Where(c => c.PhoneNumber == reservationForm.Phone).FirstOrDefaultAsync();
-
-
-            if (customer == null)
-            {
-                customer = new Customer
-                {
-                    Email = reservationForm.Email,
-                    PhoneNumber = reservationForm.Phone,
-                    FirstName = reservationForm.FirstName,
-                    LastName = reservationForm.LastName,
-                    RestaurantId = sitting.RestaurantId
-                };
-            }
+            var customer = await _personService.FindOrCreateCustomerAsync(restaurantId,reservationForm.Phone,reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
 
             string? comments = reservationForm.Comments;
-
-            if (comments==null)
-            {
-                comments = "";
-            }
 
             DateTime arrival = reservationForm.Date.Date.Add(reservationForm.Time.TimeOfDay);
 
@@ -96,7 +82,7 @@ namespace ReservationSystem.Controllers
                 Sitting = sitting,
                 ReservationStatus = reservationstatus,
                 ReservationOrigin = reservationorigin,
-                Customer = customer
+                Customer = (Customer)customer
             };
 
             _context.Reservations.Add(reservation);

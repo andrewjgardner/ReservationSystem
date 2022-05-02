@@ -1,20 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
 using ReservationSystem.Models.Reservation;
+using ReservationSystem.Services;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly PersonService _personService;
 
-        public HomeController (ApplicationDbContext context)
+        public HomeController (ApplicationDbContext context, PersonService personService)
         {
+            _personService = personService;
             _context = context;
         }
 
@@ -134,30 +139,15 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
         public async Task<IActionResult> SaveReservation(ReservationsCreateVM reservationForm)
         {
-            var sittinngs = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
+            var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
             var restaruantId = 1;
-            var customer = await _context.Customers.Where(c => c.PhoneNumber == reservationForm.Phone).FirstOrDefaultAsync();
             //var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
             //var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
 
-            if (customer == null)
-            {
-                customer = new Customer
-                {
-                    RestaurantId = restaruantId,
-                    Email = reservationForm.Email,
-                    PhoneNumber = reservationForm.Phone,
-                    FirstName = reservationForm.FirstName,
-                    LastName = reservationForm.LastName
-                };
-            }
+            var customer = await _personService.FindOrCreateCustomerAsync(restaruantId, reservationForm.Phone, reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
 
             string? comments = reservationForm.Comments;
 
-            if (comments == null)
-            {
-                comments = "";
-            }
             DateTime arrival = reservationForm.Date.Date.Add(reservationForm.Time.TimeOfDay);
 
             var reservation = new Reservation
@@ -173,7 +163,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("SittingDetails",new {sittingId = sittinngs.Id});
+            return RedirectToAction("SittingDetails",new {sittingId = sitting.Id});
         }
 
         public async Task<IActionResult> EditReservation(int reservationId)

@@ -41,6 +41,6 @@ namespace ReservationSystem.Areas.Admin.Models
         public int NumPeople { get; set; }
 
         [Display(Name = "Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 }
