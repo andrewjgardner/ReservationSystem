@@ -27,11 +27,19 @@
 	<ItemGroup>
 		<Folder Include="Areas\Admin\Data\" />
 		<Folder Include="Areas\Member\Models\" />
-		<Folder Include="Migrations\" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="ReservationSystemTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="SQL\ReservationCreate.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="SQL\ReservationUpdate.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>
