@@ -2,12 +2,11 @@
 
 @{
 	ViewData["Title"] = "Edit Reservation";
-	var start = Model.StartTime.ToString("hh:mm");
-	var end = Model.EndTime.ToString("hh:mm");
+	var start = Model.Date.ToString("hh:mm");
 }
 
-<h1 class="display-4 text-primary pb-4 fw-4">Add Sitting</h1>
-<h1>@Model.StartTime - @Model.EndTime</h1>
+<h1 class="display-4 text-primary pb-4 fw-4">Edit Reservation</h1>
+<h1>@Model.Date</h1>
 
 <div class="col-md-6 offset-md-3">
 	<form asp-area=Admin asp-controller=Home asp-action=EditReservation>
@@ -28,8 +27,12 @@
 			<input type="number" class="form-control" id="phone" name="phone" value="@Model.Phone">
 		</div>
 		<div class="form-group">
-			<label for="time">Time</label>
-			<input type="time" class="form-control" id="time" value="@Model.Time">
+			<label for="date">Date</label>
+			<input type="datetime" class="form-control" name="date" id="date" value="@Model.Date">
+		</div>
+		<div class="form-group">
+			<label for="date">Number of People</label>
+			<input type="number" class="form-control" name="numpeople" id="numpeople" value="@Model.NumPeople">
 		</div>
 
 		<div class="form-group">
@@ -46,6 +49,6 @@
 			<button type="submit" class="btn btn-primary">Save</button>
 		</div>
 		<input type="hidden" asp-for=SittingId />
-		<input type="hidden" asp-for=Date />
+		<input type="hidden" asp-for=Id />
 	</form>
 </div>

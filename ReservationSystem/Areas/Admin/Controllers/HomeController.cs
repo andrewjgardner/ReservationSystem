@@ -166,6 +166,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return RedirectToAction("SittingDetails",new {sittingId = sitting.Id});
         }
 
+        [HttpGet]
         public async Task<IActionResult> EditReservation(int reservationId)
         {
             var reservations = await _context.Reservations.Where(r => r.Id == reservationId).Include(c=> c.Customer).FirstOrDefaultAsync();
@@ -174,19 +175,42 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             var reservationEdit = new ReservationEditVM
             {
+              Id = reservations.Id,
               FirstName = reservations.Customer.FirstName,
               LastName = reservations.Customer.LastName,
               Email = reservations.Customer.Email,
               Phone = reservations.Customer.PhoneNumber,
-              Time = reservations.StartTime,
+              Date = reservations.StartTime,
               ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
               ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
               ReservationStatusId = reservations.ReservationStatusId,
-              ReservationOriginId = reservations.ReservationOriginId
+              ReservationOriginId = reservations.ReservationOriginId,
+              NumPeople = reservations.NoOfPeople
               
             };
 
             return View(reservationEdit);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditReservation(ReservationEditVM res)
+        {
+            var rese = await _context.Reservations.Where(r => r.Id == res.Id).Include(c=> c.Customer).FirstOrDefaultAsync();
+
+            rese.Customer.FirstName = res.FirstName;
+            rese.Customer.LastName = res.LastName;
+            rese.Customer.Email = res.Email;
+            rese.Customer.PhoneNumber = res.Phone;
+            rese.StartTime = res.Date;
+            rese.ReservationOriginId = res.ReservationOriginId;
+            rese.ReservationStatusId = res.ReservationStatusId;
+            rese.NoOfPeople = res.NumPeople;
+
+            _context.Reservations.Update(rese);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Reservations");
+
         }
 
         [HttpPost]
