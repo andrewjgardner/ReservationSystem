@@ -65,16 +65,6 @@ namespace ReservationSystem.Data
         {
             _modelBuilder.Entity<ReservationTable>()
                 .HasKey(t => new { t.ReservationId, t.TableId });
-
-            _modelBuilder.Entity<ReservationTable>()
-                .HasOne(rt => rt.Reservation)
-                .HasForeignKey(rt => rt.ReservationId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            _modelBuilder.Entity<ReservationTable>()
-                .HasOne(rt => rt.Table)
-                .HasForeignKey(rt => rt.TableId)
-                .OnDelete(DeleteBehavior.Restrict);
         }
         
 
