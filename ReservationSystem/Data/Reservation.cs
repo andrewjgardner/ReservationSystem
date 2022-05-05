@@ -6,7 +6,7 @@ namespace ReservationSystem.Data
     {
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
-        public int NoOfPeople { get; set; }
+        public int Guests { get; set; }
         
         public string? Comments { get; set; }
 
@@ -22,13 +22,15 @@ namespace ReservationSystem.Data
         public Customer Customer { get; set; }
         public int CustomerId { get; set; }
 
-        public List<ReservationTable> ReservationTables { get; set; } = new List<ReservationTable>();
+        public List<Table> Tables { get; set; } = new List<Table>();
 
+        /*
         public IEnumerable<Table> Tables(ApplicationDbContext context)
         {
             var reservationtables = context.ReservationTables.Where(rt => rt.ReservationId == this.Id).Include(rt => rt.Table).ToList();
             var tables = reservationtables.Select(rt => rt.Table);
             return tables;
         }
+        */
     }
 }

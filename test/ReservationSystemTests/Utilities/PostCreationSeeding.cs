@@ -331,7 +331,7 @@ namespace ReservationSystemTests.Utilities
                new Reservation
                 {
                     StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
-                    NoOfPeople = 3,
+                    Guests = 3,
                     SittingId = 1,
                     ReservationStatusId = 1,
                     ReservationOriginId = 1,
@@ -339,7 +339,7 @@ namespace ReservationSystemTests.Utilities
                 }, new Reservation
                 {
                     StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
-                    NoOfPeople = 4,
+                    Guests = 4,
                     SittingId = 2,
                     ReservationStatusId = 2,
                     ReservationOriginId = 2,
@@ -347,7 +347,7 @@ namespace ReservationSystemTests.Utilities
                 }, new Reservation
                 {
                     StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
-                    NoOfPeople = 5,
+                    Guests = 5,
                     SittingId = 3,
                     ReservationStatusId = 3,
                     ReservationOriginId = 3,

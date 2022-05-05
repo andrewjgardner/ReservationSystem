@@ -12,13 +12,14 @@ namespace ReservationSystem.Data
         public DataSeeder(ModelBuilder modelBuilder)
         {
             _modelBuilder = modelBuilder;
+            List<Table> tables = GetTables();
             SeedRestaurant();
             SeedArea();
-            SeedTables();
+            SeedTables(tables);
             SeedSittingType();
             SeedSitting();
-            SeedReservation();
-            SeedReservationTable();
+            SeedReservation(tables);
+            //SeedReservationTable();
             SeedReservationOrigin();
             SeedCustomer();
             SeedEmployee();
@@ -28,43 +29,9 @@ namespace ReservationSystem.Data
 
         }
 
-        public void SeedRestaurant()
+        public List<Table> GetTables()
         {
-            _modelBuilder.Entity<Restaurant>()
-                .HasData(new Restaurant
-                {
-                    Id = 1,
-                    Name = "Bean Scene",
-                    Address = "12 Springfield rd",
-                    PhoneNumber = "12345678",
-                    DefaultCapacity = 100
-                });
-        }
-        public void SeedArea()
-        {
-            _modelBuilder.Entity<Area>()
-                .HasData(new Area
-                {
-                    Id = 1,
-                    RestaurantId = 1,
-                    Name = "Main",
-                }, new Area
-                {
-                    Id = 2,
-                    RestaurantId = 1,
-                    Name = "Outside"
-                }, new Area
-                {
-                    Id = 3,
-                    RestaurantId = 1,
-                    Name = "Balcony"
-                });
-        }
-
-        public void SeedTables()
-        {
-            _modelBuilder.Entity<Table>()
-                .HasData(new Table
+            var tables = new List<Table> { new Table
                 {
                     Id = 1,
                     TableNumber = "M1",
@@ -244,7 +211,47 @@ namespace ReservationSystem.Data
                     TableNumber = "B10",
                     TableCapacity = 3,
                     AreaId = 3
+                }};
+            return tables;
+            
+        }
+
+        public void SeedRestaurant()
+        {
+            _modelBuilder.Entity<Restaurant>()
+                .HasData(new Restaurant
+                {
+                    Id = 1,
+                    Name = "Bean Scene",
+                    Address = "12 Springfield rd",
+                    PhoneNumber = "12345678",
+                    DefaultCapacity = 100
                 });
+        }
+        public void SeedArea()
+        {
+            _modelBuilder.Entity<Area>()
+                .HasData(new Area
+                {
+                    Id = 1,
+                    RestaurantId = 1,
+                    Name = "Main",
+                }, new Area
+                {
+                    Id = 2,
+                    RestaurantId = 1,
+                    Name = "Outside"
+                }, new Area
+                {
+                    Id = 3,
+                    RestaurantId = 1,
+                    Name = "Balcony"
+                });
+        }
+
+        public void SeedTables(List<Table> tables)
+        {
+            _modelBuilder.Entity<Table>().HasData(tables);
 
         }
 
@@ -304,42 +311,48 @@ namespace ReservationSystem.Data
                 });
         }
 
-        public void SeedReservation()
+        public void SeedReservation(List<Table> tables)
         {
-            _modelBuilder.Entity<Reservation>()
-                .HasData(new Reservation
-                {
-                    Id = 1,
-                    StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
-                    Comments = "By the balcony, please.",
-                    NoOfPeople = 3,
-                    SittingId = 1,
-                    ReservationStatusId = 1,
-                    ReservationOriginId = 1,
-                    CustomerId = 5,
-                }, new Reservation
-                {
-                    Id = 2,
-                    StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
-                    Comments = "",
-                    NoOfPeople = 4,
-                    SittingId = 2,
-                    ReservationStatusId = 2,
-                    ReservationOriginId = 2,
-                    CustomerId = 8,
-                }, new Reservation
-                {
-                    Id = 3,
-                    StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
-                    Comments = "",
-                    NoOfPeople = 5,
-                    SittingId = 3,
-                    ReservationStatusId = 3,
-                    ReservationOriginId = 3,
-                    CustomerId = 6,
-                });
+            var res1 = new Reservation
+            {
+                Id = 1,
+                StartTime = new DateTime(2022, 07, 13, 09, 30, 00),
+                Comments = "By the balcony, please.",
+                Guests = 3,
+                SittingId = 1,
+                ReservationStatusId = 1,
+                ReservationOriginId = 1,
+                CustomerId = 5,
+                Tables = new List<Table> { tables[2], tables[3] }
+            };
+            var res2 = new Reservation
+            {
+                Id = 2,
+                StartTime = new DateTime(2022, 07, 13, 12, 30, 00),
+                Comments = "",
+                Guests = 4,
+                SittingId = 2,
+                ReservationStatusId = 2,
+                ReservationOriginId = 2,
+                CustomerId = 8,
+                Tables = new List<Table> { tables[24] }
+            };
+            var res3 = new Reservation
+            {
+                Id = 3,
+                StartTime = new DateTime(2022, 07, 13, 18, 30, 00),
+                Comments = "",
+                Guests = 5,
+                SittingId = 3,
+                ReservationStatusId = 3,
+                ReservationOriginId = 3,
+                CustomerId = 6,
+                Tables = new List<Table> { tables[12],tables[13],tables[14] }
+            };
+            _modelBuilder.Entity<Reservation>().HasData(res1,res2,res3);
         }
 
+        /*
         public void SeedReservationTable()
         {
             _modelBuilder.Entity<ReservationTable>()
@@ -369,6 +382,7 @@ namespace ReservationSystem.Data
                      TableId = 15
                  });
         }
+        */
 
         public void SeedReservationOrigin()
         {

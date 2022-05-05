@@ -15,7 +15,7 @@ namespace ReservationSystem.Data
             ModelSitting();
             ModelTable();
             ModelReservation();
-            ModelReservationTable();
+            //ModelReservationTable();
         }
 
         private void ModelArea()
@@ -50,15 +50,17 @@ namespace ReservationSystem.Data
         private void ModelReservation()
         {
             //Model building for database only entity 
+            
+            _modelBuilder.Entity<Reservation>()
+                .HasMany(r => r.Tables).WithMany(t => t.Reservations)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ReservationTables",
+                    rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
+                    rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
 
-            //_modelBuilder.Entity<Reservation>()
-            //    .HasMany(r => r.Tables).WithMany(t => t.Reservations)
-            //    .UsingEntity<Dictionary<string, object>>(
-            //        "ReservationTables",
-            //        rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
-            //        rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
         }
 
+        
         private void ModelReservationTable()
         {
             _modelBuilder.Entity<ReservationTable>()
@@ -66,16 +68,15 @@ namespace ReservationSystem.Data
 
             _modelBuilder.Entity<ReservationTable>()
                 .HasOne(rt => rt.Reservation)
-                .WithMany(r => r.ReservationTables)
                 .HasForeignKey(rt => rt.ReservationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             _modelBuilder.Entity<ReservationTable>()
                 .HasOne(rt => rt.Table)
-                .WithMany(t => t.ReservationTables)
                 .HasForeignKey(rt => rt.TableId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+        
 
         private void ModelUserTable()
         {

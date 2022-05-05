@@ -9,8 +9,8 @@ namespace ReservationSystem.Models.Reservation
         [Display( Name = "Arrival Time" )]
         public DateTime ArrivalTime { get; set; }
 
-        [Display(Name = "Number of People")]
-        public int NumberOfPeople { get; set; }
+        [Display(Name = "Guests")]
+        public int Guests { get; set; }
 
         [Display(Name = "Comments")]
         public string Comments { get; set; }
