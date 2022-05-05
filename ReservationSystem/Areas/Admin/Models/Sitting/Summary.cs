@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ReservationSystem.Areas.Admin.Models
 {
-    public class SittingsCreateVM
+    public class Summary
     {
+        public int SittingID { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dddd dd/MM/yyyy}")]
         public DateTime Date { get; set; }
@@ -18,16 +18,10 @@ namespace ReservationSystem.Areas.Admin.Models
         public DateTime EndTime { get; set; }
 
         [Display(Name = "Name")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public SelectList SittingTypes { get; set; }
+        [Display(Name = "Percent Full")]
+        public int PercentFull { get; set; }
 
-        public int SittingTypeId { get; set; }
-
-        public int RestaurantId { get; set; }
-
-        public int Capacity { get; set; }
-
-        public bool IsClosed { get; set; }
     }
 }

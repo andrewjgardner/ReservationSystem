@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ReservationSystem.Areas.Admin.Models
+namespace ReservationSystem.Areas.Admin.Models.Sitting
 {
-    public class SittingDetailsVM
+    public class Details
     {
         [DisplayFormat(DataFormatString = "{0:dddd dd/MM/yyyy}")]
         public DateTime Date { get; set; }

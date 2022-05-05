@@ -33,6 +33,7 @@ namespace ReservationSystem.Controllers
 
         public async Task<IActionResult> Sittings()
         {
+            //This is going to be deleted anyway once we consolidate into a single view, no point refactoring
             var sittings = GetSittings();
             List<SittingsVM> sittingsVM = sittings.Select(s => new SittingsVM
             {

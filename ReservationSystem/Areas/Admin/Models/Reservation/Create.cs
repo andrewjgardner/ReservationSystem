@@ -2,7 +2,7 @@
 
 namespace ReservationSystem.Areas.Admin.Models
 {
-    public class ReservationsCreateVM
+    public class Create
     {
         public string FirstName { get; set; }
 

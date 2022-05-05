@@ -1,37 +1,39 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
-using ReservationSystem.Models.Reservation;
-using ReservationSystem.Services;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
-    public class HomeController : Controller
+    public class SittingController : Controller
     {
-
         private readonly ApplicationDbContext _context;
-        private readonly PersonService _personService;
 
-        public HomeController (ApplicationDbContext context, PersonService personService)
+        public SittingController(ApplicationDbContext context)
         {
-            _personService = personService;
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var sittings = await _context.Sittings.Include(s => s.SittingType).Include(s => s.Reservations).ToArrayAsync();
+            var m = new Models.Sitting.Index
+            {
+                Sittings = await _context.Sittings
+                    .Include(s => s.SittingType)
+                    .Select(s => new Summary
+                    {
+                        SittingID = s.Id,
+                        Date = s.StartTime,
+                        StartTime = s.StartTime,
+                        EndTime = s.EndTime,
+                        Title = s.Title,
+                        PercentFull = s.PercentFull()
+                    })
+                    .ToArrayAsync()
+            };
 
-        public async Task<IActionResult> Sittings()
-        {
-            var sittings = await _context.Sittings.Include(s => s.SittingType).Include(s=>s.Reservations).ToArrayAsync();
-            List<Summary> sittingsVM = sittings.Select(s => new Summary
+            List<SittingsListVM> sittingsVM = sittings.Select(s => new SittingsListVM
             {
                 SittingID = s.Id,
                 Date = s.StartTime,
@@ -42,31 +44,12 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }).ToList();
 
             return View(sittingsVM);
-        }
 
-        public async Task<IActionResult> AddSitting()
-        {
-            //TODO: Get Restaurant from Employee ID
-            int restaurantId = 1;
-
-            var restaurant = await _context.Restaurants.Where(r => r.Id == restaurantId).FirstOrDefaultAsync();
-
-            var sittingtypes = await _context.SittingTypes.ToListAsync();
-
-            var sitting = new Create
-            {
-                SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
-                RestaurantId = restaurantId,
-                Capacity = restaurant.DefaultCapacity,
-                IsClosed = false
-            };
-
-            return View(sitting);
         }
 
         public async Task<IActionResult> SittingDetails(int sittingId)
         {
-            var sitting = await _context.Sittings.Where(s => s.Id == sittingId).Include(s=>s.SittingType).Include(s=>s.Reservations).ThenInclude(r=>r.Customer).FirstOrDefaultAsync();
+            var sitting = await _context.Sittings.Where(s => s.Id == sittingId).Include(s => s.SittingType).Include(s => s.Reservations).ThenInclude(r => r.Customer).FirstOrDefaultAsync();
             var reservations = new List<SittingReservationListVM>();
 
             foreach (Reservation reservation in sitting.Reservations)
@@ -109,7 +92,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 SittingTypeId = sittingform.SittingTypeId,
                 RestaurantId = sittingform.RestaurantId,
                 SittingType = sittingtype,
-                ResDuration = sittingtype.ResDuration                
+                ResDuration = sittingtype.ResDuration
             };
 
             _context.Sittings.Add(sitting);
@@ -118,5 +101,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             return RedirectToAction("Sittings");
         }
+
     }
 }
