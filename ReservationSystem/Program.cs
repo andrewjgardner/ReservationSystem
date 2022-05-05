@@ -19,6 +19,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddTransient<AdminSeed>();
+builder.Services.AddTransient<SeedSQL>();
 
 var app = builder.Build();
 
@@ -63,9 +64,13 @@ app.MapRazorPages();
 
 using(var scope = app.Services.CreateScope())
 {
-    var service = scope.ServiceProvider.GetService<AdminSeed>();
-    await service.SeedAdmin();
+    var adminservice = scope.ServiceProvider.GetService<AdminSeed>();
+    await adminservice.SeedAdmin();
+
+    var sqlservice = scope.ServiceProvider.GetService<SeedSQL>();
+    await sqlservice.SeedAll();
 }
+
 
 app.Run();
 

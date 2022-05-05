@@ -1,0 +1,1 @@
+﻿DROP TRIGGER IF EXISTS update_people_booked_in_sitting_insert, update_people_booked_in_sitting_update
