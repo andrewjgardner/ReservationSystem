@@ -33,21 +33,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     .ToArrayAsync()
             };
 
-            List<SittingsListVM> sittingsVM = sittings.Select(s => new SittingsListVM
-            {
-                SittingID = s.Id,
-                Date = s.StartTime,
-                StartTime = s.StartTime,
-                EndTime = s.EndTime,
-                Title = s.Title,
-                PercentFull = s.PercentFull()
-            }).ToList();
-
             return View(sittingsVM);
 
         }
 
-        public async Task<IActionResult> SittingDetails(int sittingId)
+        public async Task<IActionResult> Details(int sittingId)
         {
             var sitting = await _context.Sittings.Where(s => s.Id == sittingId).Include(s => s.SittingType).Include(s => s.Reservations).ThenInclude(r => r.Customer).FirstOrDefaultAsync();
             var reservations = new List<SittingReservationListVM>();
@@ -79,7 +69,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveSitting(Create sittingform)
+        public async Task<IActionResult> Save(Create sittingform)
         {
             var sittingtype = await _context.SittingTypes.Where(st => st.Id == sittingform.SittingTypeId).FirstOrDefaultAsync();
             var sitting = new Sitting
@@ -100,6 +90,26 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
 
             return RedirectToAction("Sittings");
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            //TODO: Get Restaurant from Employee ID
+            int restaurantId = 1;
+
+            var restaurant = await _context.Restaurants.Where(r => r.Id == restaurantId).FirstOrDefaultAsync();
+
+            var sittingtypes = await _context.SittingTypes.ToListAsync();
+
+            var sitting = new Create
+            {
+                SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
+                RestaurantId = restaurantId,
+                Capacity = restaurant.DefaultCapacity,
+                IsClosed = false
+            };
+
+            return View(sitting);
         }
 
     }
