@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ReservationSystem.Data;
 
-namespace ReservationSystem.Areas.Admin.Models
+namespace ReservationSystem.Areas.Admin.Models.Reservation
 {
-    public class ReservationEditVM
+    public class Edit
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -31,6 +33,15 @@ namespace ReservationSystem.Areas.Admin.Models
 
         public SelectList Sittings { get; set; }
         public int SittingId { get; set; }
+
+
+        public void Validate(ModelStateDictionary modelState,Sitting sitting)
+        {
+            if(Time < sitting.StartTime || Time > sitting.EndTime)
+            {
+                modelState.AddModelError("Time", "Reservation Time Must Fall Within Sitting"); 
+            }
+        }
 
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ReservationSystem.Areas.Admin.Models
 {
-    public class ReservationListVM
+    public class Index
     {
         public int ResId { get; set; }
         public DateTime Date { get; set; }
