@@ -68,7 +68,7 @@ using(var scope = app.Services.CreateScope())
     await adminservice.SeedAdmin();
 
     var sqlservice = scope.ServiceProvider.GetService<SeedSQL>();
-    await sqlservice.SeedTriggers();
+    await sqlservice.SeedAll();
 }
 
 

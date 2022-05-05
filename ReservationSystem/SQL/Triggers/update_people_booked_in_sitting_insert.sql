@@ -9,4 +9,3 @@ BEGIN
 	SET Sittings.PeopleBooked = @PeopleBooked + (SELECT NoOfPeople FROM Inserted)
 	WHERE Id = (SELECT SittingId FROM Inserted)
 END
-GO

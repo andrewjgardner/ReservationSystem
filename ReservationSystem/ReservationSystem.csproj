@@ -34,10 +34,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="SQL\ReservationCreate.sql">
+	  <None Update="SQL\droptriggers.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="SQL\ReservationUpdate.sql">
+	  <None Update="SQL\Triggers\update_people_booked_in_sitting_insert.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="SQL\Triggers\update_people_booked_in_sitting_update.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

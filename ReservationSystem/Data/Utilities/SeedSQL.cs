@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace ReservationSystem.Data.Utilities
 {
@@ -11,12 +12,25 @@ namespace ReservationSystem.Data.Utilities
             _context = context;
         }
 
+        public async Task SeedAll()
+        {
+            await DropTriggers();
+            await SeedTriggers();
+        }
+
+        public async Task DropTriggers()
+        {
+            string file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SQL","droptriggers.sql");
+            string sql = await File.ReadAllTextAsync(file);
+            await _context.Database.ExecuteSqlRawAsync(sql);
+        }
+
         public async Task SeedTriggers()
         {
-            foreach (string file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SQL"), "*.sql").ToList())
+            foreach (string file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SQL","Triggers"), "*.sql").ToList())
             {
-                string sql = File.ReadAllText(file);
-                _context.Database.ExecuteSqlRaw(sql);
+                string sql = await File.ReadAllTextAsync(file);
+                await _context.Database.ExecuteSqlRawAsync(sql);
             }
         }
 
