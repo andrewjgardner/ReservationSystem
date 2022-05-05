@@ -21,11 +21,11 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
         [Display(Name = "Sitting Type")]
         public string SittingType { get; set; }
 
-        public List<SittingReservationListVM> Reservations { get; set; }
+        public List<ReservationList> ReservationList { get; set; }
         public int SittingId { get; set; }
     }
 
-    public class SittingReservationListVM
+    public class ReservationList
     {
         [DisplayFormat(DataFormatString = "{0:t}")]
         [Display(Name = "Arrival time")]
@@ -37,8 +37,8 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
         [Display(Name = "Customer Phone")]
         public string Phone { get; set; }
 
-        [Display(Name = "Number of People")]
-        public int NumPeople { get; set; }
+        [Display(Name = "Number of Guests")]
+        public int Guests { get; set; }
 
         [Display(Name = "Comments")]
         public string? Comments { get; set; }

@@ -1,4 +1,4 @@
-﻿@model ReservationSystem.Areas.Admin.Models.Create
+﻿@model ReservationSystem.Areas.Admin.Models.Sitting.Create
 
 @{
 	ViewData["Title"] = "Add Sitting";
@@ -7,7 +7,7 @@
 <h1 class="display-4 text-primary pb-4 fw-4">Add Sitting</h1>
 
 <div class="col-md-6 offset-md-3">
-	<form asp-action=SaveSitting>
+	<form asp-action=Create>
 		<div class="form-group">
 			<label for="title">Name</label>
 			<input type="text" class="form-control" id="title" name="title" placeholder="Enter name" required>

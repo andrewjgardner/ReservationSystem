@@ -20,7 +20,7 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
         [Display(Name = "Name")]
         public string Title { get; set; }
 
-        public SelectList SittingTypes { get; set; }
+        public SelectList ?SittingTypes { get; set; }
 
         public int SittingTypeId { get; set; }
 

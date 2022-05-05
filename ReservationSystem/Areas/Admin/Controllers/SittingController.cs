@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class SittingController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -33,29 +37,29 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     .ToArrayAsync()
             };
 
-            return View(sittingsVM);
+            return View(m);
 
         }
 
         public async Task<IActionResult> Details(int sittingId)
         {
-            var sitting = await _context.Sittings.Where(s => s.Id == sittingId).Include(s => s.SittingType).Include(s => s.Reservations).ThenInclude(r => r.Customer).FirstOrDefaultAsync();
-            var reservations = new List<SittingReservationListVM>();
+            var sitting = await _context.Sittings.Include(s => s.SittingType).Include(s => s.Reservations).ThenInclude(r => r.Customer).FirstOrDefaultAsync(s => s.Id == sittingId);
+            var reservations = new List<Models.Sitting.ReservationList>();
 
             foreach (Reservation reservation in sitting.Reservations)
             {
-                var reservationVM = new SittingReservationListVM
+                var reservationVM = new Models.Sitting.ReservationList
                 {
                     StartTime = reservation.StartTime,
                     Name = reservation.Customer.FullName(),
                     Phone = reservation.Customer.PhoneNumber,
                     Comments = reservation.Comments,
-                    NumPeople = reservation.NoOfPeople
+                    Guests = reservation.NoOfPeople
                 };
                 reservations.Add(reservationVM);
             }
 
-            var sittingVM = new Details
+            var sittingVM = new Models.Sitting.Details
             {
                 SittingId = sittingId,
                 Date = sitting.StartTime.Date,
@@ -63,45 +67,23 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 EndTime = sitting.EndTime,
                 Title = sitting.Title,
                 SittingType = sitting.SittingType.Description,
-                Reservations = reservations
+                ReservationList = reservations
             };
             return View(sittingVM);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Save(Create sittingform)
-        {
-            var sittingtype = await _context.SittingTypes.Where(st => st.Id == sittingform.SittingTypeId).FirstOrDefaultAsync();
-            var sitting = new Sitting
-            {
-                Title = sittingform.Title,
-                StartTime = sittingform.StartTime,
-                EndTime = sittingform.EndTime,
-                Capacity = sittingform.Capacity,
-                IsClosed = sittingform.IsClosed,
-                SittingTypeId = sittingform.SittingTypeId,
-                RestaurantId = sittingform.RestaurantId,
-                SittingType = sittingtype,
-                ResDuration = sittingtype.ResDuration
-            };
-
-            _context.Sittings.Add(sitting);
-            await _context.SaveChangesAsync();
-
-
-            return RedirectToAction("Sittings");
-        }
-
+        
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             //TODO: Get Restaurant from Employee ID
             int restaurantId = 1;
 
-            var restaurant = await _context.Restaurants.Where(r => r.Id == restaurantId).FirstOrDefaultAsync();
+            var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == restaurantId);
 
             var sittingtypes = await _context.SittingTypes.ToListAsync();
 
-            var sitting = new Create
+            var sitting = new Models.Sitting.Create
             {
                 SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
                 RestaurantId = restaurantId,
@@ -110,6 +92,30 @@ namespace ReservationSystem.Areas.Admin.Controllers
             };
 
             return View(sitting);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Models.Sitting.Create m)
+        {
+            var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
+            var sitting = new Sitting
+            {
+                Title = m.Title,
+                StartTime = m.StartTime,
+                EndTime = m.EndTime,
+                Capacity = m.Capacity,
+                IsClosed = m.IsClosed,
+                SittingTypeId = m.SittingTypeId,
+                RestaurantId = m.RestaurantId,
+                SittingType = sittingtype,
+                ResDuration = sittingtype.ResDuration
+            };
+
+            _context.Sittings.Add(sitting);
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("Index");
         }
 
     }

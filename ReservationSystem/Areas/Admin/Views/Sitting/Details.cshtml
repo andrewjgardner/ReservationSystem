@@ -1,5 +1,5 @@
 ﻿@using System.Security.Policy
-@model ReservationSystem.Areas.Admin.Models.Details
+@model ReservationSystem.Areas.Admin.Models.Sitting.Details
 
 @{
 	ViewData["Title"] = @Model.Title;
@@ -9,7 +9,7 @@
 	<h1 class="display-4 text-primary pb-4 fw-4">@Model.Title</h1>
 	<h4>@Model.StartTime - @Model.EndTime</h4>
     <p>Sitting Type: @Model.SittingType</p>
-	<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="AddReservation" asp-route-sittingId = "@Model.SittingId" >Add Reservation</a>
+	<a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Create" asp-route-sittingId = "@Model.SittingId" >Add Reservation</a>
 	<table class="table table-hover table-striped" >
 		<thead class="table-primary">
 			<tr>
@@ -31,7 +31,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var item in Model.Reservations)
+			@foreach (var item in Model.ReservationList)
 			{	
 			<tr> 
 				<td>
@@ -44,7 +44,7 @@
 					@Html.DisplayFor(modelItem => item.Phone)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.NumPeople)
+					@Html.DisplayFor(modelItem => item.Guests)
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Comments)

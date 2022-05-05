@@ -1,15 +1,15 @@
-﻿@model ReservationSystem.Areas.Admin.Models.Edit
+﻿@model ReservationSystem.Areas.Admin.Models.Reservation.Edit
 
 @{
 	ViewData["Title"] = "Edit Reservation";
-	var start = Model.Date.ToString("hh:mm");
+	var start = Model.DateTime.ToString("hh:mm");
 }
 
 <h1 class="display-4 text-primary pb-4 fw-4">Edit Reservation</h1>
-<h1>@Model.Date</h1>
+<h1>@Model.DateTime</h1>
 
 <div class="col-md-6 offset-md-3">
-	<form asp-area=Admin asp-controller=Home asp-action=EditReservation>
+	<form asp-area=Admin asp-controller=Reservation asp-action=Edit>
 		<div class="form-group">
 			<label for="firstName">First Name</label>
 			<input type="text" class="form-control" id="firstName" name="firstName" value="@Model.FirstName" required>
@@ -27,12 +27,16 @@
 			<input type="number" class="form-control" id="phone" name="phone" value="@Model.Phone">
 		</div>
 		<div class="form-group">
-			<label for="date">Date</label>
-			<input type="datetime" class="form-control" name="date" id="date" value="@Model.Date">
+			<label for="datetime">Date & Time</label>
+			<input type="datetime" class="form-control" name="datetime" id="datetime" value="@Model.DateTime">
 		</div>
 		<div class="form-group">
-			<label for="date">Number of People</label>
-			<input type="number" class="form-control" name="numpeople" id="numpeople" value="@Model.NumPeople">
+			<label for="guests">Number of Guests</label>
+			<input type="number" class="form-control" name="guests" id="guests" value="@Model.Guests">
+		</div>
+		<div class="form-group">
+			<label for="comments">Comments</label>
+			<input type="text" class="form-control" name="comments" id="comments" value="@Model.Comments">
 		</div>
 
 		<div class="form-group">
@@ -50,5 +54,7 @@
 		</div>
 		<input type="hidden" asp-for=SittingId />
 		<input type="hidden" asp-for=Id />
+		<input type="hidden" asp-for=ReservationStatus />
+		<input type="hidden" asp-for=ReservationOrigin />
 	</form>
 </div>

@@ -1,5 +1,5 @@
 ﻿@using System.Security.Policy
-@model ReservationSystem.Areas.Admin.Models.Index
+@model ReservationSystem.Areas.Admin.Models.Reservation.Index
 @{
 	ViewData["Title"] = "Reservations";
 }
@@ -25,7 +25,7 @@
 				<td>@r.Status</td>
 				<td>@r.SittingId</td>
 				<td>
-					<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="EditReservation" asp-route-reservationId = "@item.ResId" >Edit Reservation</a>
+					<a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId = "@r.Id" >Edit Reservation</a>
 				</td>
 			</tr>
 			}

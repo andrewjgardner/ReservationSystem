@@ -1,5 +1,5 @@
 ﻿@using System.Security.Policy
-@model IEnumerable<ReservationSystem.Areas.Admin.Models.Summary>
+@model ReservationSystem.Areas.Admin.Models.Sitting.Index
 
 @{
 	ViewData["Title"] = "Sittings";
@@ -7,24 +7,24 @@
 
 <div class="container text-center">
 	<h1 class="display-4 text-primary pb-4 fw-4">Sittings</h1>
-	<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="AddSitting">Add Sitting</a>
+	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
 	<table class="table table-hover table-striped" >
 		<thead class="table-primary">
 			<tr>
 				<th>
-					@Html.DisplayNameFor(model => model.Date)
+					Date
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.StartTime)
+					StartTime
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.EndTime)
+					EndTime
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Title)
+					Title
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.PercentFull)
+					PercentFull
 				</th>
 				<th>
 					View Sittings Details
@@ -35,26 +35,26 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var item in Model)
+			@foreach (var r in Model.Sittings)
 			{	
 			<tr> 
 				<td>
-					@Html.DisplayFor(modelItem => item.Date)
+					@r.Date
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.StartTime)
+					@r.StartTime
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.EndTime)
+					@r.EndTime
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Title)
+					@r.Title
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.PercentFull)
+					@r.PercentFull
 				</td>
 				<td>
-					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("SittingDetails", "Home", new {sittingId = item.SittingID})'">View Details</button>
+					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Details", "Sitting", new {sittingId = r.SittingID})'">View Details</button>
 				</td>
 				<td>
 					<button type="button" class="btn btn-primary">Close Sitting</button>
