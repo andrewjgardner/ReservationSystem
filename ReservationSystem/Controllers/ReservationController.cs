@@ -52,6 +52,11 @@ namespace ReservationSystem.Controllers
         {
             var sittings = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
 
+            if (sittings == null)
+            {
+                return NotFound();            
+            }
+            
             var reservationForm = new ReservationFormVM
             {
                 Date = sittings.StartTime,
@@ -72,8 +77,16 @@ namespace ReservationSystem.Controllers
                 {
                     var restaurantId = 1;
                     var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
+
+                    if (sitting == null || sitting.IsClosed)
+                    {
+                        TempData["ErrorMessage"] = "Sitting is no longer available";
+                        return RedirectToAction("Sittings");
+                    }
+
                     var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
                     var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
+
                     var customer = await _personService.FindOrCreateCustomerAsync(restaurantId, reservationForm.Phone, reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
 
                     DateTime arrival = reservationForm.Date.Date.Add(reservationForm.Time.TimeOfDay);
@@ -94,15 +107,13 @@ namespace ReservationSystem.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    var ReceiptVM = new ReceiptVM()
-                    {
-                        Id = reservation.Id,
-                        ArrivalTime = reservation.StartTime,
-                        NumberOfPeople = reservation.NoOfPeople,
-                        Comments = reservation.Comments
-                    };
+                  
+                    TempData["Id"] = reservation.Id;
+                    TempData["ArrivalTime"] = reservation.StartTime;
+                    TempData["NumberOfPeople"] = reservation.NoOfPeople;
+                    TempData["Comments"] = reservation.Comments;
 
-                    return RedirectToAction("Receipt", reservationForm);
+                    return RedirectToAction("Receipt");
 
                 }
                 catch (Exception ex)
@@ -115,20 +126,30 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Receipt(ReceiptVM receiptVM)
+        public async Task<IActionResult> Receipt()
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                var id = (int)TempData["Id"];
+                if (id != 0)
                 {
-                    return View(receiptVM);
+                    var receipt = new ReceiptVM
+                    {
+                        Id = id,
+                        ArrivalTime = (DateTime)TempData["ArrivalTime"],
+                        NumberOfPeople = (int)TempData["NumberOfPeople"],
+                        Comments = (string)TempData["Comments"]
+                    };
+
+                    return View(receipt);
                 }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
-                }
+                return NotFound();
             }
-            return View(receiptVM);
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return NotFound();
+            }
 
         }
 
