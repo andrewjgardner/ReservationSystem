@@ -1,4 +1,4 @@
-﻿@model ReservationSystem.Models.Reservation.ReservationFormVM
+﻿@model ReservationSystem.Models.Reservation.Create
 
 @{
 	ViewData["Title"] = "ReservationForm";
@@ -8,7 +8,7 @@
 <h1 class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
 <h1>@Model.StartTime - @Model.EndTime</h1>
 <div class="col-md-6 offset-md-3">
-	<form asp-action=Receipt>
+	<form asp-action=Create>
 		<div class="form-group">
 			<label for="firstname">First Name</label>
 			<input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your first name" required>

@@ -1,5 +1,6 @@
-﻿@model ReservationSystem.Areas.Admin.Models.ReservationsCreateVM
-
+﻿@model ReservationSystem.Areas.Admin.Models.Reservation.Create
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/theme.css" />
 @{
 	ViewData["Title"] = "Add Reservation";
 	var start = Model.StartTime.ToString("hh:mm");
@@ -12,8 +13,9 @@
 <h1>@Model.StartTime - @Model.EndTime</h1>
 }
 
+
 <div class="col-md-6 offset-md-3">
-	<form asp-area=Admin asp-controller=Home asp-action=SaveReservation>
+	<form asp-area=Admin asp-controller=Reservation asp-action=Create>
 		<div class="form-group">
 			<label for="firstName">First Name</label>
 			<input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" required>
@@ -31,13 +33,18 @@
 			<input type="number" class="form-control" id="phone" name="phone" placeholder="Enter Phonenumber">
 		</div>
 		<div class="form-group">
-			<label for="time">Time</label>
-			<input type="time" class="form-control" id="time" name="time">
+			<label for="datetime">Date & Time</label>
+			<input type="datetime" class="form-control" id="datetime" name="datetime">
 		</div>
 		<div class="form-group">
 			<label for="numpeople">Number Of People</label>
 			<input type="number" class="form-control" id="numpeople" name="numpeople">
 		</div>
+		<div class="form-group">
+			<label for="comments">Comments</label>
+			<input type="text" class="form-control" id="comments" name="comments">
+		</div>
+		<div class="calendar-container"></div>
 
 		<div class="form-group">
 			<p>Reservation Status: </p>
@@ -60,6 +67,28 @@
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
 		<input type="hidden" asp-for=SittingId />
-		<input type="hidden" asp-for=Date />
+		<input type="hidden" asp-for=DateTime />
 	</form>
 </div>
+
+@section Scripts{
+	<script src="/js/js/calendar.min.js"></script>
+	<script src="/js/calendar.js"></script>
+
+	<script>
+		$(function(){
+		$('.calendar-container').calendar({
+			prevButton:"<",
+			nextButton:">",
+		});
+		});
+
+		$('.calendar-container').calendar({
+		onClickDate: function (date) {
+			$('.calendar-container').updateCalenderOptions
+		
+		}
+});
+	</script>
+}
+
