@@ -24,8 +24,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
             _context = context;
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -50,12 +48,10 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(int? sittingId)
         {
-
-
             var reservationStatus = await _context.ReservationStatuses.ToListAsync();
             var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
 
-            var reservation = new Create
+            var reservation = new Models.Reservation.Create
             {
                 ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
                 ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
@@ -77,7 +73,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Create m)
+        public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
             var restaruantId = 1;

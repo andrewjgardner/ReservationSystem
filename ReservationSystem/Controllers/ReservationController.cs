@@ -51,7 +51,7 @@ namespace ReservationSystem.Controllers
         {
             var sittings =  await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
 
-            var reservationForm = new ReservationFormVM
+            var reservationForm = new Create
             {
                 Date = sittings.StartTime,
                 SittingId = sittingId,
@@ -62,7 +62,7 @@ namespace ReservationSystem.Controllers
             return View(reservationForm);
         }
 
-        public async Task<IActionResult> Receipt(ReservationFormVM reservationForm)
+        public async Task<IActionResult> Receipt(Create reservationForm)
         {
             var restaurantId = 1; 
             var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
