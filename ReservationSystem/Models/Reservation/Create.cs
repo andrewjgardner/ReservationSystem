@@ -3,7 +3,7 @@
 namespace ReservationSystem.Models.Reservation
 {
 
-    public class ReservationFormVM
+    public class Create
     {
         [Required]
         public string FirstName { get; set; }

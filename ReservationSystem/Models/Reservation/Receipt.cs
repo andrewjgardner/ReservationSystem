@@ -2,7 +2,7 @@
 
 namespace ReservationSystem.Models.Reservation
 {
-    public class ReceiptVM
+    public class Receipt
     {
         public int Id { get; set; }
         

@@ -61,7 +61,7 @@ namespace ReservationSystemTests.ReservationControllerTests
 
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<SittingsVM>>(
+            var model = Assert.IsAssignableFrom<IEnumerable<Sittings>>(
                 viewResult.ViewData.Model);
             Assert.Equal(4, model.Count());
         }
@@ -76,7 +76,7 @@ namespace ReservationSystemTests.ReservationControllerTests
             var controller = new ReservationController(context, _personService);
 
             //Act
-            var result = await controller.ReservationForm(testSittingId);
+            var result = await controller.Create(testSittingId);
 
             //Assert
             var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
