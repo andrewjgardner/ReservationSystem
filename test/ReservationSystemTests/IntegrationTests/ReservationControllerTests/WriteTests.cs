@@ -56,10 +56,10 @@ namespace ReservationSystemTests.ReservationControllerTests
 
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<SittingsVM>>(
+            var model = Assert.IsAssignableFrom<IEnumerable<Sittings>>(
                 viewResult.ViewData.Model);
 
-            Assert.Equal(new List<SittingsVM>(), model);
+            Assert.Equal(new List<Sittings>(), model);
         }
 
     }

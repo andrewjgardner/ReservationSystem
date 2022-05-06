@@ -1,5 +1,5 @@
 ﻿@using System.Security.Policy
-@model IEnumerable<ReservationSystem.Models.Reservation.SittingsVM>
+@model IEnumerable<ReservationSystem.Models.Reservation.Sittings>
 
 @{
 	ViewData["Title"] = "Sittings";
@@ -44,7 +44,7 @@
 					@Html.DisplayFor(modelItem => item.Title)
 				</td>
 				<td>
-					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("ReservationForm", "Reservation", new {sittingId = item.SittingID})'">Select Sitting</button>
+					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Create", "Reservation", new {sittingId = item.SittingID})'">Select Sitting</button>
 				</td>
 			</tr>
 			}

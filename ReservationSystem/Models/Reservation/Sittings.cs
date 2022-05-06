@@ -2,7 +2,7 @@
 
 namespace ReservationSystem.Models.Reservation
 {
-    public class SittingsVM
+    public class Sittings
     {
         public int SittingID { get; set; }
 
