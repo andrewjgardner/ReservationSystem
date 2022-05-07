@@ -27,7 +27,10 @@
 					PercentFull
 				</th>
 				<th>
-					View Sittings Details
+					View Sitting Details
+				</th>
+				<th>
+					Edit Sitting Details
 				</th>
 				<th>
 					Close Reservation
@@ -55,6 +58,9 @@
 				</td>
 				<td>
 					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Details", "Sitting", new {sittingId = r.SittingID})'">View Details</button>
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Sitting", new {sittingId = r.SittingID})'">Edit Details</button>
 				</td>
 				<td>
 					<button type="button" class="btn btn-primary">Close Sitting</button>
