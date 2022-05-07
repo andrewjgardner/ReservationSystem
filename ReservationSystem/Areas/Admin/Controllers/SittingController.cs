@@ -54,7 +54,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     Name = reservation.Customer.FullName(),
                     Phone = reservation.Customer.PhoneNumber,
                     Comments = reservation.Comments,
-                    Guests = reservation.NoOfPeople
+                    Guests = reservation.Guests
                 };
                 reservations.Add(reservationVM);
             }

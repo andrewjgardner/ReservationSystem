@@ -116,7 +116,7 @@ namespace ReservationSystem.Controllers
                     var reservation = new Reservation
                     {
                         StartTime = arrival,
-                        NoOfPeople = m.Guests,
+                        Guests = m.Guests,
                         Comments = m.Comments,
                         SittingId = m.SittingId,
                         Sitting = sitting,
@@ -156,7 +156,7 @@ namespace ReservationSystem.Controllers
                     {
                         Id = reservation.Id,
                         ArrivalTime = reservation.StartTime,
-                        NumberOfPeople = reservation.NoOfPeople,
+                        NumberOfPeople = reservation.Guests,
                         Comments = reservation.Comments
                     };
 

@@ -95,7 +95,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     var reservation = new Reservation
                     {
                         StartTime = m.DateTime,
-                        NoOfPeople = m.NumPeople,
+                        Guests = m.NumPeople,
                         Comments = comments,
                         SittingId = m.SittingId,
                         ReservationStatusId = m.ReservationStatusId,
@@ -139,7 +139,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
               ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
               ReservationStatusId = reservation.ReservationStatusId,
               ReservationOriginId = reservation.ReservationOriginId,
-              Guests = reservation.NoOfPeople,
+              Guests = reservation.Guests,
               SittingId = reservation.SittingId,
               Comments = reservation.Comments
               
@@ -174,7 +174,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     reservation.StartTime = m.DateTime;
                     reservation.ReservationOriginId = m.ReservationOriginId;
                     reservation.ReservationStatusId = m.ReservationStatusId;
-                    reservation.NoOfPeople = m.Guests;
+                    reservation.Guests = m.Guests;
 
                     _context.Reservations.Update(reservation);
                     await _context.SaveChangesAsync();
