@@ -8,64 +8,38 @@
 <div class="container text-center">
 	<h1 class="display-4 text-primary pb-4 fw-4">Sittings</h1>
 	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
-	<table class="table table-hover table-striped" >
+	<table class="table table-hover table-striped">
 		<thead class="table-primary">
 			<tr>
-				<th>
-					Date
-				</th>
-				<th>
-					StartTime
-				</th>
-				<th>
-					EndTime
-				</th>
-				<th>
-					Title
-				</th>
-				<th>
-					PercentFull
-				</th>
-				<th>
-					View Sitting Details
-				</th>
-				<th>
-					Edit Sitting Details
-				</th>
-				<th>
-					Close Reservation
-				</th>
+				<th> Date </th>
+				<th> Start Time </th>
+				<th> End Time </th>
+				<th> Title </th>
+				<th> PercentFull </th>
+				<th> View Sitting Details </th>
+				<th> Edit Sitting Details </th>
+				<th> Close Reservation </th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var r in Model.Sittings)
-			{	
-			<tr> 
-				<td>
-					@r.Date
-				</td>
-				<td>
-					@r.StartTime
-				</td>
-				<td>
-					@r.EndTime
-				</td>
-				<td>
-					@r.Title
-				</td>
-				<td>
-					@r.PercentFull
-				</td>
-				<td>
-					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Details", "Sitting", new {sittingId = r.SittingID})'">View Details</button>
-				</td>
-				<td>
-					<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Sitting", new {sittingId = r.SittingID})'">Edit Details</button>
-				</td>
-				<td>
-					<button type="button" class="btn btn-primary">Close Sitting</button>
-				</td>
-			</tr>
+			{
+				<tr class=@r.TableVariant>
+					<td> @Html.DisplayFor(modelItem => r.Date) </td>
+					<td> @Html.DisplayFor(modelItem => r.StartTime) </td>
+					<td> @Html.DisplayFor(modelItem => r.EndTime) </td>
+					<td> @r.Title </td>
+					<td> @r.PercentFull </td>
+					<td>
+						<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Details", "Sitting", new {sittingId = r.SittingID})'">View Details</button>
+					</td>
+					<td>
+						<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Sitting", new {sittingId = r.SittingID})'">Edit Details</button>
+					</td>
+					<td>
+						<button type="button" class="btn btn-primary">Close Sitting</button>
+					</td>
+				</tr>
 			}
 		</tbody>
 	</table>

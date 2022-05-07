@@ -32,7 +32,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                         StartTime = s.StartTime,
                         EndTime = s.EndTime,
                         Title = s.Title,
-                        PercentFull = s.PercentFull()
+                        PercentFull = s.PercentFull(),
+                        IsClosed = s.IsClosed
                     })
                     .ToArrayAsync()
             };
@@ -160,18 +161,18 @@ namespace ReservationSystem.Areas.Admin.Controllers
             try
             {
                 var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
-				if (sitting == null)
-				{
+                if (sitting == null)
+                {
                     TempData["ErrorMessage"] = "Sitting not found";
                     return NotFound();
                 }
 
                 var sittingType = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
-				if (sittingType == null)
-				{
+                if (sittingType == null)
+                {
                     TempData["ErrorMessage"] = "Sitting Type not found";
                     return NotFound();
-				}
+                }
 
                 m.Validate(ModelState, sitting);
 
