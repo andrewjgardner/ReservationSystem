@@ -6,7 +6,7 @@ namespace ReservationSystem.Data
     {
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
-        public int NoOfPeople { get; set; }
+        public int Guests { get; set; }
         
         public string? Comments { get; set; }
 
