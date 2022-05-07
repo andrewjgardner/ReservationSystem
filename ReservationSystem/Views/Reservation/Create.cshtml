@@ -9,29 +9,52 @@
 <h1>@Model.StartTime - @Model.EndTime</h1>
 <div class="col-md-6 offset-md-3">
 	<form asp-action=Create>
-		<div class="form-group">
-			<label for="firstname">First Name</label>
-			<input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your first name" required>
-		</div>
-		<div class="form-group">
-			<label for="lastname">Last Name</label>
-			<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter your last name" required>
-		</div>
-		<div class="form-group">
-			<label for="email">Email</label>
-			<input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
-		</div>
-		<div class="form-group">
-			<label for="phone">Phone</label>
-			<input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your phone" required >
-		</div>
+		@if (Model.FirstName != null)
+		{
+			<div class="form-group">
+				<label for="firstname">First Name</label>
+				<input type="text" class="form-control" id="firstname" name="firstname" value="@Model.FirstName" readonly>
+			</div>
+			<div class="form-group">
+				<label for="lastname">Last Name</label>
+				<input type="text" class="form-control" id="lastname" name="lastname" value="@Model.LastName" readonly>
+			</div>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="email" class="form-control" id="email" name="email" value="@Model.Email" readonly>
+			</div>
+			<div class="form-group">
+				<label for="phone">Phone</label>
+				<input type="text" class="form-control" id="phone" name="phone" value="@Model.Phone" readonly>
+			</div>
+		}
+		else
+		{
+			<div class="form-group">
+				<label for="firstname">First Name</label>
+				<input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your first name" required>
+			</div>
+			<div class="form-group">
+				<label for="lastname">Last Name</label>
+				<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter your last name" required>
+			</div>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+			</div>
+			<div class="form-group">
+				<label for="phone">Phone</label>
+				<input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your phone" required>
+			</div>
+
+		}
 		<div class="form-group">
 			<label for="time">Time</label>
 			<input type="time" class="form-control" id="time" name="time" placeholder="Enter your time" min="@start" max="@end">
 		</div>
 		<div class="form-group">
-			<label for="numpeople">People</label>
-			<input type="number" class="form-control" id="numpeople" name="numpeople" placeholder="Enter number of people" required>
+			<label for="guests">People</label>
+			<input type="number" class="form-control" id="guests" name="guests" placeholder="Enter number of people" required>
 		</div>
 		<div class="form-group">
 			<label for="comments">Comments</label>
@@ -40,7 +63,7 @@
 		<div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
-		
+
 		<input type="hidden" asp-for=SittingId />
 		<input type="hidden" asp-for=Date />
 	</form>
