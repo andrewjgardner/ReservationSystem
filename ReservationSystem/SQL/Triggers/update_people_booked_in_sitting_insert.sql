@@ -6,6 +6,6 @@ BEGIN
 	DECLARE @PeopleBooked INT
 	SET @PeopleBooked = (SELECT PeopleBooked FROM Sittings WHERE Id = (SELECT SittingId FROM Inserted))
 	UPDATE Sittings
-	SET Sittings.PeopleBooked = @PeopleBooked + (SELECT NoOfPeople FROM Inserted)
+	SET Sittings.PeopleBooked = @PeopleBooked + (SELECT Guests FROM Inserted)
 	WHERE Id = (SELECT SittingId FROM Inserted)
 END

@@ -88,7 +88,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -119,8 +119,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int reservationId)
         {
-            var reservation = await _context.Reservations.Include(c=> c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
-            if(reservation == null)
+            var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
+            if (reservation == null)
             {
                 return NotFound();
             }
@@ -129,20 +129,20 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             var reservationEdit = new Models.Reservation.Edit
             {
-              Id = reservation.Id,
-              FirstName = reservation.Customer.FirstName,
-              LastName = reservation.Customer.LastName,
-              Email = reservation.Customer.Email,
-              Phone = reservation.Customer.PhoneNumber,
-              DateTime = reservation.StartTime,
-              ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
-              ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
-              ReservationStatusId = reservation.ReservationStatusId,
-              ReservationOriginId = reservation.ReservationOriginId,
-              Guests = reservation.Guests,
-              SittingId = reservation.SittingId,
-              Comments = reservation.Comments
-              
+                Id = reservation.Id,
+                FirstName = reservation.Customer.FirstName,
+                LastName = reservation.Customer.LastName,
+                Email = reservation.Customer.Email,
+                Phone = reservation.Customer.PhoneNumber,
+                DateTime = reservation.StartTime,
+                ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
+                ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
+                ReservationStatusId = reservation.ReservationStatusId,
+                ReservationOriginId = reservation.ReservationOriginId,
+                Guests = reservation.Guests,
+                SittingId = reservation.SittingId,
+                Comments = reservation.Comments
+
             };
 
             return View(reservationEdit);
@@ -153,18 +153,20 @@ namespace ReservationSystem.Areas.Admin.Controllers
         {
             var reservationStatus = await _context.ReservationStatuses.ToListAsync();
             var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
+
             var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == m.Id);
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
             if (reservation == null || sitting == null)
             {
                 return NotFound();
             }
+
             m.ReservationStatus = new SelectList(reservationStatus, "Id", "Description");
             m.ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description");
+
             m.Validate(ModelState, sitting);
             if (ModelState.IsValid)
             {
-
                 try
                 {
                     reservation.Customer.FirstName = m.FirstName;
@@ -190,7 +192,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
         }
 
-        
+
 
 
     }

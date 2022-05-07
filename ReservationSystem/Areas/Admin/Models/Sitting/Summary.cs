@@ -23,5 +23,19 @@ namespace ReservationSystem.Areas.Admin.Models
         [Display(Name = "Percent Full")]
         public int PercentFull { get; set; }
 
+        public bool IsClosed { get; set; }
+
+        public string TableVariant
+		{
+            get
+			{
+				if (IsClosed)
+				{
+                    return "table-warning";
+                }
+                return "";
+			}
+		}
+
     }
 }

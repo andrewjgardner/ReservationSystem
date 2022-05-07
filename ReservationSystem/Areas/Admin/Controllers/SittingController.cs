@@ -32,7 +32,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                         StartTime = s.StartTime,
                         EndTime = s.EndTime,
                         Title = s.Title,
-                        PercentFull = s.PercentFull()
+                        PercentFull = s.PercentFull(),
+                        IsClosed = s.IsClosed
                     })
                     .ToArrayAsync()
             };
@@ -62,7 +63,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
             var sittingVM = new Models.Sitting.Details
             {
                 SittingId = sittingId,
-                Date = sitting.StartTime.Date,
                 StartTime = sitting.StartTime,
                 EndTime = sitting.EndTime,
                 Title = sitting.Title,
@@ -72,7 +72,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(sittingVM);
         }
 
-        
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -97,6 +97,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
+
             var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
             var sitting = new Sitting
             {
@@ -118,5 +119,83 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int sittingId)
+        {
+            try
+            {
+                var sittingtypes = await _context.SittingTypes.ToListAsync();
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+                var m = new Areas.Admin.Models.Sitting.Edit
+                {
+                    Title = sitting.Title,
+                    Date = sitting.StartTime.Date,
+                    StartTime = sitting.StartTime,
+                    EndTime = sitting.EndTime,
+                    SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
+                    SittingTypeId = sitting.SittingTypeId,
+                    SittingId = sitting.Id,
+                    Capacity = sitting.Capacity,
+                    RestaurantId = sitting.RestaurantId,
+                    IsClosed = sitting.IsClosed
+                };
+
+                return View(m);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Areas.Admin.Models.Sitting.Edit m)
+        {
+            try
+            {
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+
+                var sittingType = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
+                if (sittingType == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting Type not found";
+                    return NotFound();
+                }
+
+                m.Validate(ModelState, sitting);
+
+                if (ModelState.IsValid)
+                {
+                    sitting.Title = m.Title;
+                    sitting.StartTime = m.StartTime;
+                    sitting.EndTime = m.EndTime;
+                    sitting.Capacity = m.Capacity;
+                    sitting.IsClosed = m.IsClosed;
+
+                    _context.Update(sitting);
+
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
+            }
+            return View(m);
+        }
     }
 }
