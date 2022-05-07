@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,13 @@ namespace ReservationSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ReservationController(ApplicationDbContext context, PersonService personService)
+        public ReservationController(ApplicationDbContext context, PersonService personService, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _personService = personService;
+            _userManager = userManager;
         }
 
         public List<Sitting> GetSittings()
@@ -49,22 +52,42 @@ namespace ReservationSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(int sittingId)
         {
-            var sittings = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
-
-            if (sittings == null)
+            try
             {
+                var sittings = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
+
+                if (sittings == null)
+                {
+                    return NotFound();
+                }
+
+                var m = new ReservationSystem.Models.Reservation.Create
+                {
+                    Date = sittings.StartTime,
+                    SittingId = sittingId,
+                    StartTime = sittings.StartTime,
+                    EndTime = sittings.EndTime,
+                };
+
+                if (User.Identity.IsAuthenticated && User.IsInRole(Roles.Member.ToString()))
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
+
+                    m.FirstName = customer.FirstName;
+                    m.LastName = customer.LastName;
+                    m.Phone = customer.PhoneNumber;
+                    m.Email = customer.Email;
+                }
+
+                return View(m);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
                 return NotFound();
             }
-
-            var m = new ReservationSystem.Models.Reservation.Create
-            {
-                Date = sittings.StartTime,
-                SittingId = sittingId,
-                StartTime = sittings.StartTime,
-                EndTime = sittings.EndTime,
-            };
-
-            return View(m);
         }
 
         [HttpPost]
@@ -93,7 +116,7 @@ namespace ReservationSystem.Controllers
                     var reservation = new Reservation
                     {
                         StartTime = arrival,
-                        NoOfPeople = m.NumPeople,
+                        NoOfPeople = m.Guests,
                         Comments = m.Comments,
                         SittingId = m.SittingId,
                         Sitting = sitting,
@@ -106,7 +129,7 @@ namespace ReservationSystem.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Receipt", new {reservationId = reservation.Id});
+                    return RedirectToAction("Receipt", new { reservationId = reservation.Id });
 
                 }
                 catch (Exception ex)
@@ -133,7 +156,7 @@ namespace ReservationSystem.Controllers
                     {
                         Id = reservation.Id,
                         ArrivalTime = reservation.StartTime,
-                        NumberOfPeople = reservation.NoOfPeople, 
+                        NumberOfPeople = reservation.NoOfPeople,
                         Comments = reservation.Comments
                     };
 
