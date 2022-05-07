@@ -18,25 +18,25 @@ BEGIN
 	IF @ReservationStatus = 'Cancelled'
 	BEGIN
 		UPDATE Sittings
-		SET Sittings.PeopleBooked = @PeopleBooked - (SELECT NoOfPeople FROM Deleted)
+		SET Sittings.PeopleBooked = @PeopleBooked - (SELECT Guests FROM Deleted)
 		WHERE Id = (SELECT SittingId FROM Deleted)
 	END
 
 	IF @OldSittingId != @NewSittingId
 	BEGIN
 		UPDATE Sittings
-		SET Sittings.PeopleBooked = @PeopleBooked - (SELECT NoOfPeople FROM Deleted)
+		SET Sittings.PeopleBooked = @PeopleBooked - (SELECT Guests FROM Deleted)
 		WHERE Id = (SELECT SittingId FROM Deleted)
 
 		UPDATE Sittings
-		SET Sittings.PeopleBooked = @PeopleBooked + (SELECT NoOfPeople FROM Inserted)
+		SET Sittings.PeopleBooked = @PeopleBooked + (SELECT Guests FROM Inserted)
 		WHERE Id = (SELECT SittingId FROM Inserted)
 	END
 
 	ELSE
 	BEGIN
 		UPDATE Sittings
-		SET Sittings.PeopleBooked = @PeopleBooked - (SELECT NoOfPeople FROM Deleted) + (SELECT NoOfPeople FROM Inserted)
+		SET Sittings.PeopleBooked = @PeopleBooked - (SELECT Guests FROM Deleted) + (SELECT Guests FROM Inserted)
 		WHERE Id = (SELECT SittingId FROM Deleted)
 	END
 
