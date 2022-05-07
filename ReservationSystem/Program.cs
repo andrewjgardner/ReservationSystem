@@ -5,7 +5,6 @@ using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -18,7 +17,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
-builder.Services.AddTransient<AdminSeed>();
+builder.Services.AddTransient<IdentitySeed>();
 builder.Services.AddTransient<SeedSQL>();
 
 var app = builder.Build();
@@ -63,13 +62,14 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
-    var adminservice = scope.ServiceProvider.GetService<AdminSeed>();
-    await adminservice.SeedAdmin();
+    var identitySeedService = scope.ServiceProvider.GetService<IdentitySeed>();
+    await identitySeedService.SeedAdmin();
+    await identitySeedService.SeedMember();
 
-    var sqlservice = scope.ServiceProvider.GetService<SeedSQL>();
-    await sqlservice.SeedAll();
+    var sqlService = scope.ServiceProvider.GetService<SeedSQL>();
+    await sqlService.SeedAll();
 }
 
 
