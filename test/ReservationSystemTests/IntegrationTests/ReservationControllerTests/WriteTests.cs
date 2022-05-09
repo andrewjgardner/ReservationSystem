@@ -44,23 +44,23 @@ namespace ReservationSystemTests.ReservationControllerTests
         public ApplicationDbContext CreateContext()
             => new ApplicationDbContext(_contextOptions, (modelBuilder) => new TestDataSeeder(modelBuilder));
 
-        [Fact]
-        public async void Sitting_ReturnsAViewResult_IfSittingsIsEmpty()
-        {
-            //Arrange
-            using var context = CreateContext();
-            var controller = new ReservationController(context,_personService);
+        //[Fact]
+        //public async void Sitting_ReturnsAViewResult_IfSittingsIsEmpty()
+        //{
+        //    //Arrange
+        //    using var context = CreateContext();
+        //    var controller = new ReservationController(context,_personService);
 
-            //Act
-            var result = await controller.Sittings();
+        //    //Act
+        //    var result = await controller.Sittings();
 
-            //Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<Sittings>>(
-                viewResult.ViewData.Model);
+        //    //Assert
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = Assert.IsAssignableFrom<IEnumerable<Sittings>>(
+        //        viewResult.ViewData.Model);
 
-            Assert.Equal(new List<Sittings>(), model);
-        }
+        //    Assert.Equal(new List<Sittings>(), model);
+        //}
 
     }
 }
