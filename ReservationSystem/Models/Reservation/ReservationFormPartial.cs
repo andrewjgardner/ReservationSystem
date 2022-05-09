@@ -2,17 +2,15 @@
 
 namespace ReservationSystem.Models.Reservation
 {
+	public class ReservationFormPartial
+	{
+        public string? FirstName { get; set; }
 
-    public class Create
-    {
-		public string FirstName { get; set; }
+        public string? LastName { get; set; }
 
-        public string LastName { get; set; }
+        public string? Email { get; set; }
 
-        public string Email { get; set; }
-
-        [Required]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -24,11 +22,9 @@ namespace ReservationSystem.Models.Reservation
 
         public int Guests { get; set; }
 
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         public int SittingId { get; set; }
 
-        public ReservationFormPartial ReservationFormPartial { get; set; }
-        
-    }
+	}
 }

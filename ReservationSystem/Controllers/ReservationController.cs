@@ -61,12 +61,17 @@ namespace ReservationSystem.Controllers
                     return NotFound();
                 }
 
-                var m = new ReservationSystem.Models.Reservation.Create
+                var m = new Models.Reservation.Create
                 {
-                    Date = sittings.StartTime,
-                    SittingId = sittingId,
                     StartTime = sittings.StartTime,
                     EndTime = sittings.EndTime,
+                };
+
+                m.ReservationFormPartial = new Models.Reservation.ReservationFormPartial
+                {
+                    Date = sittings.StartTime,
+                    EndTime = sittings.EndTime,
+                    SittingId = sittings.Id
                 };
 
                 if (User.Identity.IsAuthenticated && User.IsInRole(Roles.Member.ToString()))
@@ -74,10 +79,10 @@ namespace ReservationSystem.Controllers
                     var user = await _userManager.GetUserAsync(User);
                     var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
 
-                    m.FirstName = customer.FirstName;
-                    m.LastName = customer.LastName;
-                    m.Phone = customer.PhoneNumber;
-                    m.Email = customer.Email;
+                    m.ReservationFormPartial.FirstName = customer.FirstName;
+                    m.ReservationFormPartial.LastName = customer.LastName;
+                    m.ReservationFormPartial.Phone = customer.PhoneNumber;
+                    m.ReservationFormPartial.Email = customer.Email;
                 }
 
                 return View(m);
@@ -91,8 +96,10 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ReservationSystem.Models.Reservation.Create m)
+        public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
+            var e = ModelState.Values.Where(m => m.ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid);
+           
             if (ModelState.IsValid)
             {
                 try
@@ -111,7 +118,7 @@ namespace ReservationSystem.Controllers
 
                     var customer = await _personService.FindOrCreateCustomerAsync(restaurantId, m.Phone, m.FirstName, m.LastName, m.Email);
 
-                    DateTime arrival = m.Date.Date.Add(m.Time.TimeOfDay);
+                    DateTime arrival = m.Date.Date.Add(m.ReservationFormPartial.Time.TimeOfDay);
 
                     var reservation = new Reservation
                     {
@@ -152,7 +159,7 @@ namespace ReservationSystem.Controllers
                     return NotFound();
                 }
                 {
-                    var receipt = new ReservationSystem.Models.Reservation.Receipt
+                    var receipt = new Models.Reservation.Receipt
                     {
                         Id = reservation.Id,
                         ArrivalTime = reservation.StartTime,
