@@ -15,7 +15,7 @@ namespace ReservationSystem.Data
             ModelSitting();
             ModelTable();
             ModelReservation();
-            //ModelReservationTable();
+            ModelReservationTable();
         }
 
         private void ModelArea()
@@ -51,19 +51,12 @@ namespace ReservationSystem.Data
         {
             //Model building for database only entity 
 
-            /*
-            _modelBuilder.Entity<Reservation>()
-                .HasMany(r => r.Tables).WithMany(t => t.Reservations)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ReservationTables",
-                    rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
-                    rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
-            */
-
-            _modelBuilder.Entity<Reservation>()
-                .HasMany(r => r.Tables).WithMany(t => t.Reservations).UsingEntity("ReservationTable");
-
-
+            //_modelBuilder.Entity<Reservation>()
+            //    .HasMany(r => r.Tables).WithMany(t => t.Reservations)
+            //    .UsingEntity<Dictionary<string, object>>(
+            //        "ReservationTables",
+            //        rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
+            //        rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
         }
 
 
@@ -72,7 +65,6 @@ namespace ReservationSystem.Data
             _modelBuilder.Entity<ReservationTable>()
                 .HasKey(t => new { t.ReservationId, t.TableId });
         }
-        
 
         private void ModelUserTable()
         {

@@ -23,7 +23,7 @@
             int peoplebooked = 0;
             foreach(Reservation reservation in this.Reservations)
             {
-                peoplebooked += reservation.Guests;
+                peoplebooked += reservation.NoOfPeople;
             }
             return 100 * peoplebooked / Capacity;
         }

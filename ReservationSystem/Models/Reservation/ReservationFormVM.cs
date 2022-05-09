@@ -28,7 +28,7 @@ namespace ReservationSystem.Models.Reservation
         public DateTime EndTime { get; set; }
 
         [Required]
-        public int Guests { get; set; }
+        public int NumPeople { get; set; }
 
         [Required]
         public string Comments { get; set; }
