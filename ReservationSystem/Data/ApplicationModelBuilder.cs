@@ -50,17 +50,23 @@ namespace ReservationSystem.Data
         private void ModelReservation()
         {
             //Model building for database only entity 
-            
+
+            /*
             _modelBuilder.Entity<Reservation>()
                 .HasMany(r => r.Tables).WithMany(t => t.Reservations)
                 .UsingEntity<Dictionary<string, object>>(
                     "ReservationTables",
                     rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
                     rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
+            */
+
+            _modelBuilder.Entity<Reservation>()
+                .HasMany(r => r.Tables).WithMany(t => t.Reservations).UsingEntity("ReservationTable");
+
 
         }
 
-        
+
         private void ModelReservationTable()
         {
             _modelBuilder.Entity<ReservationTable>()

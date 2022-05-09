@@ -43,10 +43,10 @@ namespace ReservationSystemTests.Utilities
 
             context.Reservations.AddRange(GetReservations());
             context.SaveChanges(); 
-
+            /*
             context.ReservationTables.AddRange(GetReservationTables());
             context.SaveChanges(); 
-
+            */
 
         }
 
@@ -290,8 +290,8 @@ namespace ReservationSystemTests.Utilities
                 new Sitting
                 {
                     Title = "Breakfast",
-                    StartTime = new DateTime(2020, 04, 13, 7, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 11, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 7, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 11, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 1,
@@ -299,24 +299,24 @@ namespace ReservationSystemTests.Utilities
                 }, new Sitting
                 {
                     Title = "Lunch",
-                    StartTime = new DateTime(2020, 04, 13, 12, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 15, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 12, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 15, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 2
                 }, new Sitting
                 {
                     Title = "Dinner",
-                    StartTime = new DateTime(2020, 04, 13, 18, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 21, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 18, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 21, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 3
                 }, new Sitting
                 {
                     Title = "Dinner",
-                    StartTime = new DateTime(2020, 04, 13, 18, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 21, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 18, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 21, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 3
@@ -330,7 +330,7 @@ namespace ReservationSystemTests.Utilities
            {
                new Reservation
                 {
-                    StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 09, 30, 00),
                     Guests = 3,
                     SittingId = 1,
                     ReservationStatusId = 1,
@@ -338,7 +338,7 @@ namespace ReservationSystemTests.Utilities
                     CustomerId = 1,
                 }, new Reservation
                 {
-                    StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 12, 30, 00),
                     Guests = 4,
                     SittingId = 2,
                     ReservationStatusId = 2,
@@ -346,7 +346,7 @@ namespace ReservationSystemTests.Utilities
                     CustomerId = 2,
                 }, new Reservation
                 {
-                    StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 18, 30, 00),
                     Guests = 5,
                     SittingId = 3,
                     ReservationStatusId = 3,
