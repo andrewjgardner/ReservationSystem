@@ -5,8 +5,8 @@
 	var start = Model.StartTime.ToString("hh:mm");
 	var end = Model.EndTime.ToString("hh:mm");
 }
-<h1 class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
-<h1>@Model.StartTime - @Model.EndTime</h1>
+<h1 style="text-align: center" class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
+<h1 style="text-align: center">@Model.StartTime - @Model.EndTime</h1>
 <div class="col-md-6 offset-md-3">
 	<form asp-action=Create>
 		@if (Model.FirstName != null)
