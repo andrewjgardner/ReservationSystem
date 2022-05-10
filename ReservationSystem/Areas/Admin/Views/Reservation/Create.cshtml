@@ -1,6 +1,5 @@
 ﻿@model ReservationSystem.Areas.Admin.Models.Reservation.Create
-<link rel="stylesheet" href="/css/style.css" />
-<link rel="stylesheet" href="/css/theme.css" />
+
 @{
 	ViewData["Title"] = "Add Reservation";
 	var start = Model.StartTime.ToString("hh:mm");
@@ -12,7 +11,7 @@
 {
 <h1>@Model.StartTime - @Model.EndTime</h1>
 }
-
+<partial name="_Calendar"/>
 
 <div class="col-md-6 offset-md-3">
 	<form asp-area=Admin asp-controller=Reservation asp-action=Create>
@@ -44,8 +43,6 @@
 			<label for="comments">Comments</label>
 			<input type="text" class="form-control" id="comments" name="comments">
 		</div>
-		<div class="calendar-container"></div>
-
 		<div class="form-group">
 			<p>Reservation Status: </p>
 			<select asp-for=ReservationStatusId asp-items=Model.ReservationStatus></select>
@@ -74,21 +71,6 @@
 @section Scripts{
 	<script src="/js/js/calendar.min.js"></script>
 	<script src="/js/calendar.js"></script>
-
-	<script>
-		$(function(){
-		$('.calendar-container').calendar({
-			prevButton:"<",
-			nextButton:">",
-		});
-		});
-
-		$('.calendar-container').calendar({
-		onClickDate: function (date) {
-			$('.calendar-container').updateCalenderOptions
-		
-		}
-});
-	</script>
+	<script src="~/js/calendarPartial.js"></script>
 }
 
