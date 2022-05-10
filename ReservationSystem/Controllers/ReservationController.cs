@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data;
-using ReservationSystem.Models.Reservation;
 using ReservationSystem.Services;
 
 namespace ReservationSystem.Controllers
@@ -16,11 +16,13 @@ namespace ReservationSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ReservationController(ApplicationDbContext context, PersonService personService)
+        public ReservationController(ApplicationDbContext context, PersonService personService, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _personService = personService;
+            _userManager = userManager;
         }
 
         public List<Data.Sitting> GetSittings()
@@ -44,65 +46,129 @@ namespace ReservationSystem.Controllers
                 Title = s.Title
             }).ToList();
 
-            return View(sittingsVM);
+            return View(m);
         }
 
-        public async Task<IActionResult> Form(int sittingId)
+        [HttpGet]
+        public async Task<IActionResult> Create(int sittingId)
         {
-            var sittings =  await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
-
-            //TODO: Validate Sitting ID to check it's open and in future
-
-            var reservationForm = new Form
+            try
             {
-                Date = sittings.StartTime,
-                SittingId = sittingId,
-                StartTime = sittings.StartTime,
-                EndTime = sittings.EndTime,
-            };
-               
-            return View(reservationForm);
+                var sittings = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
+
+                if (sittings == null)
+                {
+                    return NotFound();
+                }
+
+                var m = new ReservationSystem.Models.Reservation.Create
+                {
+                    Date = sittings.StartTime,
+                    SittingId = sittingId,
+                    StartTime = sittings.StartTime,
+                    EndTime = sittings.EndTime,
+                };
+
+                if (User.Identity.IsAuthenticated && User.IsInRole(Roles.Member.ToString()))
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
+
+                    m.FirstName = customer.FirstName;
+                    m.LastName = customer.LastName;
+                    m.Phone = customer.PhoneNumber;
+                    m.Email = customer.Email;
+                }
+
+                return View(m);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return NotFound();
+            }
         }
 
-        public async Task<IActionResult> Receipt(Form reservationForm)
+        [HttpPost]
+        public async Task<IActionResult> Create(ReservationSystem.Models.Reservation.Create m)
         {
-            var restaurantId = 1; 
-            var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
-            var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
-            var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
-            var customer = await _personService.FindOrCreateCustomerAsync(restaurantId,reservationForm.Phone,reservationForm.FirstName, reservationForm.LastName, reservationForm.Email);
-
-            string? comments = reservationForm.Comments;
-
-            DateTime arrival = reservationForm.Date.Date.Add(reservationForm.Time.TimeOfDay);
-
-            var reservation = new Reservation
+            if (ModelState.IsValid)
             {
-                StartTime = arrival,
-                Guests = reservationForm.Guests,
-                Comments = comments,
-                SittingId = reservationForm.SittingId,
-                Sitting = sitting,
-                ReservationStatus = reservationstatus,
-                ReservationOrigin = reservationorigin,
-                Customer = (Customer)customer
-            };
+                try
+                {
+                    var restaurantId = 1;
+                    var sitting = await _context.Sittings.Where(s => s.Id == m.SittingId).FirstOrDefaultAsync();
 
-            _context.Reservations.Add(reservation);
+                    if (sitting == null || sitting.IsClosed)
+                    {
+                        TempData["ErrorMessage"] = "Sitting is no longer available";
+                        return RedirectToAction("Sittings");
+                    }
 
-            await _context.SaveChangesAsync();
+                    var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
+                    var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
 
-            var model = new Receipt
-            {
-                Id = reservation.Id,
-                ArrivalTime = reservation.StartTime,
-                Guests = reservation.Guests,
-                Comments = reservation.Comments
-            };
+                    var customer = await _personService.FindOrCreateCustomerAsync(restaurantId, m.Phone, m.FirstName, m.LastName, m.Email);
 
-            return View(model);
+                    DateTime arrival = m.Date.Date.Add(m.Time.TimeOfDay);
 
+                    var reservation = new Reservation
+                    {
+                        StartTime = arrival,
+                        Guests = m.Guests,
+                        Comments = m.Comments,
+                        SittingId = m.SittingId,
+                        Sitting = sitting,
+                        ReservationStatus = reservationstatus,
+                        ReservationOrigin = reservationorigin,
+                        Customer = customer
+                    };
+
+                    _context.Reservations.Add(reservation);
+
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Receipt", new { reservationId = reservation.Id });
+
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
+                }
+            }
+
+            return View(m);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Receipt(int reservationId)
+        {
+            try
+            {
+                var reservation = await _context.Reservations.FirstOrDefaultAsync(r => r.Id == reservationId);
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+                {
+                    var receipt = new ReservationSystem.Models.Reservation.Receipt
+                    {
+                        Id = reservation.Id,
+                        ArrivalTime = reservation.StartTime,
+                        NumberOfPeople = reservation.Guests,
+                        Comments = reservation.Comments
+                    };
+
+                    return View(receipt);
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return NotFound();
+            }
+
+        }
     }
 }

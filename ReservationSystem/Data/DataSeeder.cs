@@ -28,6 +28,12 @@ namespace ReservationSystem.Data
 
         }
 
+        protected void SeedTriggers(ApplicationDbContext context)
+        {
+            string file = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SQL", "ReservationCreateOrUpdate.sql"));
+            context.Database.ExecuteSqlRaw(file);
+        }
+
         public void SeedRestaurant()
         {
             _modelBuilder.Entity<Restaurant>()
@@ -282,6 +288,7 @@ namespace ReservationSystem.Data
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 1,
+                    PeopleBooked = 3,
                     ResDuration = 45
                 }, new Sitting
                 {
@@ -291,7 +298,8 @@ namespace ReservationSystem.Data
                     EndTime = new DateTime(2022, 07, 13, 15, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
-                    SittingTypeId = 2
+                    SittingTypeId = 2,
+                    PeopleBooked = 4
                 }, new Sitting
                 {
                     Id = 3,
@@ -300,7 +308,8 @@ namespace ReservationSystem.Data
                     EndTime = new DateTime(2022, 07, 13, 21, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
-                    SittingTypeId = 3
+                    SittingTypeId = 3,
+                    PeopleBooked = 5
                 });
         }
 

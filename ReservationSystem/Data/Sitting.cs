@@ -9,12 +9,14 @@
         public int Capacity { get; set; }
         public bool IsClosed { get; set; } = false;
         public int ResDuration { get; set; }
+        public int PeopleBooked { get; set; }
 
         public Restaurant Restaurant { get; set; }
         public int RestaurantId { get; set; }
 
         public SittingType SittingType { get; set; }
         public int SittingTypeId { get; set; }
+
 
         public List<Reservation> Reservations { get; set; } = new List<Reservation>();
 

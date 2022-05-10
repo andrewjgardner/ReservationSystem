@@ -1,0 +1,53 @@
+﻿@model ReservationSystem.Areas.Admin.Models.Sitting.Edit
+
+@{
+	ViewData["Title"] = "Edit Sitting";
+	var startTime = Model.StartTime.ToString("yyyy-MM-ddThh:mm");
+	var endTime = Model.EndTime.ToString("yyyy-MM-ddThh:mm");
+}
+<h1 class="display-4 text-primary pb-4 fw-4">Edit Sitting</h1>
+
+<div class="col-md-6 offset-md-3">
+	<form asp-action=Edit>
+		<div class="form-group">
+			<label for="title">Name</label>
+			<input type="text" class="form-control" id="title" name="title" value=@Model.Title required>
+		</div>
+		<div class="form-group">
+			<label for="starttime">Start Time</label>
+			<input type="datetime-local" class="form-control" id="starttime" name="starttime" value=@startTime>
+		</div>
+		<div class="form-group">
+			<label for="endtime">End Time</label>
+			<input type="datetime-local" class="form-control" id="endtime" name="endtime" value=@endTime>
+		</div>
+		<div class="form-group">
+			<p>Sitting Type: </p>
+			<select asp-for=SittingTypeId asp-items=Model.SittingTypes></select>
+		</div>
+		<div class="form-group">
+			<label for="capacity">Capacity</label>
+			<input type="text" class="form-control" id="capacity" name="capacity" value=@Model.Capacity>
+		</div>
+		@if (Model.IsClosed == true)
+		{
+			var x = 3;
+			<div class="form-group">
+				<label for="isClosed">Closed Sitting: </label>
+				<input type="checkbox" id="isClosed" name="isClosed" value="true" checked>
+			</div>
+		}
+		else
+		{
+			<div class="form-group">
+				<label for="isClosed">Closed Sitting: </label>
+				<input type="checkbox" id="isClosed" name="isClosed" value="true">
+			</div>
+		}
+		<div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+		<input type="hidden" asp-for=RestaurantId />
+		<input type="hidden" asp-for=SittingId />
+	</form>
+</div>

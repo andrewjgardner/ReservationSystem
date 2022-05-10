@@ -4,9 +4,9 @@
     ViewData["Title"] = "Receipt";
 }
 
-<h1>Receipt</h1>
+<h1 style="text-align: center">Receipt</h1>
 
-<div>
+<div style="width: 50%; margin-left:auto; margin-right:auto;">
     <p>Thank you. Your reservation has now been confirmed. Your reservation details are:</p>
     <dl class="row">
         <dt class = "col-sm-2">
@@ -35,7 +35,5 @@
         </dd>
     </dl>
     <p>To change or cancel this reservation, please contact the restaurant.</p>
-</div>
-<div>
-    <a asp-controller="Home" asp-action="Index">Back to Home</a>
+	<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="Index">Back to Home</a>
 </div>
