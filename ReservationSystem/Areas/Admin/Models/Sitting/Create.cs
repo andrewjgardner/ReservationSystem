@@ -29,5 +29,7 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
         public int Capacity { get; set; }
 
         public bool IsClosed { get; set; }
+
+        public int NumberToSchedule { get; set; }
     }
 }

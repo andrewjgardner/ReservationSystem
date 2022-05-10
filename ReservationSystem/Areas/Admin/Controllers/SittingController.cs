@@ -8,7 +8,7 @@ using ReservationSystem.Data;
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles="Employee, Manager")]
+    [Authorize(Roles = "Employee, Manager")]
     public class SittingController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -72,7 +72,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(sittingVM);
         }
 
-        [Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -98,24 +98,28 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
-
             var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
-            var sitting = new Sitting
+            var sittings = new List<Sitting>();
+            for (int i = 0; i < m.NumberToSchedule; i++)
             {
-                Title = m.Title,
-                StartTime = m.StartTime,
-                EndTime = m.EndTime,
-                Capacity = m.Capacity,
-                IsClosed = m.IsClosed,
-                SittingTypeId = m.SittingTypeId,
-                RestaurantId = m.RestaurantId,
-                SittingType = sittingtype,
-                ResDuration = sittingtype.ResDuration
-            };
+                var sitting = new Sitting
+                {
+                    Title = m.Title,
+                    StartTime = m.StartTime.AddDays(i),
+                    EndTime = m.EndTime.AddDays(i),
+                    Capacity = m.Capacity,
+                    IsClosed = m.IsClosed,
+                    SittingTypeId = m.SittingTypeId,
+                    RestaurantId = m.RestaurantId,
+                    SittingType = sittingtype,
+                    ResDuration = sittingtype.ResDuration,
+                };
 
-            _context.Sittings.Add(sitting);
+                sittings.Add(sitting);
+            }
+
+            _context.Sittings.AddRange(sittings);
             await _context.SaveChangesAsync();
-
 
             return RedirectToAction("Index");
         }
