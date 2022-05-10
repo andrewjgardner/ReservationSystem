@@ -7,7 +7,7 @@
 
         public Table Table { get; set; }
 
-        public string TableNumber { get { return Table.TableName; } }
+        public string TableName { get { return Table.TableName; } }
         public int TableId { get; set; }
     }
 }

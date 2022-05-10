@@ -17,6 +17,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
+builder.Services.AddScoped<ReservationService>();
+
 builder.Services.AddTransient<IdentitySeed>();
 builder.Services.AddTransient<SeedSQL>();
 
