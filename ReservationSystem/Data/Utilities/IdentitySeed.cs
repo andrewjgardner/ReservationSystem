@@ -20,29 +20,57 @@ namespace ReservationSystem.Data.Utilities
             _passwordHasher = new PasswordHasher<IdentityUser>(); 
             _personService = personService;
         }
-        public async Task SeedAdmin()
+        public async Task SeedManager()
         {
             var user = new IdentityUser
             {
-                UserName = "admin@admin.com",
-                NormalizedUserName = "ADMIN@ADMIN.COM",
-                Email = "admin@admin.com",
-                NormalizedEmail = "ADMIN@ADMIN.COM",
+                UserName = "manager@manager.com",
+                NormalizedUserName = "MANAGER@MANAGER.COM",
+                Email = "manager@manager.com",
+                NormalizedEmail = "MANAGER@MANAGER.COM",
                 EmailConfirmed = true,
                 LockoutEnabled = false,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            if (!_context.Roles.Any(r => r.Name == "Admin"))
+            if (!_context.Roles.Any(r => r.Name == "Manager"))
             {
-                await _roleStore.CreateAsync(new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" });
+                await _roleStore.CreateAsync(new IdentityRole { Name = "Manager", NormalizedName = "MANAGER" });
             }
 
             if (!_context.Users.Any(u => u.UserName == user.UserName))
             {
-                user.PasswordHash = _passwordHasher.HashPassword(user, "admin");
+                user.PasswordHash = _passwordHasher.HashPassword(user, "manager");
                 await _userStore.CreateAsync(user);
-                await _userStore.AddToRoleAsync(user, "Admin");
+                await _userStore.AddToRoleAsync(user, "Manager");
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SeedEmployee()
+        {
+            var user = new IdentityUser
+            {
+                UserName = "employee@employee.com",
+                NormalizedUserName = "EMPLOYEE@EMPLOYEE.COM",
+                Email = "employee@employee.com",
+                NormalizedEmail = "EMPLOYEE@EMPLOYEE.COM",
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            if (!_context.Roles.Any(r => r.Name == "Employee"))
+            {
+                await _roleStore.CreateAsync(new IdentityRole { Name = "Employee", NormalizedName = "EMPLOYEE" });
+            }
+
+            if (!_context.Users.Any(u => u.UserName == user.UserName))
+            {
+                user.PasswordHash = _passwordHasher.HashPassword(user, "employee");
+                await _userStore.CreateAsync(user);
+                await _userStore.AddToRoleAsync(user, "Employee");
             }
 
             await _context.SaveChangesAsync();

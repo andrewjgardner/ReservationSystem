@@ -67,7 +67,8 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var identitySeedService = scope.ServiceProvider.GetService<IdentitySeed>();
-    await identitySeedService.SeedAdmin();
+    await identitySeedService.SeedManager();
+    await identitySeedService.SeedEmployee();
     await identitySeedService.SeedMember();
 
     var sqlService = scope.ServiceProvider.GetService<SeedSQL>();

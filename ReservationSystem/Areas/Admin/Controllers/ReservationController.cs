@@ -11,10 +11,9 @@ using ReservationSystem.Services;
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Employee, Manager")]
     public class ReservationController : Controller
     {
-
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
 
@@ -45,6 +44,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
         }
 
+        [Authorize(Roles="Manager")]
         [HttpGet]
         public async Task<IActionResult> Create(int? sittingId)
         {
@@ -72,6 +72,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(reservation);
         }
 
+        [Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
@@ -200,9 +201,5 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
 
         }
-
-
-
-
     }
 }
