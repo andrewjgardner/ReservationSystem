@@ -82,7 +82,10 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             var customer = await _personService.FindOrCreateCustomerAsync(restaruantId, m.Phone, m.FirstName, m.LastName, m.Email);
 
+            //Removes comments from the ModelState, preventing validation on the comments field, allowing empty fields to pass, then saving any passed values to the database
+            //Kind of ugly, but it works
             string? comments = m.Comments;
+            ModelState.Remove("Comments");
 
             if (sitting == null)
             {
@@ -164,6 +167,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
             m.ReservationStatus = new SelectList(reservationStatus, "Id", "Description");
             m.ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description");
 
+            //Removes comments from the ModelState, preventing validation on the comments field, allowing empty fields to pass, then saving any passed values to the database
+            //Kind of ugly, but it works
+            string? comments = m.Comments;
+            ModelState.Remove("Comments");
+
             m.Validate(ModelState, sitting);
             if (ModelState.IsValid)
             {
@@ -177,6 +185,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     reservation.ReservationOriginId = m.ReservationOriginId;
                     reservation.ReservationStatusId = m.ReservationStatusId;
                     reservation.Guests = m.Guests;
+                    reservation.Comments = m.Comments;
 
                     _context.Reservations.Update(reservation);
                     await _context.SaveChangesAsync();
