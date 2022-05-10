@@ -37,7 +37,7 @@ namespace ReservationSystem.Controllers
         {
             //This is going to be deleted anyway once we consolidate into a single view, no point refactoring
             var sittings = GetSittings();
-            List<Models.Reservation.SittingVM> sittingsVM = sittings.Select(s => new Models.Reservation.SittingVM
+            List<Models.Reservation.Sittings> m = sittings.Select(s => new Models.Reservation.Sittings
             {
                 SittingID = s.Id,
                 Date = s.StartTime,
@@ -156,7 +156,7 @@ namespace ReservationSystem.Controllers
                     {
                         Id = reservation.Id,
                         ArrivalTime = reservation.StartTime,
-                        NumberOfPeople = reservation.Guests,
+                        Guests = reservation.Guests,
                         Comments = reservation.Comments
                     };
 
