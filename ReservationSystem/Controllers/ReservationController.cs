@@ -25,7 +25,7 @@ namespace ReservationSystem.Controllers
             _userManager = userManager;
         }
 
-        public List<Sitting> GetSittings()
+        public List<Data.Sitting> GetSittings()
         {
             //Currently, just shows all open sittings where the end time is in the future
             //We may want to make this more complex, e.g. by specifying that Sittings should be displayed if there is more than an hour left before the sitting ends
@@ -156,7 +156,7 @@ namespace ReservationSystem.Controllers
                     {
                         Id = reservation.Id,
                         ArrivalTime = reservation.StartTime,
-                        NumberOfPeople = reservation.Guests,
+                        Guests = reservation.Guests,
                         Comments = reservation.Comments
                     };
 

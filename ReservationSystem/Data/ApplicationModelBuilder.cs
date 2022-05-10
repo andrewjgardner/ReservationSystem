@@ -59,22 +59,11 @@ namespace ReservationSystem.Data
             //        rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
         }
 
+
         private void ModelReservationTable()
         {
             _modelBuilder.Entity<ReservationTable>()
                 .HasKey(t => new { t.ReservationId, t.TableId });
-
-            _modelBuilder.Entity<ReservationTable>()
-                .HasOne(rt => rt.Reservation)
-                .WithMany(r => r.ReservationTables)
-                .HasForeignKey(rt => rt.ReservationId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            _modelBuilder.Entity<ReservationTable>()
-                .HasOne(rt => rt.Table)
-                .WithMany(t => t.ReservationTables)
-                .HasForeignKey(rt => rt.TableId)
-                .OnDelete(DeleteBehavior.Restrict);
         }
 
         private void ModelUserTable()
