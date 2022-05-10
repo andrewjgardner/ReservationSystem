@@ -11,10 +11,9 @@ using ReservationSystem.Services;
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Employee, Manager")]
     public class ReservationController : Controller
     {
-
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
 
@@ -45,6 +44,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
         }
 
+        [Authorize(Roles="Manager")]
         [HttpGet]
         public async Task<IActionResult> Create(int? sittingId)
         {
@@ -72,6 +72,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(reservation);
         }
 
+        [Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
@@ -95,7 +96,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     var reservation = new Reservation
                     {
                         StartTime = m.DateTime,
-                        Guests = m.NumPeople,
+                        Guests = m.Guests,
                         Comments = comments,
                         SittingId = m.SittingId,
                         ReservationStatusId = m.ReservationStatusId,
@@ -129,20 +130,20 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             var reservationEdit = new Models.Reservation.Edit
             {
-                Id = reservation.Id,
-                FirstName = reservation.Customer.FirstName,
-                LastName = reservation.Customer.LastName,
-                Email = reservation.Customer.Email,
-                Phone = reservation.Customer.PhoneNumber,
-                DateTime = reservation.StartTime,
-                ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
-                ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
-                ReservationStatusId = reservation.ReservationStatusId,
-                ReservationOriginId = reservation.ReservationOriginId,
-                Guests = reservation.Guests,
-                SittingId = reservation.SittingId,
-                Comments = reservation.Comments
-
+              Id = reservation.Id,
+              FirstName = reservation.Customer.FirstName,
+              LastName = reservation.Customer.LastName,
+              Email = reservation.Customer.Email,
+              Phone = reservation.Customer.PhoneNumber,
+              DateTime = reservation.StartTime,
+              ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
+              ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
+              ReservationStatusId = reservation.ReservationStatusId,
+              ReservationOriginId = reservation.ReservationOriginId,
+              Guests = reservation.Guests,
+              SittingId = reservation.SittingId,
+              Comments = reservation.Comments
+              
             };
 
             return View(reservationEdit);
@@ -191,9 +192,5 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
 
         }
-
-
-
-
     }
 }

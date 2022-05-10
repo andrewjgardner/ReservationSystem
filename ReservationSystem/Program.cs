@@ -17,6 +17,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
+builder.Services.AddScoped<ReservationService>();
+
 builder.Services.AddTransient<IdentitySeed>();
 builder.Services.AddTransient<SeedSQL>();
 
@@ -65,7 +67,8 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var identitySeedService = scope.ServiceProvider.GetService<IdentitySeed>();
-    await identitySeedService.SeedAdmin();
+    await identitySeedService.SeedManager();
+    await identitySeedService.SeedEmployee();
     await identitySeedService.SeedMember();
 
     var sqlService = scope.ServiceProvider.GetService<SeedSQL>();

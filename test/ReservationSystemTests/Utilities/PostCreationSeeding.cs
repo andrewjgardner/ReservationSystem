@@ -43,10 +43,10 @@ namespace ReservationSystemTests.Utilities
 
             context.Reservations.AddRange(GetReservations());
             context.SaveChanges(); 
-
+            /*
             context.ReservationTables.AddRange(GetReservationTables());
             context.SaveChanges(); 
-
+            */
 
         }
 
@@ -110,152 +110,182 @@ namespace ReservationSystemTests.Utilities
             {
                 new Table
                 {
-                    TableNumber = "M1",
+                    Id = 1,
+                    TableName = "M1",
                     TableCapacity = 5,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M2",
+                    Id = 2,
+                    TableName = "M2",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M3",
+                    Id = 3,
+                    TableName = "M3",
                     TableCapacity = 4,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M4",
+                    Id = 4,
+                    TableName = "M4",
                     TableCapacity = 2,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M5",
+                    Id = 5,
+                    TableName = "M5",
                     TableCapacity = 5,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M6",
+                    Id = 6,
+                    TableName = "M6",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M7",
+                    Id = 7,
+                    TableName = "M7",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M8",
+                    Id = 8,
+                    TableName = "M8",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M9",
+                    Id = 9,
+                    TableName = "M9",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "M10",
+                    Id = 10,
+                    TableName = "M10",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
-                    TableNumber = "O1",
+                    Id = 11,
+                    TableName = "O1",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O2",
+                    Id = 12,
+                    TableName = "O2",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O3",
+                    Id = 13,
+                    TableName = "O3",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O4",
+                    Id = 14,
+                    TableName = "O4",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O5",
+                    Id = 15,
+                    TableName = "O5",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O6",
+                    Id = 16,
+                    TableName = "O6",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O7",
+                    Id = 17,
+                    TableName = "O7",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O8",
+                    Id = 18,
+                    TableName = "O8",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O9",
+                    Id = 19,
+                    TableName = "O9",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "O10",
+                    Id = 20,
+                    TableName = "O10",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
-                    TableNumber = "B1",
+                    Id = 21,
+                    TableName = "B1",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B2",
+                    Id = 22,
+                    TableName = "B2",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B3",
+                    Id = 23,
+                    TableName = "B3",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B4",
+                    Id = 24,
+                    TableName = "B4",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B5",
+                    Id = 25,
+                    TableName = "B5",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B6",
+                    Id = 26,
+                    TableName = "B6",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B7",
+                    Id = 27,
+                    TableName = "B7",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B8",
+                    Id = 28,
+                    TableName = "B8",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B9",
+                    Id = 29,
+                    TableName = "B9",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
-                    TableNumber = "B10",
+                    Id = 30,
+                    TableName = "B10",
                     TableCapacity = 3,
                     AreaId = 3
                 }
@@ -290,8 +320,8 @@ namespace ReservationSystemTests.Utilities
                 new Sitting
                 {
                     Title = "Breakfast",
-                    StartTime = new DateTime(2020, 04, 13, 7, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 11, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 7, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 11, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 1,
@@ -299,24 +329,24 @@ namespace ReservationSystemTests.Utilities
                 }, new Sitting
                 {
                     Title = "Lunch",
-                    StartTime = new DateTime(2020, 04, 13, 12, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 15, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 12, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 15, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 2
                 }, new Sitting
                 {
                     Title = "Dinner",
-                    StartTime = new DateTime(2020, 04, 13, 18, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 21, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 18, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 21, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 3
                 }, new Sitting
                 {
                     Title = "Dinner",
-                    StartTime = new DateTime(2020, 04, 13, 18, 0, 0),
-                    EndTime = new DateTime(2020, 04, 13, 21, 30, 0),
+                    StartTime = new DateTime(2020, 07, 13, 18, 0, 0),
+                    EndTime = new DateTime(2020, 07, 13, 21, 30, 0),
                     Capacity = 100,
                     RestaurantId = 1,
                     SittingTypeId = 3
@@ -330,7 +360,7 @@ namespace ReservationSystemTests.Utilities
            {
                new Reservation
                 {
-                    StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 09, 30, 00),
                     Guests = 3,
                     SittingId = 1,
                     ReservationStatusId = 1,
@@ -338,7 +368,7 @@ namespace ReservationSystemTests.Utilities
                     CustomerId = 1,
                 }, new Reservation
                 {
-                    StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 12, 30, 00),
                     Guests = 4,
                     SittingId = 2,
                     ReservationStatusId = 2,
@@ -346,7 +376,7 @@ namespace ReservationSystemTests.Utilities
                     CustomerId = 2,
                 }, new Reservation
                 {
-                    StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 18, 30, 00),
                     Guests = 5,
                     SittingId = 3,
                     ReservationStatusId = 3,
