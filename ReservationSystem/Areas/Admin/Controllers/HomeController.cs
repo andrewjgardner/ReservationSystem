@@ -10,10 +10,9 @@ using ReservationSystem.Services;
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Employee, Manager")]
     public class HomeController : Controller
     {
-
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
 
@@ -27,7 +26,5 @@ namespace ReservationSystem.Areas.Admin.Controllers
         {
             return View();
         }
-
-
     }
 }

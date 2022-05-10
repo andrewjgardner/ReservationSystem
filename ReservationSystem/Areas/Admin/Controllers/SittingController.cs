@@ -8,7 +8,7 @@ using ReservationSystem.Data;
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles="Employee, Manager")]
     public class SittingController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -72,7 +72,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(sittingVM);
         }
 
-
+        [Authorize(Roles="Manager")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -94,6 +94,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(sitting);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
@@ -119,6 +120,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Edit(int sittingId)
         {
@@ -155,6 +157,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Edit(Areas.Admin.Models.Sitting.Edit m)
         {
