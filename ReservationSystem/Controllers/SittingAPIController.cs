@@ -5,13 +5,13 @@ using ReservationSystem.Models.SittingsAPI;
 
 namespace ReservationSystem.Controllers
 {
-    [Route("api/sittings")]
+    [Route("api/sitting")]
     [ApiController]
     
-    public class SittingsAPIController : ControllerBase
+    public class SittingAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public SittingsAPIController(ApplicationDbContext context)
+        public SittingAPIController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -19,12 +19,10 @@ namespace ReservationSystem.Controllers
         [HttpGet("{date}")]
         public ICollection<Get> Get(DateTime date)
         {
-            var data = _context.Sittings
+            return _context.Sittings
                 .Where(m => m.StartTime.Year == date.Year && m.StartTime.Month == date.Month)
                 .Select(s => new Get { Id = s.Id,Title = s.Title, StartTime = s.StartTime, EndTime = s.EndTime})
                 .ToList();
-
-            return data;
         }
     }
 }

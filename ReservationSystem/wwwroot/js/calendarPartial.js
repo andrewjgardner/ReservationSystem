@@ -1,27 +1,24 @@
 ﻿$(function () {
-    var date = new Date();
-    const sittings = filterSittingsOPL(date);  
-    console.log(sittings)
+    const currentDate = new Date();
+    filterSittingsOPL(currentDate);  
 });
 
 async function getSittingsOnMonth(date) {
-    var jsonDate = date.toJSON();
-    const sittings = await fetch(`/api/sittings/${jsonDate}`, { cache: 'force-cache' })
-        .then(res => res.json())
-        .then(d => { return d });
+    const sittings = await fetch(`/api/sitting/${date.toJson()}`, { cache: 'force-cache' })
+        .then(response => response.json())
+        .then(data => { return data });
     sessionStorage.setItem('sittings', JSON.stringify(sittings));
     return sittings;
 }
 
 function getSittingsOnDay(selectedDate, sittings) {
-
     return sittingsFilter = sittings.filter(s => {
-        var date = new Date(s.startTime);
+        const date = new Date(s.startTime);
         return date.getDate() == selectedDate.getDate();
     });
 }
 
-async function filterSittingsOPL(date) {
+async function onPageLoadGetSittings(date) {
     const sittings = await getSittingsOnMonth(date);
     const sittingsOnDay = getSittingsOnDay(date, sittings);
     $(".sittings-partial").html(sittingsOnDay.map(s => {
@@ -46,8 +43,7 @@ async function updateSessionPartial(date) {
     }));        
 }
 
-
-var calendar = $('.calendar-container').calendar({
+const calendar = $('.calendar-container').calendar({
     weekDayLength: 1,
     date: new Date(),
     onClickDate: selectDate,
