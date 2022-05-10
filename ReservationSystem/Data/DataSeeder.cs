@@ -67,181 +67,181 @@ namespace ReservationSystem.Data
                 .HasData(new Table
                 {
                     Id = 1,
-                    TableNumber = "M1",
+                    TableName = "M1",
                     TableCapacity = 5,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 2,
-                    TableNumber = "M2",
+                    TableName = "M2",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 3,
-                    TableNumber = "M3",
+                    TableName = "M3",
                     TableCapacity = 4,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 4,
-                    TableNumber = "M4",
+                    TableName = "M4",
                     TableCapacity = 2,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 5,
-                    TableNumber = "M5",
+                    TableName = "M5",
                     TableCapacity = 5,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 6,
-                    TableNumber = "M6",
+                    TableName = "M6",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 7,
-                    TableNumber = "M7",
+                    TableName = "M7",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 8,
-                    TableNumber = "M8",
+                    TableName = "M8",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 9,
-                    TableNumber = "M9",
+                    TableName = "M9",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 10,
-                    TableNumber = "M10",
+                    TableName = "M10",
                     TableCapacity = 3,
                     AreaId = 1
                 }, new Table
                 {
                     Id = 11,
-                    TableNumber = "O1",
+                    TableName = "O1",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 12,
-                    TableNumber = "O2",
+                    TableName = "O2",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 13,
-                    TableNumber = "O3",
+                    TableName = "O3",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 14,
-                    TableNumber = "O4",
+                    TableName = "O4",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 15,
-                    TableNumber = "O5",
+                    TableName = "O5",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 16,
-                    TableNumber = "O6",
+                    TableName = "O6",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 17,
-                    TableNumber = "O7",
+                    TableName = "O7",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 18,
-                    TableNumber = "O8",
+                    TableName = "O8",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 19,
-                    TableNumber = "O9",
+                    TableName = "O9",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 20,
-                    TableNumber = "O10",
+                    TableName = "O10",
                     TableCapacity = 3,
                     AreaId = 2
                 }, new Table
                 {
                     Id = 21,
-                    TableNumber = "B1",
+                    TableName = "B1",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 22,
-                    TableNumber = "B2",
+                    TableName = "B2",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 23,
-                    TableNumber = "B3",
+                    TableName = "B3",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 24,
-                    TableNumber = "B4",
+                    TableName = "B4",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 25,
-                    TableNumber = "B5",
+                    TableName = "B5",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 26,
-                    TableNumber = "B6",
+                    TableName = "B6",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 27,
-                    TableNumber = "B7",
+                    TableName = "B7",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 28,
-                    TableNumber = "B8",
+                    TableName = "B8",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 29,
-                    TableNumber = "B9",
+                    TableName = "B9",
                     TableCapacity = 3,
                     AreaId = 3
                 }, new Table
                 {
                     Id = 30,
-                    TableNumber = "B10",
+                    TableName = "B10",
                     TableCapacity = 3,
                     AreaId = 3
                 });
@@ -312,7 +312,7 @@ namespace ReservationSystem.Data
                     Id = 1,
                     StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
                     Comments = "By the balcony, please.",
-                    NoOfPeople = 3,
+                    Guests = 3,
                     SittingId = 1,
                     ReservationStatusId = 1,
                     ReservationOriginId = 1,
@@ -322,7 +322,7 @@ namespace ReservationSystem.Data
                     Id = 2,
                     StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
                     Comments = "",
-                    NoOfPeople = 4,
+                    Guests = 4,
                     SittingId = 2,
                     ReservationStatusId = 2,
                     ReservationOriginId = 2,
@@ -332,7 +332,7 @@ namespace ReservationSystem.Data
                     Id = 3,
                     StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
                     Comments = "",
-                    NoOfPeople = 5,
+                    Guests = 5,
                     SittingId = 3,
                     ReservationStatusId = 3,
                     ReservationOriginId = 3,

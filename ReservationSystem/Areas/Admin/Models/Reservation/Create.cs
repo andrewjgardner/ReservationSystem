@@ -19,7 +19,7 @@ namespace ReservationSystem.Areas.Admin.Models.Reservation
 
         public DateTime EndTime { get; set; }
 
-        public int NumPeople { get; set; }
+        public int Guests { get; set; }
         public string Comments { get; set; }
 
         public SelectList ?ReservationStatus { get; set; }

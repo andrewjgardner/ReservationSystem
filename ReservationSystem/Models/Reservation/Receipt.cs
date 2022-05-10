@@ -2,7 +2,7 @@
 
 namespace ReservationSystem.Models.Reservation
 {
-    public class ReceiptVM
+    public class Receipt
     {
         public int Id { get; set; }
         
@@ -10,7 +10,7 @@ namespace ReservationSystem.Models.Reservation
         public DateTime ArrivalTime { get; set; }
 
         [Display(Name = "Number of People")]
-        public int NumberOfPeople { get; set; }
+        public int Guests { get; set; }
 
         [Display(Name = "Comments")]
         public string Comments { get; set; }

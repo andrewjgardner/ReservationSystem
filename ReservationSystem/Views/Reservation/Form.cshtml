@@ -1,7 +1,7 @@
-﻿@model ReservationSystem.Models.Reservation.ReservationFormVM
+﻿@model ReservationSystem.Models.Reservation.Form
 
 @{
-	ViewData["Title"] = "ReservationForm";
+	ViewData["Title"] = "Reservation Form";
 	var start = Model.StartTime.ToString("hh:mm");
 	var end = Model.EndTime.ToString("hh:mm");
 }
@@ -30,8 +30,8 @@
 			<input type="time" class="form-control" id="time" name="time" placeholder="Enter your time" min="@start" max="@end">
 		</div>
 		<div class="form-group">
-			<label for="numpeople">People</label>
-			<input type="number" class="form-control" id="numpeople" name="numpeople" placeholder="Enter number of people" required>
+			<label for="guests">Guests</label>
+			<input type="number" class="form-control" id="guests" name="guests" placeholder="Enter number of guests" required>
 		</div>
 		<div class="form-group">
 			<label for="comments">Comments</label>

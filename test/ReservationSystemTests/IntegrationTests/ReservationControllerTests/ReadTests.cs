@@ -61,7 +61,7 @@ namespace ReservationSystemTests.ReservationControllerTests
 
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<SittingsVM>>(
+            var model = Assert.IsAssignableFrom<IEnumerable<SittingVM>>(
                 viewResult.ViewData.Model);
             Assert.Equal(4, model.Count());
         }

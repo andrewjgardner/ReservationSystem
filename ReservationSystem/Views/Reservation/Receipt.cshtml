@@ -1,4 +1,4 @@
-﻿@model ReservationSystem.Models.Reservation.ReceiptVM
+﻿@model ReservationSystem.Models.Reservation.Receipt
 
 @{
     ViewData["Title"] = "Receipt";
@@ -22,10 +22,10 @@
             @Html.DisplayFor(model => model.ArrivalTime)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberOfPeople)
+            @Html.DisplayNameFor(model => model.Guests)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumberOfPeople)
+            @Html.DisplayFor(model => model.Guests)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Comments)

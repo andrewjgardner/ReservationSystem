@@ -23,7 +23,7 @@ namespace ReservationSystem.Controllers
             _personService = personService;
         }
 
-        public List<Sitting> GetSittings()
+        public List<Data.Sitting> GetSittings()
         {
             //Currently, just shows all open sittings where the end time is in the future
             //We may want to make this more complex, e.g. by specifying that Sittings should be displayed if there is more than an hour left before the sitting ends
@@ -35,7 +35,7 @@ namespace ReservationSystem.Controllers
         {
             //This is going to be deleted anyway once we consolidate into a single view, no point refactoring
             var sittings = GetSittings();
-            List<SittingsVM> sittingsVM = sittings.Select(s => new SittingsVM
+            List<Models.Reservation.SittingVM> sittingsVM = sittings.Select(s => new Models.Reservation.SittingVM
             {
                 SittingID = s.Id,
                 Date = s.StartTime,
@@ -47,11 +47,13 @@ namespace ReservationSystem.Controllers
             return View(sittingsVM);
         }
 
-        public async Task<IActionResult> ReservationForm(int sittingId)
+        public async Task<IActionResult> Form(int sittingId)
         {
             var sittings =  await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
 
-            var reservationForm = new ReservationFormVM
+            //TODO: Validate Sitting ID to check it's open and in future
+
+            var reservationForm = new Form
             {
                 Date = sittings.StartTime,
                 SittingId = sittingId,
@@ -62,7 +64,7 @@ namespace ReservationSystem.Controllers
             return View(reservationForm);
         }
 
-        public async Task<IActionResult> Receipt(ReservationFormVM reservationForm)
+        public async Task<IActionResult> Receipt(Form reservationForm)
         {
             var restaurantId = 1; 
             var sitting = await _context.Sittings.Where(s => s.Id == reservationForm.SittingId).FirstOrDefaultAsync();
@@ -77,7 +79,7 @@ namespace ReservationSystem.Controllers
             var reservation = new Reservation
             {
                 StartTime = arrival,
-                NoOfPeople = reservationForm.NumPeople,
+                Guests = reservationForm.Guests,
                 Comments = comments,
                 SittingId = reservationForm.SittingId,
                 Sitting = sitting,
@@ -90,11 +92,11 @@ namespace ReservationSystem.Controllers
 
             await _context.SaveChangesAsync();
 
-            var model = new ReceiptVM
+            var model = new Receipt
             {
                 Id = reservation.Id,
                 ArrivalTime = reservation.StartTime,
-                NumberOfPeople = reservation.NoOfPeople,
+                Guests = reservation.Guests,
                 Comments = reservation.Comments
             };
 
