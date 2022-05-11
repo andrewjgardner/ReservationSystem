@@ -27,7 +27,7 @@ namespace ReservationSystem.Controllers
             _restaurantId = 1;
         }
 
-        public List<Data.Sitting> GetSittings()
+        public async Task<List<Sitting>> GetSittings()
         {
             //Currently, just shows all open sittings where the end time is in the future
             //We may want to make this more complex, e.g. by specifying that Sittings should be displayed if there is more than an hour left before the sitting ends
@@ -38,7 +38,7 @@ namespace ReservationSystem.Controllers
         public async Task<IActionResult> Sittings()
         {
             //This is going to be deleted anyway once we consolidate into a single view, no point refactoring
-            var sittings = GetSittings();
+            var sittings = await GetSittings();
             List<Models.Reservation.Sittings> m = sittings.Select(s => new Models.Reservation.Sittings
             {
                 SittingID = s.Id,
