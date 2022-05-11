@@ -61,7 +61,7 @@ namespace ReservationSystem.Controllers
                     return NotFound();
                 }
 
-                var m = new ReservationSystem.Models.Reservation.Create
+                var m = new Models.Reservation.Create
                 {
                     Date = sittings.StartTime,
                     SittingId = sittingId,
@@ -69,7 +69,7 @@ namespace ReservationSystem.Controllers
                     EndTime = sittings.EndTime,
                 };
 
-                if (User.Identity.IsAuthenticated && User.IsInRole(Roles.Member.ToString()))
+                if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Roles.Member)))
                 {
                     var user = await _userManager.GetUserAsync(User);
                     var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
@@ -91,16 +91,16 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ReservationSystem.Models.Reservation.Create m)
+        public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var restaurantId = 1;
+                    const int restaurantId = 1;
                     var sitting = await _context.Sittings.Where(s => s.Id == m.SittingId).FirstOrDefaultAsync();
 
-                    if (sitting == null || sitting.IsClosed)
+                    if (sitting?.IsClosed != false)
                     {
                         TempData["ErrorMessage"] = "Sitting is no longer available";
                         return RedirectToAction("Sittings");
@@ -152,7 +152,7 @@ namespace ReservationSystem.Controllers
                     return NotFound();
                 }
                 {
-                    var receipt = new ReservationSystem.Models.Reservation.Receipt
+                    var receipt = new Models.Reservation.Receipt
                     {
                         Id = reservation.Id,
                         ArrivalTime = reservation.StartTime,

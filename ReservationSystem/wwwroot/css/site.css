@@ -16,3 +16,7 @@ html {
 body {
   margin-bottom: 250px;
 }
+
+.validation-summary-valid {
+    display: none;
+}
