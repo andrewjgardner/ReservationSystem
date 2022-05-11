@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ReservationSystem.Areas.Admin.Models;
-using ReservationSystem.Areas.Admin.Models.Reservation;
 using ReservationSystem.Data;
-using ReservationSystem.Models.Reservation;
 using ReservationSystem.Services;
 
 namespace ReservationSystem.Areas.Admin.Controllers
@@ -16,17 +13,18 @@ namespace ReservationSystem.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
+        private readonly int _restaurantId;
 
         public ReservationController(ApplicationDbContext context, PersonService personService)
         {
             _personService = personService;
             _context = context;
+            _restaurantId = 1;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-
             var m = new Models.Reservation.Index
             {
                 Reservations = await _context.Reservations
@@ -44,115 +42,145 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
         }
 
-        [Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Create(int? sittingId)
         {
-            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
-            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
+            try
+            {
+                var m = new Models.Reservation.Create
+                {
+                    ReservationForm = new ReservationSystem.Models.Reservation.ReservationForm(),
+                    AdminReservationForm = new Models.Reservation.AdminReservationForm
+                    {
+                        ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description"),
+                        ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description")
+                    },
+                };
 
-            var reservation = new Models.Reservation.Create
-            {
-                ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
-                ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
-            };
-            if (sittingId.HasValue)
-            {
-                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
-                reservation.SittingId = (int)sittingId;
-                reservation.StartTime = sitting.StartTime;
-                reservation.EndTime = sitting.EndTime;
-                reservation.DateTime = sitting.StartTime;
+                if (sittingId.HasValue)
+                {
+                    var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
+                    m.SittingId = (int)sittingId;
+                    m.StartTime = sitting.StartTime;
+                    m.EndTime = sitting.EndTime;
+                    m.ReservationForm.DateTime = sitting.StartTime;
+                }
+                else
+                {
+                    var sittings = await _context.Sittings.ToListAsync();
+                    m.Sittings = new SelectList(sittings, "Id", "StartTime");
+                }
+                return View(m);
             }
-            else
+            catch (Exception ex)
             {
-                var sittings = await _context.Sittings.ToListAsync();
-                reservation.Sittings = new SelectList(sittings, "Id", "StartTime");
+                TempData["ErrorMessage"] = ex.Message;
+                return NotFound();
             }
-            return View(reservation);
         }
 
-        [Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
-            var restaruantId = 1;
-            //var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
-            //var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
-
-            var customer = await _personService.FindOrCreateCustomerAsync(restaruantId, m.Phone, m.FirstName, m.LastName, m.Email);
-
             if (sitting == null)
             {
                 return NotFound();
             }
+            m.ReservationForm.Validate(ModelState, sitting);
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.Phone, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email);
                     var reservation = new Reservation
                     {
-                        StartTime = m.DateTime,
-                        Guests = m.Guests,
-                        Comments = m.Comments,
+                        StartTime = m.ReservationForm.DateTime,
+                        Guests = m.ReservationForm.Guests,
+                        Comments = m.ReservationForm.Comments,
                         SittingId = m.SittingId,
-                        ReservationStatusId = m.ReservationStatusId,
-                        ReservationOriginId = m.ReservationOriginId,
+                        ReservationStatusId = m.AdminReservationForm.ReservationStatusId,
+                        ReservationOriginId = m.AdminReservationForm.ReservationOriginId,
                         Customer = customer
                     };
+
                     _context.Reservations.Add(reservation);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Details", "Sitting", new { sittingId = sitting.Id });
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-
-                    ModelState.AddModelError("Error", e.Message);
+                    ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
                 }
             }
+
+            m.AdminReservationForm.ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description", m.AdminReservationForm.ReservationStatusId);
+            m.AdminReservationForm.ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description", m.AdminReservationForm.ReservationOriginId);
+            m.StartTime = sitting.StartTime;
+            m.EndTime = sitting.EndTime;
+            m.SittingId = sitting.Id;
+
             return View(m);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int reservationId)
         {
-            var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
-            if (reservation == null)
+            try
             {
+                var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == reservation.SittingId);
+                if (sitting == null)
+                {
+                    return NotFound();
+                }
+
+                var m = new Models.Reservation.Edit
+                {
+                    ReservationForm = new ReservationSystem.Models.Reservation.ReservationForm
+                    {
+                        FirstName = reservation.Customer.FirstName,
+                        LastName = reservation.Customer.LastName,
+                        Email = reservation.Customer.Email,
+                        Phone = reservation.Customer.PhoneNumber,
+                        DateTime = reservation.StartTime,
+                        Guests = reservation.Guests,
+                        Comments = reservation.Comments
+                    },
+                    AdminReservationForm = new Models.Reservation.AdminReservationForm
+                    {
+                        ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description"),
+                        ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description"),
+                        ReservationStatusId = reservation.ReservationStatusId,
+                        ReservationOriginId = reservation.ReservationOriginId
+                    },
+                    SittingId = reservation.SittingId,
+                    Id = reservation.Id,
+                    StartTime = sitting.StartTime,
+                    EndTime = sitting.EndTime
+                };
+
+                return View(m);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
                 return NotFound();
             }
-            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
-            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
-
-            var reservationEdit = new Models.Reservation.Edit
-            {
-              Id = reservation.Id,
-              FirstName = reservation.Customer.FirstName,
-              LastName = reservation.Customer.LastName,
-              Email = reservation.Customer.Email,
-              Phone = reservation.Customer.PhoneNumber,
-              DateTime = reservation.StartTime,
-              ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
-              ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
-              ReservationStatusId = reservation.ReservationStatusId,
-              ReservationOriginId = reservation.ReservationOriginId,
-              Guests = reservation.Guests,
-              SittingId = reservation.SittingId,
-              Comments = reservation.Comments
-              
-            };
-
-            return View(reservationEdit);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Edit m)
+        public async Task<IActionResult> Edit(Models.Reservation.Edit m)
         {
-            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
-            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
-
             var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == m.Id);
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
             if (reservation == null || sitting == null)
@@ -160,23 +188,21 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            m.ReservationStatus = new SelectList(reservationStatus, "Id", "Description");
-            m.ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description");
+            m.ReservationForm.Validate(ModelState, sitting);
 
-            m.Validate(ModelState, sitting);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    reservation.Customer.FirstName = m.FirstName;
-                    reservation.Customer.LastName = m.LastName;
-                    reservation.Customer.Email = m.Email;
-                    reservation.Customer.PhoneNumber = m.Phone;
-                    reservation.StartTime = m.DateTime;
-                    reservation.ReservationOriginId = m.ReservationOriginId;
-                    reservation.ReservationStatusId = m.ReservationStatusId;
-                    reservation.Guests = m.Guests;
-                    reservation.Comments = m.Comments;
+                    reservation.Customer.FirstName = m.ReservationForm.FirstName;
+                    reservation.Customer.LastName = m.ReservationForm.LastName;
+                    reservation.Customer.Email = m.ReservationForm.Email;
+                    reservation.Customer.PhoneNumber = m.ReservationForm.Phone;
+                    reservation.Guests = m.ReservationForm.Guests;
+                    reservation.StartTime = m.ReservationForm.DateTime;
+                    reservation.Comments = m.ReservationForm.Comments;
+                    reservation.ReservationOriginId = m.AdminReservationForm.ReservationOriginId;
+                    reservation.ReservationStatusId = m.AdminReservationForm.ReservationStatusId;
 
                     _context.Reservations.Update(reservation);
                     await _context.SaveChangesAsync();
@@ -188,8 +214,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     ModelState.AddModelError("Error", e.Message);
                 }
             }
-            return View(m);
 
+            m.AdminReservationForm.ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description");
+            m.AdminReservationForm.ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description");
+
+            return View(m);
         }
     }
 }

@@ -12,15 +12,16 @@ namespace ReservationSystem.Areas.Admin.Controllers
     public class SittingController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly int _restaurantId;
 
         public SittingController(ApplicationDbContext context)
         {
             _context = context;
+            _restaurantId = 1;
         }
 
         public async Task<IActionResult> Index()
         {
-            var sittings = await _context.Sittings.Include(s => s.SittingType).Include(s => s.Reservations).ToArrayAsync();
             var m = new Models.Sitting.Index
             {
                 Sittings = await _context.Sittings
@@ -35,6 +36,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                         PercentFull = s.PercentFull(),
                         IsClosed = s.IsClosed
                     })
+                    .OrderBy(s => s.StartTime)
                     .ToArrayAsync()
             };
 
@@ -45,83 +47,116 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int sittingId)
         {
             var sitting = await _context.Sittings.Include(s => s.SittingType).Include(s => s.Reservations).ThenInclude(r => r.Customer).FirstOrDefaultAsync(s => s.Id == sittingId);
-            var reservations = new List<Models.Sitting.ReservationList>();
 
-            foreach (Reservation reservation in sitting.Reservations)
+            if (sitting == null)
             {
-                var reservationVM = new Models.Sitting.ReservationList
-                {
-                    StartTime = reservation.StartTime,
-                    Name = reservation.Customer.FullName(),
-                    Phone = reservation.Customer.PhoneNumber,
-                    Comments = reservation.Comments,
-                    Guests = reservation.Guests
-                };
-                reservations.Add(reservationVM);
+                return NotFound();
             }
 
-            var sittingVM = new Models.Sitting.Details
+            try
             {
-                SittingId = sittingId,
-                StartTime = sitting.StartTime,
-                EndTime = sitting.EndTime,
-                Title = sitting.Title,
-                SittingType = sitting.SittingType.Description,
-                ReservationList = reservations
-            };
-            return View(sittingVM);
+                var reservations = new List<Models.Sitting.ReservationListItem>();
+
+                foreach (Reservation reservation in sitting.Reservations)
+                {
+                    var reservationVM = new Models.Sitting.ReservationListItem
+                    {
+                        StartTime = reservation.StartTime,
+                        Name = reservation.Customer.FullName(),
+                        Phone = reservation.Customer.PhoneNumber,
+                        Comments = reservation.Comments,
+                        Guests = reservation.Guests
+                    };
+                    reservations.Add(reservationVM);
+                }
+
+                var sittingVM = new Models.Sitting.Details
+                {
+                    SittingId = sittingId,
+                    StartTime = sitting.StartTime,
+                    EndTime = sitting.EndTime,
+                    Title = sitting.Title,
+                    SittingType = sitting.SittingType.Description,
+                    ReservationList = reservations
+                };
+                return View(sittingVM);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
+                return NotFound();
+            }
         }
 
         [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            //TODO: Get Restaurant from Employee ID
-            int restaurantId = 1;
+            var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == _restaurantId);
 
-            var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == restaurantId);
-
-            var sittingtypes = await _context.SittingTypes.ToListAsync();
-
-            var sitting = new Models.Sitting.Create
+            if (restaurant == null)
             {
-                SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
-                RestaurantId = restaurantId,
-                Capacity = restaurant.DefaultCapacity,
-                IsClosed = false
-            };
+                return NotFound();
+            }
 
-            return View(sitting);
+            try
+            {
+                var m = new Models.Sitting.Create
+                {
+                    SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description"),
+                    RestaurantId = _restaurantId,
+                    Capacity = restaurant.DefaultCapacity,
+                    IsClosed = false
+                };
+
+                return View(m);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
+                return NotFound();
+            }
         }
 
         [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
-            var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
-            var sittings = new List<Sitting>();
-            for (int i = 0; i < m.NumberToSchedule; i++)
+            if (ModelState.IsValid)
             {
-                var sitting = new Sitting
+                try
                 {
-                    Title = m.Title,
-                    StartTime = m.StartTime.AddDays(i),
-                    EndTime = m.EndTime.AddDays(i),
-                    Capacity = m.Capacity,
-                    IsClosed = m.IsClosed,
-                    SittingTypeId = m.SittingTypeId,
-                    RestaurantId = m.RestaurantId,
-                    SittingType = sittingtype,
-                    ResDuration = sittingtype.ResDuration,
-                };
+                    var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
+                    var sittings = new List<Sitting>();
+                    for (int i = 0; i < m.NumberToSchedule; i++)
+                    {
+                        var sitting = new Sitting
+                        {
+                            Title = m.Title,
+                            StartTime = m.StartTime.AddDays(i),
+                            EndTime = m.EndTime.AddDays(i),
+                            Capacity = m.Capacity,
+                            IsClosed = m.IsClosed,
+                            SittingTypeId = m.SittingTypeId,
+                            RestaurantId = m.RestaurantId,
+                            SittingType = sittingtype,
+                            ResDuration = sittingtype.ResDuration,
+                        };
 
-                sittings.Add(sitting);
+                        sittings.Add(sitting);
+                    }
+
+                    _context.Sittings.AddRange(sittings);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
+                }
             }
-
-            _context.Sittings.AddRange(sittings);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");
+            return View(m);
         }
 
         [Authorize(Roles = "Manager")]
@@ -130,20 +165,20 @@ namespace ReservationSystem.Areas.Admin.Controllers
         {
             try
             {
-                var sittingtypes = await _context.SittingTypes.ToListAsync();
                 var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
                 if (sitting == null)
                 {
                     TempData["ErrorMessage"] = "Sitting not found";
                     return NotFound();
                 }
-                var m = new Areas.Admin.Models.Sitting.Edit
+
+                var m = new Models.Sitting.Edit
                 {
                     Title = sitting.Title,
                     Date = sitting.StartTime.Date,
                     StartTime = sitting.StartTime,
                     EndTime = sitting.EndTime,
-                    SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
+                    SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description"),
                     SittingTypeId = sitting.SittingTypeId,
                     SittingId = sitting.Id,
                     Capacity = sitting.Capacity,
@@ -163,7 +198,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
         [Authorize(Roles = "Manager")]
         [HttpPost]
-        public async Task<IActionResult> Edit(Areas.Admin.Models.Sitting.Edit m)
+        public async Task<IActionResult> Edit(Models.Sitting.Edit m)
         {
             try
             {

@@ -2,74 +2,39 @@
 
 @{
 	ViewData["Title"] = "Add Reservation";
-	var start = Model.StartTime.ToString("HH:mm");
-	var end = Model.EndTime.ToString("HH:mm");
 }
-
-<h1 class="display-4 text-primary pb-4 fw-4">Add Reservation</h1>
-@if(Model.SittingId != 0)
-{
-<h1>@Model.StartTime - @Model.EndTime</h1>
-}
-<partial name="_Calendar"/>
-
-<div class="col-md-6 offset-md-3">
-	<form asp-area=Admin asp-controller=Reservation asp-action=Create>
-		<div class="form-group">
-			<label for="firstName">First Name</label>
-			<input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" required>
-		</div>
-		<div class="form-group">
-			<label for="lastName">Last Name</label>
-			<input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
-		</div>
-		<div class="form-group">
-			<label for="email">Email</label>
-			<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
-		</div>
-		<div class="form-group">
-			<label for="phone">Phone Number</label>
-			<input type="number" class="form-control" id="phone" name="phone" placeholder="Enter Phonenumber">
-		</div>
-		<div class="form-group">
-			<label for="datetime">Date & Time</label>
-			<input type="datetime" class="form-control" id="datetime" name="datetime">
-		</div>
-		<div class="form-group">
-			<label for="guests">Number Of People</label>
-			<input type="number" class="form-control" id="guests" name="guests">
-		</div>
-		<div class="form-group">
-			<label for="comments">Comments</label>
-			<input type="text" class="form-control" id="comments" name="comments">
-		</div>
-		<div class="form-group">
-			<p>Reservation Status: </p>
-			<select asp-for=ReservationStatusId asp-items=Model.ReservationStatus></select>
-		</div>
-		<div class="form-group">
-			<p>Reservation Origin: </p>
-			<select asp-for=ReservationOriginId asp-items=Model.ReservationOrigin></select>
-		</div>
-
-		@if(Model.SittingId == 0)
-		{
-		<div class="form-group">
-			<p>Sitting: </p>
-			<select asp-for=SittingId asp-items=Model.Sittings></select>
-		</div>
-		}
-
-		<div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</div>
-		<input type="hidden" asp-for=SittingId />
-		<input type="hidden" asp-for=DateTime />
-	</form>
+<div class="row text-center">
+	<h1 class="display-4 text-primary pb-4 fw-4">Add Reservation</h1>
+	@if (Model.SittingId != 0)
+	{
+		<h2>@Model.StartTime - @Model.EndTime</h2>
+	}
+</div>
+<div class="row">
+	<div class="col-md-5 offset-md-1">
+		<partial name="_Calendar" />
+	</div>
+	<div class="col-md-5 ">
+		<form asp-area=Admin asp-controller=Reservation asp-action=Create>
+			<partial name="_ReservationFormPartial" for="ReservationForm" />
+			<partial name="_AdminReservationFormPartial" for="AdminReservationForm" />
+			@if (Model.SittingId == 0)
+			{
+				<div class="form-group">
+					<p>Sitting: </p>
+					<select asp-for=SittingId asp-items=Model.Sittings></select>
+				</div>
+			}
+			<div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+			<input type="hidden" asp-for=SittingId />
+		</form>
+	</div>
 </div>
 
 @section Scripts{
-	<script src="/js/calendar.js"></script>
-	<script src="~/js/calendarPartial.js"></script>
+<script src="/js/calendar.js"></script>
+<script src="~/js/calendarPartial.js"></script>
 }
 
