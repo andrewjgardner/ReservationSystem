@@ -135,13 +135,13 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
                 if (reservation == null)
                 {
-                    return NotFound();
+                    return RedirectToAction("Error", "Home", new {area = ""});
                 }
 
                 var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == reservation.SittingId);
                 if (sitting == null)
                 {
-                    return NotFound();
+                    return RedirectToAction("Error", "Home");
                 }
 
                 var m = new Models.Reservation.Edit
@@ -174,7 +174,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
-                return NotFound();
+                return RedirectToAction("Error", "Home");
             }
         }
 
