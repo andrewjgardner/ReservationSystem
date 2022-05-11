@@ -2,6 +2,7 @@
 
 namespace ReservationSystem.Areas.Admin.Models.Reservation
 {
+    //Partial View Model
     public class AdminReservationForm
     {
         public SelectList? ReservationStatus { get; set; }

@@ -12,10 +12,12 @@ namespace ReservationSystem.Areas.Admin.Controllers
     public class SittingController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly int _restaurantId;
 
         public SittingController(ApplicationDbContext context)
         {
             _context = context;
+            _restaurantId = 1;
         }
 
         public async Task<IActionResult> Index()
@@ -76,17 +78,14 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            //TODO: Get Restaurant from Employee ID
-            int restaurantId = 1;
-
-            var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == restaurantId);
+            var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == _restaurantId);
 
             var sittingtypes = await _context.SittingTypes.ToListAsync();
 
             var sitting = new Models.Sitting.Create
             {
                 SittingTypes = new SelectList(sittingtypes, "Id", "Description"),
-                RestaurantId = restaurantId,
+                RestaurantId = _restaurantId,
                 Capacity = restaurant.DefaultCapacity,
                 IsClosed = false
             };
