@@ -25,7 +25,8 @@ namespace ReservationSystem.Areas.Admin.Models.Reservation
         public DateTime EndTime { get; set; }
         [Required]
         public int Guests { get; set; }
-        [Required(AllowEmptyStrings=true)]
+
+        //[Required(AllowEmptyStrings=true)]
         public string? Comments { get; set; }
 
         public SelectList ?ReservationStatus { get; set; }

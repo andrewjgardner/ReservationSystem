@@ -93,9 +93,6 @@ namespace ReservationSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ReservationSystem.Models.Reservation.Create m)
         {
-            //Removes comments from the ModelState, preventing validation on the comments field, allowing empty fields to pass
-            //Kind of ugly, but it works
-            ModelState.Remove("Comments");
             if (ModelState.IsValid)
             {
                 try
