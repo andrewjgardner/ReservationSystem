@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ReservationSystem.Areas.Admin.Models;
-using ReservationSystem.Areas.Admin.Models.Reservation;
 using ReservationSystem.Data;
-using ReservationSystem.Models.Reservation;
 using ReservationSystem.Services;
 
 namespace ReservationSystem.Areas.Admin.Controllers
@@ -55,18 +52,20 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var reservationStatus = await _context.ReservationStatuses.ToListAsync();
                 var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
 
-                var reservationForm = new ReservationSystem.Models.Reservation.ReservationForm();
-
                 var reservation = new Models.Reservation.Create
                 {
-                    ReservationForm = reservationForm,
-                    ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
-                    ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
+                    ReservationForm = new ReservationSystem.Models.Reservation.ReservationForm(),
+                    AdminReservationForm = new Models.Reservation.AdminReservationForm(),
                 };
+
+                reservation.AdminReservationForm.ReservationStatus = new SelectList(reservationStatus, "Id", "Description");
+                reservation.AdminReservationForm.ReservationStatus = new SelectList(reservationOrigin, "Id", "Description");
+
                 if (sittingId.HasValue)
                 {
                     var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
                     reservation.SittingId = (int)sittingId;
+                    reservation.AdminReservationForm.SittingId = (int)sittingId;
                     reservation.StartTime = sitting.StartTime;
                     reservation.EndTime = sitting.EndTime;
                     reservation.ReservationForm.DateTime = sitting.StartTime;
@@ -74,7 +73,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 else
                 {
                     var sittings = await _context.Sittings.ToListAsync();
-                    reservation.Sittings = new SelectList(sittings, "Id", "StartTime");
+                    reservation.AdminReservationForm.Sittings = new SelectList(sittings, "Id", "StartTime");
                 }
                 return View(reservation);
             }
@@ -101,16 +100,14 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 try
                 {
                     var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.Phone, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email);
-                    string? comments = m.ReservationForm.Comments;
-
                     var reservation = new Reservation
                     {
                         StartTime = m.ReservationForm.DateTime,
                         Guests = m.ReservationForm.Guests,
-                        Comments = comments,
+                        Comments = m.ReservationForm.Comments,
                         SittingId = m.SittingId,
-                        ReservationStatusId = m.ReservationStatusId,
-                        ReservationOriginId = m.ReservationOriginId,
+                        ReservationStatusId = m.AdminReservationForm.ReservationStatusId,
+                        ReservationOriginId = m.AdminReservationForm.ReservationOriginId,
                         Customer = customer
                     };
 
@@ -125,8 +122,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 }
             }
 
-            m.ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description", m.ReservationStatusId);
-            m.ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description", m.ReservationOriginId);
+            m.AdminReservationForm.ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description", m.AdminReservationForm.ReservationStatusId);
+            m.AdminReservationForm.ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description", m.AdminReservationForm.ReservationOriginId);
             m.StartTime = sitting.StartTime;
             m.EndTime = sitting.EndTime;
             return View(m);
@@ -165,7 +162,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Edit m)
+        public async Task<IActionResult> Edit(Models.Reservation.Edit m)
         {
             var reservationStatus = await _context.ReservationStatuses.ToListAsync();
             var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
