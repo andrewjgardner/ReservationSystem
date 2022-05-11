@@ -1,0 +1,17 @@
+﻿@model ReservationSystem.Areas.Admin.Models.Reservation.AdminReservationForm
+<div class="form-group">
+	<label asp-for=ReservationStatusId class="control-label"></label>
+	<select asp-for=ReservationStatusId asp-items=Model.ReservationStatus class="form-select"></select>
+</div>
+<div class="form-group">
+	<label asp-for=ReservationStatusId class="control-label"></label>
+	<select asp-for=ReservationOriginId asp-items=Model.ReservationOrigin class="form-select"></select>
+</div>
+@if (Model.SittingId == 0)
+{
+	<div class="form-group">
+		<p>Sitting: </p>
+		<select asp-for=SittingId asp-items=Model.Sittings></select>
+	</div>
+}
+

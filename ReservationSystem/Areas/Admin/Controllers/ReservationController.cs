@@ -55,8 +55,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var reservationStatus = await _context.ReservationStatuses.ToListAsync();
                 var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
 
+                var reservationForm = new ReservationSystem.Models.Reservation.ReservationForm();
+
                 var reservation = new Models.Reservation.Create
                 {
+                    ReservationForm = reservationForm,
                     ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
                     ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
                 };
@@ -66,7 +69,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     reservation.SittingId = (int)sittingId;
                     reservation.StartTime = sitting.StartTime;
                     reservation.EndTime = sitting.EndTime;
-                    reservation.DateTime = sitting.StartTime;
+                    reservation.ReservationForm.DateTime = sitting.StartTime;
                 }
                 else
                 {
@@ -87,30 +90,30 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
-            var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.Phone, m.FirstName, m.LastName, m.Email);
-
-            string? comments = m.Comments;
-
             if (sitting == null)
             {
                 return NotFound();
             }
-            m.Validate(ModelState, sitting);
+            m.ReservationForm.Validate(ModelState, sitting);
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.Phone, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email);
+                    string? comments = m.ReservationForm.Comments;
+
                     var reservation = new Reservation
                     {
-                        StartTime = m.DateTime,
-                        Guests = m.Guests,
+                        StartTime = m.ReservationForm.DateTime,
+                        Guests = m.ReservationForm.Guests,
                         Comments = comments,
                         SittingId = m.SittingId,
                         ReservationStatusId = m.ReservationStatusId,
                         ReservationOriginId = m.ReservationOriginId,
                         Customer = customer
                     };
+
                     _context.Reservations.Add(reservation);
                     await _context.SaveChangesAsync();
 
