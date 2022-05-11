@@ -24,7 +24,7 @@ namespace ReservationSystem.Models.Reservation
         [Display(Name = "Date")]
         public DateTime DateTime { get; set; }
 
-        [Range(1,8)]
+        [Range(1,10000)]
         [Required]
         [Display(Name = "Number of guests")]
         public int Guests { get; set; }

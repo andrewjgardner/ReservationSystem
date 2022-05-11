@@ -51,7 +51,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var m = new Models.Reservation.Create
                 {
                     ReservationForm = new ReservationSystem.Models.Reservation.ReservationForm(),
-                    AdminReservationForm = new Models.Reservation.AdminReservationForm()
+                    AdminReservationForm = new Models.Reservation.AdminReservationForm
                     {
                         ReservationStatus = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description"),
                         ReservationOrigin = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description")
@@ -112,9 +112,9 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
                     return RedirectToAction("Details", "Sitting", new { sittingId = sitting.Id });
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError("Error", e.Message);
+                    ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
                 }
             }
 
@@ -130,41 +130,57 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int reservationId)
         {
-            var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
-            if (reservation == null)
+            try
             {
+                var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == reservation.SittingId);
+                if (sitting == null)
+                {
+                    return NotFound();
+                }
+
+                var m = new Models.Reservation.Edit
+                {
+                    ReservationForm = new ReservationSystem.Models.Reservation.ReservationForm
+                    {
+                        FirstName = reservation.Customer.FirstName,
+                        LastName = reservation.Customer.LastName,
+                        Email = reservation.Customer.Email,
+                        Phone = reservation.Customer.PhoneNumber,
+                        DateTime = reservation.StartTime,
+                        Guests = reservation.Guests,
+                        Comments = reservation.Comments
+                    },
+                    AdminReservationForm = new Models.Reservation.AdminReservationForm
+                    {
+                        ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description"),
+                        ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description"),
+                        ReservationStatusId = reservation.ReservationStatusId,
+                        ReservationOriginId = reservation.ReservationOriginId
+                    },
+                    SittingId = reservation.SittingId,
+                    Id = reservation.Id,
+                    StartTime = sitting.StartTime,
+                    EndTime = sitting.EndTime
+                };
+
+                return View(m);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
                 return NotFound();
             }
-            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
-            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
-
-            var reservationEdit = new Models.Reservation.Edit
-            {
-                Id = reservation.Id,
-                FirstName = reservation.Customer.FirstName,
-                LastName = reservation.Customer.LastName,
-                Email = reservation.Customer.Email,
-                Phone = reservation.Customer.PhoneNumber,
-                DateTime = reservation.StartTime,
-                ReservationStatus = new SelectList(reservationStatus, "Id", "Description"),
-                ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description"),
-                ReservationStatusId = reservation.ReservationStatusId,
-                ReservationOriginId = reservation.ReservationOriginId,
-                Guests = reservation.Guests,
-                SittingId = reservation.SittingId,
-                Comments = reservation.Comments
-
-            };
-
-            return View(reservationEdit);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Reservation.Edit m)
         {
-            var reservationStatus = await _context.ReservationStatuses.ToListAsync();
-            var reservationOrigin = await _context.ReservationOrigins.ToListAsync();
-
             var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == m.Id);
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
             if (reservation == null || sitting == null)
@@ -172,22 +188,21 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            m.ReservationStatus = new SelectList(reservationStatus, "Id", "Description");
-            m.ReservationOrigin = new SelectList(reservationOrigin, "Id", "Description");
+            m.ReservationForm.Validate(ModelState, sitting);
 
-            m.Validate(ModelState, sitting);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    reservation.Customer.FirstName = m.FirstName;
-                    reservation.Customer.LastName = m.LastName;
-                    reservation.Customer.Email = m.Email;
-                    reservation.Customer.PhoneNumber = m.Phone;
-                    reservation.StartTime = m.DateTime;
-                    reservation.ReservationOriginId = m.ReservationOriginId;
-                    reservation.ReservationStatusId = m.ReservationStatusId;
-                    reservation.Guests = m.Guests;
+                    reservation.Customer.FirstName = m.ReservationForm.FirstName;
+                    reservation.Customer.LastName = m.ReservationForm.LastName;
+                    reservation.Customer.Email = m.ReservationForm.Email;
+                    reservation.Customer.PhoneNumber = m.ReservationForm.Phone;
+                    reservation.Guests = m.ReservationForm.Guests;
+                    reservation.StartTime = m.ReservationForm.DateTime;
+                    reservation.Comments = m.ReservationForm.Comments;
+                    reservation.ReservationOriginId = m.AdminReservationForm.ReservationOriginId;
+                    reservation.ReservationStatusId = m.AdminReservationForm.ReservationStatusId;
 
                     _context.Reservations.Update(reservation);
                     await _context.SaveChangesAsync();
@@ -199,8 +214,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     ModelState.AddModelError("Error", e.Message);
                 }
             }
-            return View(m);
 
+            m.AdminReservationForm.ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description");
+            m.AdminReservationForm.ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description");
+
+            return View(m);
         }
     }
 }
