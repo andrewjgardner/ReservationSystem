@@ -83,8 +83,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             var customer = await _personService.FindOrCreateCustomerAsync(restaruantId, m.Phone, m.FirstName, m.LastName, m.Email);
 
-            string? comments = m.Comments;
-
             if (sitting == null)
             {
                 return NotFound();
@@ -97,7 +95,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     {
                         StartTime = m.DateTime,
                         Guests = m.Guests,
-                        Comments = comments,
+                        Comments = m.Comments,
                         SittingId = m.SittingId,
                         ReservationStatusId = m.ReservationStatusId,
                         ReservationOriginId = m.ReservationOriginId,
@@ -178,6 +176,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     reservation.ReservationOriginId = m.ReservationOriginId;
                     reservation.ReservationStatusId = m.ReservationStatusId;
                     reservation.Guests = m.Guests;
+                    reservation.Comments = m.Comments;
 
                     _context.Reservations.Update(reservation);
                     await _context.SaveChangesAsync();

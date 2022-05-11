@@ -2,8 +2,8 @@
 
 @{
 	ViewData["Title"] = "Add Reservation";
-	var start = Model.StartTime.ToString("hh:mm");
-	var end = Model.EndTime.ToString("hh:mm");
+	var start = Model.StartTime.ToString("HH:mm");
+	var end = Model.EndTime.ToString("HH:mm");
 }
 
 <h1 class="display-4 text-primary pb-4 fw-4">Add Reservation</h1>
@@ -36,8 +36,8 @@
 			<input type="datetime" class="form-control" id="datetime" name="datetime">
 		</div>
 		<div class="form-group">
-			<label for="numpeople">Number Of People</label>
-			<input type="number" class="form-control" id="numpeople" name="numpeople">
+			<label for="guests">Number Of People</label>
+			<input type="number" class="form-control" id="guests" name="guests">
 		</div>
 		<div class="form-group">
 			<label for="comments">Comments</label>

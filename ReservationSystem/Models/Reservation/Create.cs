@@ -29,9 +29,9 @@ namespace ReservationSystem.Models.Reservation
 
         [Required]
         public int Guests { get; set; }
-
-        [Required]
-        public string Comments { get; set; }
+        
+        //[Required(AllowEmptyStrings=true)]
+        public string? Comments { get; set; }
 
         public int SittingId { get; set; }
         
