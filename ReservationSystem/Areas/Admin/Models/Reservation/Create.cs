@@ -10,10 +10,7 @@ namespace ReservationSystem.Areas.Admin.Models.Reservation
         public ReservationSystem.Models.Reservation.ReservationForm ReservationForm { get; set; }
         public AdminReservationForm AdminReservationForm { get; set; }
 
+        public SelectList? Sittings { get; set; }
         public int SittingId { get; set; }
-
-
     }
-
-
 }

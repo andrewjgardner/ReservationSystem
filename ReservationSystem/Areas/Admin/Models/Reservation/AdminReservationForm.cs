@@ -10,8 +10,5 @@ namespace ReservationSystem.Areas.Admin.Models.Reservation
         public SelectList? ReservationOrigin { get; set; }
         public int ReservationOriginId { get; set; }
 
-        public SelectList? Sittings { get; set; }
-        public int SittingId { get; set; }
-
     }
 }
