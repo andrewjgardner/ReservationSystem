@@ -17,12 +17,14 @@ namespace ReservationSystem.Controllers
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly int _restaurantId;
 
         public ReservationController(ApplicationDbContext context, PersonService personService, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _personService = personService;
             _userManager = userManager;
+            _restaurantId = 1;
         }
 
         public List<Data.Sitting> GetSittings()
@@ -54,19 +56,22 @@ namespace ReservationSystem.Controllers
         {
             try
             {
-                var sittings = await _context.Sittings.Where(s => s.Id == sittingId).FirstOrDefaultAsync();
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
 
-                if (sittings == null)
+                if (sitting == null)
                 {
                     return NotFound();
                 }
 
                 var m = new Models.Reservation.Create
                 {
-                    Date = sittings.StartTime,
+                    ReservationForm = new Models.Reservation.ReservationForm()
+                    {
+                        DateTime = sitting.StartTime
+                    },
                     SittingId = sittingId,
-                    StartTime = sittings.StartTime,
-                    EndTime = sittings.EndTime,
+                    StartTime = sitting.StartTime,
+                    EndTime = sitting.EndTime
                 };
 
                 if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Roles.Member)))
@@ -74,18 +79,17 @@ namespace ReservationSystem.Controllers
                     var user = await _userManager.GetUserAsync(User);
                     var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
 
-                    m.FirstName = customer.FirstName;
-                    m.LastName = customer.LastName;
-                    m.Phone = customer.PhoneNumber;
-                    m.Email = customer.Email;
+                    m.ReservationForm.FirstName = customer.FirstName;
+                    m.ReservationForm.LastName = customer.LastName;
+                    m.ReservationForm.Phone = customer.PhoneNumber;
+                    m.ReservationForm.Email = customer.Email;
                 }
-
                 return View(m);
 
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
+                TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
                 return NotFound();
             }
         }
@@ -93,42 +97,42 @@ namespace ReservationSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
+            var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
+
+            if (sitting == null)
+            {
+                return NotFound();
+            }
+
+            if (sitting?.IsClosed != false)
+            {
+                TempData["ErrorMessage"] = "Sitting is no longer available";
+                return RedirectToAction("Sittings");
+            }
+
+            m.ReservationForm.Validate(ModelState, sitting);
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    const int restaurantId = 1;
-                    var sitting = await _context.Sittings.Where(s => s.Id == m.SittingId).FirstOrDefaultAsync();
+                    var reservationStatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
+                    var reservationOrigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
 
-                    if (sitting?.IsClosed != false)
-                    {
-                        TempData["ErrorMessage"] = "Sitting is no longer available";
-                        return RedirectToAction("Sittings");
-                    }
-
-                    var reservationstatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
-                    var reservationorigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
-
-                    var customer = await _personService.FindOrCreateCustomerAsync(restaurantId, m.Phone, m.FirstName, m.LastName, m.Email);
-
-                    DateTime arrival = m.Date.Date.Add(m.Time.TimeOfDay);
-
+                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.Phone, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email);
                     var reservation = new Reservation
                     {
-                        StartTime = arrival,
-                        Guests = m.Guests,
-                        Comments = m.Comments,
+                        StartTime = m.ReservationForm.DateTime,
+                        Guests = m.ReservationForm.Guests,
+                        Comments = m.ReservationForm.Comments,
                         SittingId = m.SittingId,
-                        Sitting = sitting,
-                        ReservationStatus = reservationstatus,
-                        ReservationOrigin = reservationorigin,
+                        ReservationStatusId = reservationStatus.Id,
+                        ReservationOriginId = reservationOrigin.Id,
                         Customer = customer
                     };
 
                     _context.Reservations.Add(reservation);
-
                     await _context.SaveChangesAsync();
-
                     return RedirectToAction("Receipt", new { reservationId = reservation.Id });
 
                 }
@@ -138,6 +142,8 @@ namespace ReservationSystem.Controllers
                 }
             }
 
+            m.StartTime = sitting.StartTime;
+            m.EndTime = sitting.EndTime;
             return View(m);
         }
 

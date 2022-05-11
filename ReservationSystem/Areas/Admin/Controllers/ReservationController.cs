@@ -25,7 +25,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-
             var m = new Models.Reservation.Index
             {
                 Reservations = await _context.Reservations
@@ -52,16 +51,16 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var m = new Models.Reservation.Create
                 {
                     ReservationForm = new ReservationSystem.Models.Reservation.ReservationForm(),
-                    AdminReservationForm = new Models.Reservation.AdminReservationForm(),
+                    AdminReservationForm = new Models.Reservation.AdminReservationForm()
+                    {
+                        ReservationStatus = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description"),
+                        ReservationOrigin = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description")
+                    },
                 };
-
-                m.AdminReservationForm.ReservationStatus = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description");
-                m.AdminReservationForm.ReservationOrigin = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description");
 
                 if (sittingId.HasValue)
                 {
                     var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
-                    m.SittingId = (int)sittingId;
                     m.SittingId = (int)sittingId;
                     m.StartTime = sitting.StartTime;
                     m.EndTime = sitting.EndTime;

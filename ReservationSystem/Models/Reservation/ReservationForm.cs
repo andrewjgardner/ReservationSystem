@@ -6,9 +6,11 @@ namespace ReservationSystem.Models.Reservation
     public class ReservationForm
     {
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
@@ -16,6 +18,7 @@ namespace ReservationSystem.Models.Reservation
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "Phone Number")]
         public string Phone { get; set; }
 
         [Display(Name = "Date")]
@@ -33,7 +36,7 @@ namespace ReservationSystem.Models.Reservation
 
             if (DateTime < sitting.StartTime || DateTime > sitting.EndTime)
             {
-                modelState.AddModelError("Time", "Reservation Time Must Fall Within Sitting");
+                modelState.AddModelError("ReservationForm.DateTime", "Reservation Time Must Fall Within Sitting");
             }
         }
 
