@@ -53,8 +53,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     ReservationForm = new ReservationSystem.Models.Reservation.ReservationForm(),
                     AdminReservationForm = new Models.Reservation.AdminReservationForm
                     {
-                        ReservationStatus = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description"),
-                        ReservationOrigin = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description")
+                        ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description"),
+                        ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description")
                     },
                 };
 
