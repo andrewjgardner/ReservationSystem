@@ -5,75 +5,74 @@
 	var start = Model.StartTime.ToString("hh:mm");
 	var end = Model.EndTime.ToString("hh:mm");
 }
-
+<div class="row text-center">
 <h1 class="display-4 text-primary pb-4 fw-4">Add Reservation</h1>
 @if (Model.SittingId != 0)
 {
 	<h1>@Model.StartTime - @Model.EndTime</h1>
 }
-<partial name="_Calendar" />
-
-<div class="col-md-6 offset-md-3">
-	<form asp-area=Admin asp-controller=Reservation asp-action=Create>
-		<div asp-validation-summary="All" class="alert alert-danger"></div>
-		<div class="form-group">
-			<label asp-for="FirstName">First Name</label>
-			<input asp-for="FirstName" class="form-control" placeholder="Enter first name">
-		</div>
-		<div class="form-group">
-			<label asp-for="LastName">Last Name</label>
-			<input asp-for="LastName" class="form-control" placeholder="Enter last name">
-		</div>
-		<div class="form-group">
-			<label asp-for="Email">Email</label>
-			<input asp-for="Email" class="form-control" placeholder="Enter email">
-		</div>
-		<div class="form-group">
-			<label asp-for="Phone">Phone Number</label>
-			<input asp-for="Phone" class="form-control" placeholder="Enter Phonenumber">
-		</div>
-		<div class="form-group">
-			<label asp-for="DateTime">Date & Time</label>
-			<input asp-for="DateTime" class="form-control" >
-			<span asp-validation-for="DateTime" class="text-danger"></span>
-		</div>
-		<div class="form-group">
-			<label asp-for="Guests">Number Of Guests</label>
-			<input asp-for="Guests" class="form-control" >
-			<span asp-validation-for="Guests" class="text-danger"></span>
-		</div>
-@*		<div class="form-group">
-			<label asp-for="Comments">Comments</label>
-			<input asp-for="Comments" class="form-control">
-		</div>
-*@		<div class="form-group">
-			<label for="comments">Comments</label>
-			<textarea class="form-control" id="comments" name="comments" placeholder="Enter your comments here"></textarea>
-		</div>
-
-		<div class="form-group">
-			<label asp-for=ReservationStatusId class="control-label"></label>
-			<select asp-for=ReservationStatusId asp-items=Model.ReservationStatus class="form-select"></select>
-		</div>
-		<div class="form-group">
-			<p>Reservation Origin: </p>
-			<select asp-for=ReservationOriginId asp-items=Model.ReservationOrigin></select>
-		</div>
-
-		@if (Model.SittingId == 0)
-		{
+</div>
+<div class="row">
+	<div class="col-md-5 offset-md-1">
+		<partial name="_Calendar" />
+	</div>
+	<div class="col-md-5 ">
+		<form asp-area=Admin asp-controller=Reservation asp-action=Create>
+			<div asp-validation-summary="All" class="alert alert-danger"></div>
 			<div class="form-group">
-				<p>Sitting: </p>
-				<select asp-for=SittingId asp-items=Model.Sittings></select>
+				<label asp-for="FirstName">First Name</label>
+				<input asp-for="FirstName" class="form-control" placeholder="Enter first name">
 			</div>
-		}
+			<div class="form-group">
+				<label asp-for="LastName">Last Name</label>
+				<input asp-for="LastName" class="form-control" placeholder="Enter last name">
+			</div>
+			<div class="form-group">
+				<label asp-for="Email">Email</label>
+				<input asp-for="Email" class="form-control" placeholder="Enter email">
+			</div>
+			<div class="form-group">
+				<label asp-for="Phone">Phone Number</label>
+				<input asp-for="Phone" class="form-control" placeholder="Enter Phonenumber">
+			</div>
+			<div class="form-group">
+				<label asp-for="DateTime">Date & Time</label>
+				<input asp-for="DateTime" class="form-control">
+				<span asp-validation-for="DateTime" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Guests">Number Of Guests</label>
+				<input asp-for="Guests" class="form-control">
+				<span asp-validation-for="Guests" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Comments">Comments</label>
+				<input asp-for="Comments" class="form-control">
+			</div>
+			<div class="form-group">
+				<label asp-for=ReservationStatusId class="control-label"></label>
+				<select asp-for=ReservationStatusId asp-items=Model.ReservationStatus class="form-select"></select>
+			</div>
+			<div class="form-group">
+				<label asp-for=ReservationStatusId class="control-label"></label>
+				<select asp-for=ReservationOriginId asp-items=Model.ReservationOrigin class="form-select"></select>
+			</div>
 
-		<div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</div>
-		<input type="hidden" asp-for=SittingId />
-		<input type="hidden" asp-for=DateTime />
-	</form>
+			@if (Model.SittingId == 0)
+			{
+				<div class="form-group">
+					<p>Sitting: </p>
+					<select asp-for=SittingId asp-items=Model.Sittings></select>
+				</div>
+			}
+
+			<div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+			<input type="hidden" asp-for=SittingId />
+			<input type="hidden" asp-for=DateTime />
+		</form>
+	</div>
 </div>
 
 @section Scripts{

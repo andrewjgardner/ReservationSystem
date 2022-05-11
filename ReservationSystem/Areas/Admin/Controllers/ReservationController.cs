@@ -16,11 +16,13 @@ namespace ReservationSystem.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
+        private readonly int _restaurantId;
 
         public ReservationController(ApplicationDbContext context, PersonService personService)
         {
             _personService = personService;
             _context = context;
+            _restaurantId = 1;
         }
 
         [HttpGet]
@@ -85,9 +87,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
-            var restaruantId = 1;
-            
-            var customer = await _personService.FindOrCreateCustomerAsync(restaruantId, m.Phone, m.FirstName, m.LastName, m.Email);
+            var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.Phone, m.FirstName, m.LastName, m.Email);
 
             string? comments = m.Comments;
 
