@@ -319,7 +319,7 @@ namespace ReservationSystem.Data
                 .HasData(new Reservation
                 {
                     Id = 1,
-                    StartTime = new DateTime(2022, 04, 13, 09, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 09, 30, 00),
                     Comments = "By the balcony, please.",
                     Guests = 3,
                     SittingId = 1,
@@ -329,7 +329,7 @@ namespace ReservationSystem.Data
                 }, new Reservation
                 {
                     Id = 2,
-                    StartTime = new DateTime(2022, 04, 13, 12, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 12, 30, 00),
                     Comments = "",
                     Guests = 4,
                     SittingId = 2,
@@ -339,7 +339,7 @@ namespace ReservationSystem.Data
                 }, new Reservation
                 {
                     Id = 3,
-                    StartTime = new DateTime(2022, 04, 13, 18, 30, 00),
+                    StartTime = new DateTime(2022, 07, 13, 18, 30, 00),
                     Comments = "",
                     Guests = 5,
                     SittingId = 3,
