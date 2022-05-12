@@ -217,6 +217,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             m.AdminReservationForm.ReservationStatus = new SelectList(await _context.ReservationStatuses.ToListAsync(), "Id", "Description");
             m.AdminReservationForm.ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description");
+            m.StartTime = sitting.StartTime;
+            m.EndTime = sitting.EndTime;
 
             return View(m);
         }
