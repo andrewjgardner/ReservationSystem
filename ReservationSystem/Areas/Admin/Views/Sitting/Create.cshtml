@@ -2,6 +2,8 @@
 
 @{
 	ViewData["Title"] = "Add Sitting";
+	var starttime = Model.StartTime.ToString();
+	var endtime = Model.EndTime.ToString();
 }
 <h1 class="display-4 text-primary pb-4 fw-4">Add Sitting</h1>
 
@@ -10,15 +12,15 @@
 		<div class="sitting-details">
 			<div class="form-group">
 				<label for="title">Name</label>
-				<input type="text" class="form-control" id="title" name="title" placeholder="Enter name" required>
+				<input asp-for=Title class="form-control" placeholder="Enter name" required>
 			</div>
 			<div class="form-group">
-				<label for="starttime">Start Time</label>
-				<input type="datetime-local" class="form-control" id="starttime" name="starttime">
+				<label for="StartTime">Start Time</label>
+				<input asp-for=StartTime class="form-control" placeholder="HH:mm"/>
 			</div>
 			<div class="form-group">
-				<label for="endtime">End Time</label>
-				<input type="datetime-local" class="form-control" id="endtime" name="endtime">
+				<label for="EndTime">End Time</label>
+				<input asp-for=EndTime class="form-control" />
 			</div>
 			<div class="form-group">
 				<p>Sitting Type: </p>
@@ -26,35 +28,23 @@
 			</div>
 			<div class="form-group">
 				<label for="capacity">Capacity</label>
-				<input type="text" class="form-control" id="capacity" name="capacity" value=@Model.Capacity>
+				<input asp-for=Capacity class="form-control">
 			</div>
 			<div class="form-group">
 				<label for="isClosed">Closed Sitting: </label>
-				<input type="checkbox" id="isClosed" name="isClosed" value="true">
+				<input asp-for=IsClosed />
+				@*<input type="checkbox" id="isClosed" name="isClosed" value="true">*@
 			</div>
 		</div>
 		<div class="recurring-form">
 			<div class="form-group">
-				<label for="recurring">Make Recurring? </label>
-				<input type="checkbox" id="recurring" name="recurring" value="true" onchange="showRecurringForm()"/>
+				<label for="cb-show-recurring">Make Recurring? </label>
+				<input asp-for=IsRecurring type="checkbox" id="cb-show-recurring" />
 			</div>
-			<div class="form-group my-4" id="recurringForm" hidden>
-				<div class="form-check" id="recurringType">
-					<p>Recurring Type: </p>
+			<div class="form-group my-4" style="display:none" id="recurring-form-container">
+				<div class="form-group" id="recurringType">
+					<label for="recurringType">Recurring Type: </label>
 					<select asp-for=RecurringType asp-items=Model.RecurringTypes></select>
-					<!--
-					<label for="recurringType" class="form-label">Recurring Type:</label>
-					<br/>
-
-					
-
-					<label for="daily" class="form-check-label">Daily </label>
-					<input type="radio" class="form-check-input" name="recurringType" id="daily" value="daily"/>
-					<br/>
-
-					<label for="weekly" class="form-check-label">Weekly </label>
-					<input type="radio" class="form-check-input" name="recurringType" id="weekly" value="weekly"/>
-					-->
 				</div>
 
 				<label for="numberToSchedule" class="form-label">Number to schedule:</label>
@@ -74,29 +64,8 @@
 </div>
 
 @section Scripts{
-<script src="~/js/sittingRangeInput.js"></script>
 
-<!--
-<script>
-	$(document).ready(function(){
-		$("#makeRecurring").click(function(){
-			$("#recurringForm").slideToggle("slow");
-		});
-	});
-</script>
--->
-<script>
-	function showRecurringForm() {
-		document.getElementById("recurringForm").toggleAttribute("hidden");
-		//$("#recurringForm").show();
-	}
+	<script src="~/js/admin.sitting.create.js"></script>
+	<script src="~/js/sittingRangeInput.js"></script>
 
-	var slider = document.getElementById("numberToSchedule");
-	var output = document.getElementById("numberToScheduleText");
-	output.innerHTML = slider.value;
-
-	slider.oninput = function() {
-		output.innerHTML = this.value;
-	}
-</script>
 }

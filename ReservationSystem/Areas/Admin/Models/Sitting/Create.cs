@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace ReservationSystem.Areas.Admin.Models.Sitting
@@ -32,7 +33,7 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         //Recurring
 
-        public bool Recurring { get; set; }
+        public bool IsRecurring { get; set; }
 
         public SelectList? RecurringTypes { get; set; }
 
@@ -40,16 +41,27 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         public int? NumberToSchedule { get; set; }
 
-    }
-
-    public class RecurringType
-    {
-
-        public RecurringType(string name)
+        public void Validate(ModelStateDictionary modelState)
         {
-            this.Name = name;
+            if (StartTime > EndTime)
+            {
+                modelState.AddModelError("Create.EndTime", "End Time must be after Start Time");
+            }
+            else if (EndTime < DateTime.Now)
+            {
+                modelState.AddModelError("Create.EndTime", "Sitting can not be in the past");
+            }
+            if (IsRecurring)
+            {
+                if (RecurringType == null)
+                {
+                    modelState.AddModelError("Create.RecurringType", "Recurring Type can not be null");
+                }
+                if (NumberToSchedule <= 0 || NumberToSchedule == null)
+                {
+                    modelState.AddModelError("Create.NumberToSchedule", "Recurring Type must be a positive integer");
+                }
+            }
         }
-
-        public string Name { get; set; }
     }
 }

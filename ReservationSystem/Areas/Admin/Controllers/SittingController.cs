@@ -89,6 +89,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
+        private SelectList getRecurringTypes()
+        {
+            return new SelectList(new List<string> { "Daily", "Weekly" });
+        }
+
         [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -103,15 +108,15 @@ namespace ReservationSystem.Areas.Admin.Controllers
             try
             {
 
-                var recurringTypes = new List<string>{"Daily","Weekly"};
-
                 var m = new Models.Sitting.Create
                 {
                     SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description"),
                     RestaurantId = _restaurantId,
                     Capacity = restaurant.DefaultCapacity,
                     IsClosed = false,
-                    RecurringTypes = new SelectList(recurringTypes)
+                    RecurringTypes = getRecurringTypes(),
+                    StartTime = DateTime.Now.Date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute),
+                    EndTime = DateTime.Now.Date.AddHours(DateTime.Now.Hour+4).AddMinutes(DateTime.Now.Minute)
                 };
 
                 return View(m);
@@ -123,64 +128,65 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
+        private Sitting createSitting(Models.Sitting.Create m,SittingType sittingtype)
+        {
+            var sitting = new Sitting
+            {
+                Title = m.Title,
+                StartTime = m.StartTime,
+                EndTime = m.EndTime,
+                Capacity = m.Capacity,
+                IsClosed = m.IsClosed,
+                SittingTypeId = m.SittingTypeId,
+                RestaurantId = m.RestaurantId,
+                SittingType = sittingtype,
+                ResDuration = sittingtype.ResDuration,
+            };
+            return sitting;
+
+        }
+
         [Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
+            m.Validate(ModelState);
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
-                    if (m.Recurring)
+                    if (m.IsRecurring)
                     {
                         var sittings = new List<Sitting>();
                         for (int i = 0; i < m.NumberToSchedule; i++)
                         {
-                            var sitting = new Sitting
-                            {
-                                Title = m.Title,
-                                StartTime = m.StartTime,
-                                EndTime = m.EndTime,
-                                Capacity = m.Capacity,
-                                IsClosed = m.IsClosed,
-                                SittingTypeId = m.SittingTypeId,
-                                RestaurantId = m.RestaurantId,
-                                SittingType = sittingtype,
-                                ResDuration = sittingtype.ResDuration,
-                            };
+                            var sitting = createSitting(m, sittingtype);
 
                             sittings.Add(sitting);
 
                             if (m.RecurringType == "Daily")
                             {
                                 m.StartTime = m.StartTime.AddDays(1);
+                                m.EndTime = m.EndTime.AddDays(1);
                             }
                             else if (m.RecurringType == "Weekly")
                             {
                                 m.StartTime = m.StartTime.AddDays(7);
+                                m.EndTime = m.EndTime.AddDays(7);
                             }
                             else
                             {
-                                return NotFound();
+                                ModelState.AddModelError("m.RecurringType", "Recurring Type can not be " + m.RecurringType);
                             }
                         }
                         _context.Sittings.AddRange(sittings);
+
                     }
                     else
                     {
-                        var sitting = new Sitting
-                        {
-                            Title = m.Title,
-                            StartTime = m.StartTime,
-                            EndTime = m.EndTime,
-                            Capacity = m.Capacity,
-                            IsClosed = m.IsClosed,
-                            SittingTypeId = m.SittingTypeId,
-                            RestaurantId = m.RestaurantId,
-                            SittingType = sittingtype,
-                            ResDuration = sittingtype.ResDuration,
-                        };
+                        var sitting = createSitting(m, sittingtype);
                         _context.Sittings.Add(sitting);
                     }
                     await _context.SaveChangesAsync();
@@ -192,6 +198,9 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
                 }
             }
+
+            m.RecurringTypes = getRecurringTypes();
+            m.SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description");
             return View(m);
         }
 
