@@ -94,7 +94,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(sitting);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
@@ -120,7 +120,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles="Manager")]
         [HttpGet]
         public async Task<IActionResult> Edit(int sittingId)
         {
@@ -157,7 +157,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Edit(Areas.Admin.Models.Sitting.Edit m)
         {
@@ -186,6 +186,68 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     sitting.EndTime = m.EndTime;
                     sitting.Capacity = m.Capacity;
                     sitting.IsClosed = m.IsClosed;
+
+                    _context.Update(sitting);
+
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
+            }
+            return View(m);
+        }
+
+        [Authorize(Roles="Manager")]
+        [HttpGet]
+        public async Task<IActionResult> Close(int sittingId)
+        {
+            try
+            {
+                var sittingtypes = await _context.SittingTypes.ToListAsync();
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+                var m = new Areas.Admin.Models.Sitting.Close
+                {
+                    SittingId = sitting.Id,
+                    IsClosed = sitting.IsClosed
+                };
+
+                return View(m);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles="Manager")]
+        [HttpPost]
+        public async Task<IActionResult> Close(Areas.Admin.Models.Sitting.Close m)
+        {
+            try
+            {
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+
+                m.Validate(ModelState, sitting);
+
+                if (ModelState.IsValid)
+                {
+                    sitting.IsClosed = true;
 
                     _context.Update(sitting);
 
