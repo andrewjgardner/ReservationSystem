@@ -273,36 +273,35 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
         }
 
-        [Authorize(Roles="Manager")]
-        [HttpGet]
-        public async Task<IActionResult> Close(int sittingId)
-        {
-            try
-            {
-                var sittingtypes = await _context.SittingTypes.ToListAsync();
-                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
-                if (sitting == null)
-                {
-                    TempData["ErrorMessage"] = "Sitting not found";
-                    return NotFound();
-                }
-                var m = new Areas.Admin.Models.Sitting.Close
-                {
-                    SittingId = sitting.Id,
-                    IsClosed = sitting.IsClosed
-                };
+		[Authorize(Roles = "Manager")]
+		[HttpGet] //id = sitting id
+		public async Task<IActionResult> Close(int id)
+		{
+			try
+			{
+				var sittingtypes = await _context.SittingTypes.ToListAsync();
+				var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == id);
+				if (sitting == null)
+				{
+					TempData["ErrorMessage"] = "Sitting not found";
+					return NotFound();
+				}
+				var m = new Areas.Admin.Models.Sitting.Close
+				{
+					SittingId = sitting.Id,
+					IsClosed = sitting.IsClosed
+				};
 
-                return View(m);
+				return PartialView("_AdminCloseSittingPartial", m);
+			}
+			catch (Exception ex)
+			{
+				TempData["ErrorMessage"] = ex.Message;
+				return NotFound();
+			}
+		}
 
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = ex.Message;
-                return NotFound();
-            }
-        }
-
-        [Authorize(Roles="Manager")]
+		[Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Close(Areas.Admin.Models.Sitting.Close m)
         {
