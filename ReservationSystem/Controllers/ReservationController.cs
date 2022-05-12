@@ -90,7 +90,7 @@ namespace ReservationSystem.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
-                return NotFound();
+                return RedirectToAction("Exception", "Error");
             }
         }
 
@@ -171,8 +171,8 @@ namespace ReservationSystem.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = ex.Message;
-                return NotFound();
+                TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
+                return RedirectToAction("Exception", "Error");
             }
 
         }
