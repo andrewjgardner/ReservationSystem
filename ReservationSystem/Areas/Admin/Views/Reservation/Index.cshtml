@@ -13,7 +13,8 @@
 				<th>Time</th>
 				<th>Status</th>
 				<th>Sitting Id</th>
-				<th>Actions</th>
+				<th>Edit</th>
+				<th>Cancel</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -26,6 +27,9 @@
 				<td>@r.SittingId</td>
 				<td>
 					<a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId = "@r.Id" >Edit Reservation</a>
+				</td>
+				<td>
+					<a type="button" class="btn btn-danger" asp-controller="Reservation" asp-route-reservationId = "@r.Id" >Cancel Reservation</a>
 				</td>
 			</tr>
 			}
