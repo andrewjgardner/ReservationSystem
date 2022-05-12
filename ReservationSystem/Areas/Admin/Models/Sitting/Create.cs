@@ -6,8 +6,8 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
     public class Create
     {
 
-        [DisplayFormat(DataFormatString = "{0:dddd dd/MM/yyyy}")]
-        public DateTime Date { get; set; }
+        //[DisplayFormat(DataFormatString = "{0:dddd dd/MM/yyyy}")]
+        //public DateTime Date { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:t}")]
         [Display(Name = "Start time")]
@@ -30,6 +30,26 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         public bool IsClosed { get; set; }
 
-        public int NumberToSchedule { get; set; }
+        //Recurring
+
+        public bool Recurring { get; set; }
+
+        public SelectList? RecurringTypes { get; set; }
+
+        public string? RecurringType { get; set; }
+
+        public int? NumberToSchedule { get; set; }
+
+    }
+
+    public class RecurringType
+    {
+
+        public RecurringType(string name)
+        {
+            this.Name = name;
+        }
+
+        public string Name { get; set; }
     }
 }
