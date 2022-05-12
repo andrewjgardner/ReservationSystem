@@ -200,6 +200,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
 
             m.RecurringTypes = getRecurringTypes();
+            m.SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description");
             return View(m);
         }
 
