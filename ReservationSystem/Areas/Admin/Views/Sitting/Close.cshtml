@@ -1,0 +1,16 @@
+﻿@model ReservationSystem.Areas.Admin.Models.Sitting.Close
+
+@{
+	ViewData["Title"] = "Close Sitting";
+}
+
+<div class="col-md-6 offset-md-3">
+	<form asp-action=Close>	
+		<h2>Are you sure you want to close this sitting?</h2>
+		<div>
+			<button type="submit" class="btn btn-primary">Yes</button>
+		</div>
+		<input type="hidden" asp-for=SittingId />
+		<input type="hidden" asp-for=IsClosed />
+	</form>
+</div>

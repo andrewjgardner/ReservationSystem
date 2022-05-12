@@ -40,9 +40,17 @@
 						<td>
 							<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Sitting", new {sittingId = r.SittingID})'">Edit Details</button>
 						</td>
-						<td>
-							<button type="button" class="btn btn-primary">Close Sitting</button>
-						</td>						
+						@if(!r.IsClosed){
+							<td>
+								<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Close", "Sitting", new {sittingId = r.SittingID})'">Close Sitting</button>
+							</td>
+						}
+						else
+						{
+							<td>
+								<button type="button" class="btn btn-primary" disabled>Close Sitting</button>
+							</td>
+						}
 					}
 				</tr>
 			}

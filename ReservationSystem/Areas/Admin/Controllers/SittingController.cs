@@ -102,12 +102,16 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             try
             {
+
+                var recurringTypes = new List<string>{"Daily","Weekly"};
+
                 var m = new Models.Sitting.Create
                 {
                     SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description"),
                     RestaurantId = _restaurantId,
                     Capacity = restaurant.DefaultCapacity,
-                    IsClosed = false
+                    IsClosed = false,
+                    RecurringTypes = new SelectList(recurringTypes)
                 };
 
                 return View(m);
@@ -119,7 +123,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
@@ -128,14 +132,48 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 try
                 {
                     var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
-                    var sittings = new List<Sitting>();
-                    for (int i = 0; i < m.NumberToSchedule; i++)
+                    if (m.Recurring)
+                    {
+                        var sittings = new List<Sitting>();
+                        for (int i = 0; i < m.NumberToSchedule; i++)
+                        {
+                            var sitting = new Sitting
+                            {
+                                Title = m.Title,
+                                StartTime = m.StartTime,
+                                EndTime = m.EndTime,
+                                Capacity = m.Capacity,
+                                IsClosed = m.IsClosed,
+                                SittingTypeId = m.SittingTypeId,
+                                RestaurantId = m.RestaurantId,
+                                SittingType = sittingtype,
+                                ResDuration = sittingtype.ResDuration,
+                            };
+
+                            sittings.Add(sitting);
+
+                            if (m.RecurringType == "Daily")
+                            {
+                                m.StartTime = m.StartTime.AddDays(1);
+                            }
+                            else if (m.RecurringType == "Weekly")
+                            {
+                                m.StartTime = m.StartTime.AddDays(7);
+                            }
+                            else
+                            {
+                                return NotFound();
+                            }
+                        }
+                        _context.Sittings.AddRange(sittings);
+                    }
+                    else
                     {
                         var sitting = new Sitting
                         {
                             Title = m.Title,
-                            StartTime = m.StartTime.AddDays(i),
-                            EndTime = m.EndTime.AddDays(i),
+                            StartTime = m.StartTime,
+                            EndTime = m.EndTime,
                             Capacity = m.Capacity,
                             IsClosed = m.IsClosed,
                             SittingTypeId = m.SittingTypeId,
@@ -143,11 +181,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                             SittingType = sittingtype,
                             ResDuration = sittingtype.ResDuration,
                         };
-
-                        sittings.Add(sitting);
+                        _context.Sittings.Add(sitting);
                     }
-
-                    _context.Sittings.AddRange(sittings);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Index");
@@ -160,7 +195,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles="Manager")]
         [HttpGet]
         public async Task<IActionResult> Edit(int sittingId)
         {
@@ -196,7 +231,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles="Manager")]
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Sitting.Edit m)
         {
@@ -223,6 +258,68 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     sitting.EndTime = m.EndTime;
                     sitting.Capacity = m.Capacity;
                     sitting.IsClosed = m.IsClosed;
+
+                    _context.Update(sitting);
+
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
+            }
+            return View(m);
+        }
+
+        [Authorize(Roles="Manager")]
+        [HttpGet]
+        public async Task<IActionResult> Close(int sittingId)
+        {
+            try
+            {
+                var sittingtypes = await _context.SittingTypes.ToListAsync();
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+                var m = new Areas.Admin.Models.Sitting.Close
+                {
+                    SittingId = sitting.Id,
+                    IsClosed = sitting.IsClosed
+                };
+
+                return View(m);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles="Manager")]
+        [HttpPost]
+        public async Task<IActionResult> Close(Areas.Admin.Models.Sitting.Close m)
+        {
+            try
+            {
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+
+                m.Validate(ModelState, sitting);
+
+                if (ModelState.IsValid)
+                {
+                    sitting.IsClosed = true;
 
                     _context.Update(sitting);
 
