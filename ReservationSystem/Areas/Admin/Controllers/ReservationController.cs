@@ -42,7 +42,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
         }
 
-        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Create(int? sittingId)
         {
@@ -80,7 +79,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
-        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Reservation.Create m)
         {
