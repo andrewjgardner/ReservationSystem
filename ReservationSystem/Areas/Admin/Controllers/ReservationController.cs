@@ -135,6 +135,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
                 if (reservation == null)
                 {
+                    TempData["ErrorMessage"] = "Not Found";
                     return RedirectToAction("Error", "Home", new {area = ""});
                 }
 
