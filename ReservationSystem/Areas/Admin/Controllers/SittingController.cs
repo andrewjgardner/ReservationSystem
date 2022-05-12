@@ -33,7 +33,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                         StartTime = s.StartTime,
                         EndTime = s.EndTime,
                         Title = s.Title,
-                        PercentFull = s.PercentFull(),
+                        PercentFull = s.PeopleBooked,
                         IsClosed = s.IsClosed
                     })
                     .OrderBy(s => s.StartTime)
@@ -61,6 +61,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 {
                     var reservationVM = new Models.Sitting.ReservationListItem
                     {
+                        Id = reservation.Id,
                         StartTime = reservation.StartTime,
                         Name = reservation.Customer.FullName(),
                         Phone = reservation.Customer.PhoneNumber,

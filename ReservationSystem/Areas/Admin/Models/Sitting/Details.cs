@@ -27,6 +27,8 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
     public class ReservationListItem
     {
+        public int Id { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:t}")]
         [Display(Name = "Arrival time")]
         public DateTime StartTime { get; set; }
