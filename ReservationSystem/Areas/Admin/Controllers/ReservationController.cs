@@ -74,8 +74,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
-                return NotFound();
+                 TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
+                return RedirectToAction("Exception", "Error");
             }
         }
 
@@ -133,14 +133,13 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == reservationId);
                 if (reservation == null)
                 {
-                    TempData["ErrorMessage"] = "Not Found";
-                    return RedirectToAction("Error", "Home", new {area = ""});
+                    return NotFound();
                 }
 
                 var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == reservation.SittingId);
                 if (sitting == null)
                 {
-                    return RedirectToAction("Error", "Home");
+                    return NotFound();
                 }
 
                 var m = new Models.Reservation.Edit
@@ -173,7 +172,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Exception", "Home");
             }
         }
 

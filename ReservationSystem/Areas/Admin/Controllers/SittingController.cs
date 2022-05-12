@@ -85,7 +85,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
-                return NotFound();
+                return RedirectToAction("Error", "Home");
             }
         }
 
@@ -115,7 +115,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
-                return NotFound();
+                return RedirectToAction("Error", "Home");
             }
         }
 
@@ -169,7 +169,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
                 if (sitting == null)
                 {
-                    TempData["ErrorMessage"] = "Sitting not found";
                     return NotFound();
                 }
 
@@ -192,8 +191,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = ex.Message;
-                return NotFound();
+                TempData["ErrorMessage"] = ex.InnerException?.Message ?? ex.Message;
+                return RedirectToAction("Error", "Home");
             }
         }
 
@@ -206,14 +205,12 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
                 if (sitting == null)
                 {
-                    TempData["ErrorMessage"] = "Sitting not found";
                     return NotFound();
                 }
 
                 var sittingType = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
                 if (sittingType == null)
                 {
-                    TempData["ErrorMessage"] = "Sitting Type not found";
                     return NotFound();
                 }
 
