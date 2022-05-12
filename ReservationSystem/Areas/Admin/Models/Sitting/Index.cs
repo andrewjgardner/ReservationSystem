@@ -3,5 +3,6 @@
     public class Index
     {
         public Summary[] Sittings { get; set; }
+        public Close Close { get; set; }
     }
 }
