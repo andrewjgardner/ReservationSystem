@@ -102,12 +102,16 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             try
             {
+
+                var recurringTypes = new List<string>{"Daily","Weekly"};
+
                 var m = new Models.Sitting.Create
                 {
                     SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description"),
                     RestaurantId = _restaurantId,
                     Capacity = restaurant.DefaultCapacity,
-                    IsClosed = false
+                    IsClosed = false,
+                    RecurringTypes = new SelectList(recurringTypes)
                 };
 
                 return View(m);
@@ -128,14 +132,48 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 try
                 {
                     var sittingtype = await _context.SittingTypes.FirstOrDefaultAsync(st => st.Id == m.SittingTypeId);
-                    var sittings = new List<Sitting>();
-                    for (int i = 0; i < m.NumberToSchedule; i++)
+                    if (m.Recurring)
+                    {
+                        var sittings = new List<Sitting>();
+                        for (int i = 0; i < m.NumberToSchedule; i++)
+                        {
+                            var sitting = new Sitting
+                            {
+                                Title = m.Title,
+                                StartTime = m.StartTime,
+                                EndTime = m.EndTime,
+                                Capacity = m.Capacity,
+                                IsClosed = m.IsClosed,
+                                SittingTypeId = m.SittingTypeId,
+                                RestaurantId = m.RestaurantId,
+                                SittingType = sittingtype,
+                                ResDuration = sittingtype.ResDuration,
+                            };
+
+                            sittings.Add(sitting);
+
+                            if (m.RecurringType == "Daily")
+                            {
+                                m.StartTime = m.StartTime.AddDays(1);
+                            }
+                            else if (m.RecurringType == "Weekly")
+                            {
+                                m.StartTime = m.StartTime.AddDays(7);
+                            }
+                            else
+                            {
+                                return NotFound();
+                            }
+                        }
+                        _context.Sittings.AddRange(sittings);
+                    }
+                    else
                     {
                         var sitting = new Sitting
                         {
                             Title = m.Title,
-                            StartTime = m.StartTime.AddDays(i),
-                            EndTime = m.EndTime.AddDays(i),
+                            StartTime = m.StartTime,
+                            EndTime = m.EndTime,
                             Capacity = m.Capacity,
                             IsClosed = m.IsClosed,
                             SittingTypeId = m.SittingTypeId,
@@ -143,11 +181,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                             SittingType = sittingtype,
                             ResDuration = sittingtype.ResDuration,
                         };
-
-                        sittings.Add(sitting);
+                        _context.Sittings.Add(sitting);
                     }
-
-                    _context.Sittings.AddRange(sittings);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Index");

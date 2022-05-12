@@ -7,36 +7,62 @@
 
 <div class="col-md-6 offset-md-3">
 	<form asp-action=Create>
-		<div class="form-group">
-			<label for="title">Name</label>
-			<input type="text" class="form-control" id="title" name="title" placeholder="Enter name" required>
+		<div class="sitting-details">
+			<div class="form-group">
+				<label for="title">Name</label>
+				<input type="text" class="form-control" id="title" name="title" placeholder="Enter name" required>
+			</div>
+			<div class="form-group">
+				<label for="starttime">Start Time</label>
+				<input type="datetime-local" class="form-control" id="starttime" name="starttime">
+			</div>
+			<div class="form-group">
+				<label for="endtime">End Time</label>
+				<input type="datetime-local" class="form-control" id="endtime" name="endtime">
+			</div>
+			<div class="form-group">
+				<p>Sitting Type: </p>
+				<select asp-for=SittingTypeId asp-items=Model.SittingTypes></select>
+			</div>
+			<div class="form-group">
+				<label for="capacity">Capacity</label>
+				<input type="text" class="form-control" id="capacity" name="capacity" value=@Model.Capacity>
+			</div>
+			<div class="form-group">
+				<label for="isClosed">Closed Sitting: </label>
+				<input type="checkbox" id="isClosed" name="isClosed" value="true">
+			</div>
 		</div>
-		<div class="form-group">
-			<label for="starttime">Start Time</label>
-			<input type="datetime-local" class="form-control" id="starttime" name="starttime">
-		</div>
-		<div class="form-group">
-			<label for="endtime">End Time</label>
-			<input type="datetime-local" class="form-control" id="endtime" name="endtime">
-		</div>
-		<div class="form-group">
-			<p>Sitting Type: </p>
-			<select asp-for=SittingTypeId asp-items=Model.SittingTypes></select>
-		</div>
-		<div class="form-group">
-			<label for="capacity">Capacity</label>
-			<input type="text" class="form-control" id="capacity" name="capacity" value=@Model.Capacity>
-		</div>
-		<div class="form-group">
-			<label for="isClosed">Closed Sitting: </label>
-			<input type="checkbox" id="isClosed" name="isClosed" value="true">
-		</div>
-		<div class="form-group my-4">
-			<label for="numberToSchedule" class="form-label">Number to schedule:</label>
-			<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" min="1" max="60"/>
-			<div class = "card">
-				<div class="card-body">
-					<div id="numberToScheduleText"></div>
+		<div class="recurring-form">
+			<div class="form-group">
+				<label for="recurring">Make Recurring? </label>
+				<input type="checkbox" id="recurring" name="recurring" value="true" onchange="showRecurringForm()"/>
+			</div>
+			<div class="form-group my-4" id="recurringForm" hidden>
+				<div class="form-check" id="recurringType">
+					<p>Recurring Type: </p>
+					<select asp-for=RecurringType asp-items=Model.RecurringTypes></select>
+					<!--
+					<label for="recurringType" class="form-label">Recurring Type:</label>
+					<br/>
+
+					
+
+					<label for="daily" class="form-check-label">Daily </label>
+					<input type="radio" class="form-check-input" name="recurringType" id="daily" value="daily"/>
+					<br/>
+
+					<label for="weekly" class="form-check-label">Weekly </label>
+					<input type="radio" class="form-check-input" name="recurringType" id="weekly" value="weekly"/>
+					-->
+				</div>
+
+				<label for="numberToSchedule" class="form-label">Number to schedule:</label>
+				<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" min="1" max="60"/>
+				<div class = "card">
+					<div class="card-body">
+						<div id="numberToScheduleText"></div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -49,4 +75,28 @@
 
 @section Scripts{
 <script src="~/js/sittingRangeInput.js"></script>
+
+<!--
+<script>
+	$(document).ready(function(){
+		$("#makeRecurring").click(function(){
+			$("#recurringForm").slideToggle("slow");
+		});
+	});
+</script>
+-->
+<script>
+	function showRecurringForm() {
+		document.getElementById("recurringForm").toggleAttribute("hidden");
+		//$("#recurringForm").show();
+	}
+
+	var slider = document.getElementById("numberToSchedule");
+	var output = document.getElementById("numberToScheduleText");
+	output.innerHTML = slider.value;
+
+	slider.oninput = function() {
+		output.innerHTML = this.value;
+	}
+</script>
 }
