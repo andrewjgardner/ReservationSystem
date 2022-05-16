@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ReservationSystemTests.IntegrationTests
 {
+
     public class CustomWebApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
