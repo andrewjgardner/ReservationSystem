@@ -15,7 +15,7 @@ namespace ReservationSystem.Data
             ModelSitting();
             ModelTable();
             ModelReservation();
-            ModelReservationTable();
+            //ModelReservationTable();
         }
 
         private void ModelArea()
@@ -60,11 +60,11 @@ namespace ReservationSystem.Data
         }
 
 
-        private void ModelReservationTable()
-        {
-            _modelBuilder.Entity<ReservationTable>()
-                .HasKey(t => new { t.ReservationId, t.TableId });
-        }
+        //private void ModelReservationTable()
+        //{
+        //    _modelBuilder.Entity<ReservationTable>()
+        //        .HasKey(t => new { t.ReservationId, t.TableId });
+        //}
 
         private void ModelUserTable()
         {

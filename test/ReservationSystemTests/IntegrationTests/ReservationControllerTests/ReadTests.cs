@@ -45,7 +45,7 @@ namespace ReservationSystemTests.ReservationControllerTests
         }
 
         public ApplicationDbContext CreateContext()
-            => new ApplicationDbContext(_contextOptions, (modelBuilder) => new TestDataSeeder(modelBuilder));
+            => new ApplicationDbContext(_contextOptions);
 
         //[Fact]
         //public async void Sitting_ReturnsAViewResult_WithAListOfSittings()

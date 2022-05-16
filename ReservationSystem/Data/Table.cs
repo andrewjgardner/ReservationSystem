@@ -10,6 +10,6 @@
         public Area Area { get; set; }
         public int AreaId { get; set; }
 
-        public List<ReservationTable> ReservationTables { get; set; } = new List<ReservationTable>();
+        public List<Reservation> Reservations { get; set; }
     }
 }
