@@ -7,11 +7,11 @@ namespace ReservationSystemTests.Utilities
     public class TestDataSeeder
     {
 
-        ModelBuilder _modelBuilder;
+        //ModelBuilder _modelBuilder;
 
-        public TestDataSeeder(ModelBuilder modelBuilder)
-        {
-            _modelBuilder = modelBuilder;
-        }
+        //public TestDataSeeder(ModelBuilder modelBuilder)
+        //{
+        //    _modelBuilder = modelBuilder;
+        //}
     }
 }
