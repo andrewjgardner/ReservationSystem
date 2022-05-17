@@ -1,9 +1,34 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using System.Security.Policy
+@model ReservationSystem.Areas.Member.Models.Reservation.Index
 @{
+	ViewData["Title"] = "My Reservations";
 }
 
-<h1>Member Home</h1>
-
-<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="Reservations">View Reservations</a>
+<div class="container text-center">
+	<h1 class="display-3 text-primary pb-3 fw-3">Reservations</h1>
+	@if(Model.Reservations.Length > 0){
+		<table class="table table-hover table-striped" >
+			<thead class="table-primary">
+				<tr>
+					<th>Start Time</th>
+					<th>Guests</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var r in Model.Reservations)
+				{	
+				<tr> 
+					<td>@r.DateTime</td>
+					<td>@r.Guests</td>
+					<td>@r.Status</td>
+				</tr>
+				}
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<h2>You currently have no reservations!</h2>
+	}
+</div>

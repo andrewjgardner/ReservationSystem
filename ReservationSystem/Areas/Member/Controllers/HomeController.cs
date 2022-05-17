@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
 using ReservationSystem.Models.Reservation;
+using System.Web;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
 
 namespace ReservationSystem.Areas.Member.Controllers
 {
@@ -12,20 +15,42 @@ namespace ReservationSystem.Areas.Member.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController (ApplicationDbContext context)
+        public HomeController (ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var userId = _userManager.GetUserId(HttpContext.User);
+            int customerId = _context.People
+                .Where(p => p.UserId == userId)
+                .Select(p => p.Id)
+                .First();
 
-        //public async Task<IActionResult> Reservations()
-        //{
-        //    return View();
-        //}
+            DateTime today = DateTime.Today;
+
+            var m = new Models.Reservation.Index
+            {
+                Reservations = await _context.Reservations
+                    .Where(r => r.CustomerId == customerId)
+                    .Include(r => r.ReservationStatus)
+                    .Where(r => r.ReservationStatus.Id != 3)//Reservation status id 3 = cancelled, thus this filters out any cancelled reservations
+                    .Where(r => r.StartTime > today)
+                    .Select(r => new Models.Reservation.Details
+                    {
+                        Id = r.Id,
+                        DateTime = r.StartTime,
+                        Guests = r.Guests,
+                        Status = r.ReservationStatus.Description
+                    })
+                    .ToArrayAsync()
+            };
+
+            return View(m);
+        }
     }
 }
