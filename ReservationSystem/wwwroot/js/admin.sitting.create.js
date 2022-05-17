@@ -3,7 +3,6 @@
 	var slider = $('#numberToSchedule');
 	var endDate = $('#endDateText');
 	$("p#numberToScheduleText").html(slider.val());
-	$('#endDateText').html(calculateEndDate($('#start-time').val(), $('#set-recurring-type').val(), slider.val()));
 	disableRecurringDay();
 
 	$("#numberToSchedule").change(() => {
