@@ -33,7 +33,6 @@
 			<div class="form-group">
 				<label for="isClosed">Closed Sitting: </label>
 				<input asp-for=IsClosed />
-				@*<input type="checkbox" id="isClosed" name="isClosed" value="true">*@
 			</div>
 		</div>
 		<div class="recurring-form">
@@ -48,10 +47,11 @@
 				</div>
 
 				<label for="numberToSchedule" class="form-label">Number to schedule:</label>
-				<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" min="1" max="60"/>
+				<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" value="8" min="1" max="60"/>
 				<div class = "card">
 					<div class="card-body">
-						<div id="numberToScheduleText"></div>
+						<p id="numberToScheduleText"></p>
+						<p id="endDateText"></p>
 					</div>
 				</div>
 				<div class="form-group" style="display:none" id="weekly-days-select">

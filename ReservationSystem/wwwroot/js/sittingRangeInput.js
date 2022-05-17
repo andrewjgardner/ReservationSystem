@@ -1,4 +1,5 @@
-﻿$(() => {
+﻿/*
+$(() => {
     changeScheduleText();
 });
 
@@ -8,5 +9,6 @@ $("#numberToSchedule").change(() => {
 
 function changeScheduleText() {
     var str = $("#numberToSchedule").val();
-    $("div#numberToScheduleText").html(str);
+    $("p#numberToScheduleText").html(str);
 }
+*/
