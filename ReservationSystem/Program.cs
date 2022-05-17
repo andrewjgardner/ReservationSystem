@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
 
@@ -10,6 +11,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+var testingConnectionString = builder.Configuration.GetConnectionString("TestingConnection");
+builder.Services.AddDbContext<TestingDbContext>(options =>
+    options.UseSqlServer(testingConnectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()

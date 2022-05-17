@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using ReservationSystem.Data.Context;
 using ReservationSystem.Services;
 
 namespace ReservationSystem.Data.Utilities

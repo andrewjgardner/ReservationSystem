@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReservationSystem.Data
+namespace ReservationSystem.Data.Utilities
 {
     public class DataSeeder
     {
@@ -104,7 +104,7 @@ namespace ReservationSystem.Data
         //        {
         //            Id = 6,
         //            TableName = "M6",
-        //            TableCapacity = 3,
+        //            TableCapacity = 3,public 
         //            AreaId = 1
         //        }, new Table
         //        {
@@ -161,7 +161,7 @@ namespace ReservationSystem.Data
         //            TableCapacity = 3,
         //            AreaId = 2
         //        }, new Table
-        //        {
+        //        {public 
         //            Id = 16,
         //            TableName = "O6",
         //            TableCapacity = 3,
@@ -214,7 +214,7 @@ namespace ReservationSystem.Data
         //            TableName = "B4",
         //            TableCapacity = 3,
         //            AreaId = 3
-        //        }, new Table
+        //        }, new Tablepublic 
         //        {
         //            Id = 25,
         //            TableName = "B5",

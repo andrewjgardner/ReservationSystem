@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;

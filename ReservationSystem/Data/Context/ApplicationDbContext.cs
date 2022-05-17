@@ -1,29 +1,24 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using ReservationSystem.Models.Reservation;
+using ReservationSystem.Data.Utilities;
 
-namespace ReservationSystem.Data
+namespace ReservationSystem.Data.Context
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        private readonly Action<ModelBuilder> _dataConfigurer;
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, Action<ModelBuilder> dataConfigurer = null)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            _dataConfigurer = dataConfigurer;
+        }
+
+        protected ApplicationDbContext(DbContextOptions options)
+            : base(options)
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             _ = new ApplicationModelBuilder(builder);
-
-            if (_dataConfigurer is not null)
-            {
-                _dataConfigurer(builder);
-            }
-           
             base.OnModelCreating(builder);
         }
 
