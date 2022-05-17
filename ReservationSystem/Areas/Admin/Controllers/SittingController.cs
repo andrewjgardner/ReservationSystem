@@ -295,7 +295,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 					TempData["ErrorMessage"] = "Sitting not found";
 					return NotFound();
 				}
-				var m = new Areas.Admin.Models.Sitting.Close
+				var m = new Models.Sitting.Close
 				{
 					SittingId = sitting.Id,
 					IsClosed = sitting.IsClosed
@@ -312,7 +312,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
 		[Authorize(Roles="Manager")]
         [HttpPost]
-        public async Task<IActionResult> Close(Areas.Admin.Models.Sitting.Close m)
+        public async Task<IActionResult> Close(Models.Sitting.Close m)
         {
             try
             {
@@ -341,6 +341,44 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
             }
             return View(m);
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet] //id = sitting id
+        public async Task<IActionResult> AssignTables(int id)
+        {
+            try
+            {
+                var sittingTables = _context.Tables
+                    .Where(t => t.Id == id)
+                    .Select(t => t.)
+                    .ToList();
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == id);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+                var m = new Models.Sitting.AssignTables
+                {
+                    SittingId = sitting.Id,
+                    Tables = sittingTables
+                };
+
+                return PartialView("_AdminCloseSittingPartial", m);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return NotFound();
+            }
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpPost]
+        public async Task<IActionResult> AssignTables(Models.Sitting.Edit m)
+        {
+            return View();
         }
     }
 }
