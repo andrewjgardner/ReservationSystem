@@ -52,12 +52,10 @@
 		date = new Date(date);
 		var endDate;
 		if (recurringType == "Daily") {
-			var tempDate = date.getDate() + sliderval;
-			date.setDate(date.getDate() + 1*sliderval);
+			date.setDate(date.getDate() + (sliderval-1));
 		}
 		else if (recurringType == "Weekly") {
-			var tempDate = date.getDate() + 7*sliderval;
-			date.setDate(date.getDate() + 7*sliderval);
+			date.setDate(date.getDate() + 7*(sliderval-1));
 		}
 		return date;
 	}
