@@ -16,7 +16,7 @@
 			</div>
 			<div class="form-group">
 				<label for="StartTime">Start Time</label>
-				<input asp-for=StartTime class="form-control" placeholder="HH:mm"/>
+				<input asp-for=StartTime class="form-control" id="start-time"/>
 			</div>
 			<div class="form-group">
 				<label for="EndTime">End Time</label>
@@ -33,7 +33,6 @@
 			<div class="form-group">
 				<label for="isClosed">Closed Sitting: </label>
 				<input asp-for=IsClosed />
-				@*<input type="checkbox" id="isClosed" name="isClosed" value="true">*@
 			</div>
 		</div>
 		<div class="recurring-form">
@@ -44,15 +43,33 @@
 			<div class="form-group my-4" style="display:none" id="recurring-form-container">
 				<div class="form-group" id="recurringType">
 					<label for="recurringType">Recurring Type: </label>
-					<select asp-for=RecurringType asp-items=Model.RecurringTypes></select>
+					<select asp-for=RecurringType asp-items=Model.RecurringTypes id="set-recurring-type"></select>
 				</div>
 
 				<label for="numberToSchedule" class="form-label">Number to schedule:</label>
-				<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" min="1" max="60"/>
+				<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" value="8" min="1" max="60"/>
 				<div class = "card">
 					<div class="card-body">
-						<div id="numberToScheduleText"></div>
+						<p id="numberToScheduleText"></p>
+						<p id="endDateText"></p>
 					</div>
+				</div>
+				<div class="form-group" style="display:none" id="weekly-days-select">
+					@*
+						The two inputs is not a mistake - disabling an input causes it's value not to be posted
+						The extra input is a hidden input allowing disabled checkboxes to still post their values back
+						ReadOnly does not work with checkboxes
+					*@
+
+					@foreach(var day in Enum.GetValues(typeof(DayOfWeek)))
+					{
+						int i = (int)day;
+						var b = @Model.RecurringDays[@i];
+						<label for="recur-day-@(i)">@day: </label>
+						<input asp-for=@Model.RecurringDays[@i] type="checkbox" id="recur-checkbox-day-@(i)" />
+						<input asp-for=@Model.RecurringDays[@i] type="hidden" id="recur-hidden-day-@(i)" />
+						<br/>
+					}
 				</div>
 			</div>
 		</div>
@@ -66,6 +83,5 @@
 @section Scripts{
 
 	<script src="~/js/admin.sitting.create.js"></script>
-	<script src="~/js/sittingRangeInput.js"></script>
 
 }

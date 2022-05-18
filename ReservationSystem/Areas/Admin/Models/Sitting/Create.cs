@@ -41,6 +41,8 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         public int? NumberToSchedule { get; set; }
 
+        public bool[] RecurringDays { get; set; } = new bool[7];
+
         public void Validate(ModelStateDictionary modelState)
         {
             if (StartTime > EndTime)
@@ -60,6 +62,29 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
                 if (NumberToSchedule <= 0 || NumberToSchedule == null)
                 {
                     modelState.AddModelError("Create.NumberToSchedule", "Recurring Type must be a positive integer");
+                }
+
+                if (RecurringType=="Weekly")
+                {
+                    if (RecurringDays.Length != 7)
+                    {
+                        modelState.AddModelError("Create.RecurringDays", "RecurringDays must have one bool for each day of the week.");
+                    }
+
+                    bool atLeastOneDaySet = false;
+
+                    foreach (bool b in RecurringDays)
+                    {
+                        if (b)
+                        {
+                            atLeastOneDaySet = true;
+                            break;
+                        }
+                    }
+                    if (!atLeastOneDaySet)
+                    {
+                        modelState.AddModelError("Create.RecurringDays", "At least one day must be set.");
+                    }
                 }
             }
         }
