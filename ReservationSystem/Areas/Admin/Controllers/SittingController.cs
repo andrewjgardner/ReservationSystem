@@ -47,8 +47,9 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int sittingId)
         {
             var sitting = await _context.Sittings.Include(s => s.SittingType).Include(s => s.Reservations).ThenInclude(r => r.Customer).FirstOrDefaultAsync(s => s.Id == sittingId);
+            var allTables = await _context.Tables.ToListAsync();
 
-            if (sitting == null)
+            if (sitting == null || allTables == null)
             {
                 return NotFound();
             }
@@ -78,7 +79,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     EndTime = sitting.EndTime,
                     Title = sitting.Title,
                     SittingType = sitting.SittingType.Description,
-                    ReservationList = reservations
+                    ReservationList = reservations,
+                    AllTables = allTables
                 };
                 return View(sittingVM);
             }
@@ -356,44 +358,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
             }
             return View(m);
-        }
-
-        [Authorize(Roles = "Manager")]
-        [HttpGet] //id = sitting id
-        public async Task<IActionResult> AssignTables(int id)
-        {
-            try
-            {
-                var sittingTables = _context.Tables
-                    .Where(t => t.Id == id)
-                    .Select(t => t.)
-                    .ToList();
-                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == id);
-                if (sitting == null)
-                {
-                    TempData["ErrorMessage"] = "Sitting not found";
-                    return NotFound();
-                }
-                var m = new Models.Sitting.AssignTables
-                {
-                    SittingId = sitting.Id,
-                    Tables = sittingTables
-                };
-
-                return PartialView("_AdminCloseSittingPartial", m);
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = ex.Message;
-                return NotFound();
-            }
-        }
-
-        [Authorize(Roles = "Manager")]
-        [HttpPost]
-        public async Task<IActionResult> AssignTables(Models.Sitting.Edit m)
-        {
-            return View();
         }
     }
 }

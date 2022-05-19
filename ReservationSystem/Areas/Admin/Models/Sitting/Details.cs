@@ -23,6 +23,8 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         public List<ReservationListItem> ReservationList { get; set; }
         public int SittingId { get; set; }
+
+        public List<Data.Table> AllTables { get; set; }
     }
 
     public class ReservationListItem
