@@ -161,26 +161,41 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     if (m.IsRecurring)
                     {
                         var sittings = new List<Sitting>();
-                        for (int i = 0; i < m.NumberToSchedule; i++)
+                        var firstStartTime = m.StartTime;
+                        var firstEndTime = m.EndTime;
+                        //Starts with day of first sitting, and loops over
+                        //E.g. If the Sitting start time is Thursday, first loop will start with Thursday, and end with Wednesday
+                        for (int i = 0; i<7; i++)
                         {
-                            var sitting = createSitting(m, sittingtype);
+                            int dayindex = (int)m.StartTime.DayOfWeek;
+                            if (m.RecurringDays[dayindex])
+                            {
+                                for (int j = 0; j < m.NumberToSchedule; j++)
+                                {
+                                    var sitting = createSitting(m, sittingtype);
 
-                            sittings.Add(sitting);
+                                    sittings.Add(sitting);
 
-                            if (m.RecurringType == "Daily")
-                            {
-                                m.StartTime = m.StartTime.AddDays(1);
-                                m.EndTime = m.EndTime.AddDays(1);
+                                    if (m.RecurringType == "Daily")
+                                    {
+                                        m.StartTime = m.StartTime.AddDays(1);
+                                        m.EndTime = m.EndTime.AddDays(1);
+                                    }
+                                    else if (m.RecurringType == "Weekly")
+                                    {
+                                        m.StartTime = m.StartTime.AddDays(7);
+                                        m.EndTime = m.EndTime.AddDays(7);
+                                    }
+                                    else
+                                    {
+                                        ModelState.AddModelError("m.RecurringType", "Recurring Type can not be " + m.RecurringType);
+                                    }
+                                }
                             }
-                            else if (m.RecurringType == "Weekly")
-                            {
-                                m.StartTime = m.StartTime.AddDays(7);
-                                m.EndTime = m.EndTime.AddDays(7);
-                            }
-                            else
-                            {
-                                ModelState.AddModelError("m.RecurringType", "Recurring Type can not be " + m.RecurringType);
-                            }
+                            firstStartTime = firstStartTime.AddDays(1);
+                            firstEndTime = firstEndTime.AddDays(1);
+                            m.StartTime = firstStartTime;
+                            m.EndTime = firstEndTime;
                         }
                         _context.Sittings.AddRange(sittings);
 
