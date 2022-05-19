@@ -47,40 +47,40 @@ using ReservationSystem.Data;
 //        public ApplicationDbContext CreateContext()
 //            => new ApplicationDbContext(_contextOptions);
 
-        //[Fact]
-        //public async void Sitting_ReturnsAViewResult_WithAListOfSittings()
-        //{
+//[Fact]
+//public async void Sitting_ReturnsAViewResult_WithAListOfSittings()
+//{
 
-        //    Arrange
-        //    using var context = CreateContext();
-        //    PostCreationSeeding.InitializeDbForRead(context);
-        //    var controller = new ReservationController(context, _personService);
+//    Arrange
+//    using var context = CreateContext();
+//    PostCreationSeeding.InitializeDbForRead(context);
+//    var controller = new ReservationController(context, _personService);
 
-        //    Act
-        //    var result = await controller.Sittings();
+//    Act
+//    var result = await controller.Sittings();
 
-        //    Assert
-        //    var viewResult = Assert.IsType<ViewResult>(result);
-        //    var model = Assert.IsAssignableFrom<IEnumerable<Sittings>>(
-        //        viewResult.ViewData.Model);
-        //    Assert.Equal(4, model.Count());
-        //}
+//    Assert
+//    var viewResult = Assert.IsType<ViewResult>(result);
+//    var model = Assert.IsAssignableFrom<IEnumerable<Sittings>>(
+//        viewResult.ViewData.Model);
+//    Assert.Equal(4, model.Count());
+//}
 
-        //[Fact]
-        //public async void ReservationForm_ReturnsSittingNotFoundWhenSittingIsNotFound()
-        //{
-        //    //Arrange
-        //    int testSittingId = -1;
-        //    using var context = CreateContext();
-        //    PostCreationSeeding.InitializeDbForRead(context);
-        //    var controller = new ReservationController(context, _personService);
-        //    //Act
-        //    var result = await controller.Create(testSittingId);
+//[Fact]
+//public async void ReservationForm_ReturnsSittingNotFoundWhenSittingIsNotFound()
+//{
+//    //Arrange
+//    int testSittingId = -1;
+//    using var context = CreateContext();
+//    PostCreationSeeding.InitializeDbForRead(context);
+//    var controller = new ReservationController(context, _personService);
+//    //Act
+//    var result = await controller.Create(testSittingId);
 
-        //    //Assert
-        //    var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
-        //    Assert.Equal(testSittingId, notFoundObjectResult.Value);
+//    //Assert
+//    var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
+//    Assert.Equal(testSittingId, notFoundObjectResult.Value);
 
-        //} 
+//} 
 //    }
 //}

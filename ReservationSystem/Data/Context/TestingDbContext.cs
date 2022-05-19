@@ -13,6 +13,8 @@ namespace ReservationSystem.Data.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             _ = new ApplicationModelBuilder(builder);
+            //var dataSeeder = new DataSeeder(builder);
+            //dataSeeder.Seed();
             base.OnModelCreating(builder);
         }
     }

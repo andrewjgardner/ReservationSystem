@@ -12,8 +12,8 @@ using ReservationSystem.Data.Context;
 namespace ReservationSystem.Migrations.ApplicationDbMigrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220517003400_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220518072826_InitialSchema")]
+    partial class InitialSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -9,11 +9,11 @@ using ReservationSystem.Data.Context;
 
 #nullable disable
 
-namespace ReservationSystem.Migrations.TestingDbMigrations
+namespace ReservationSystem.Migrations.ApplicationDbMigrations
 {
-    [DbContext(typeof(TestingDbContext))]
-    [Migration("20220517012211_InitialMigration")]
-    partial class InitialMigration
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20220518073508_DataSeed")]
+    partial class DataSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,29 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "00000000-0000-0000-0000-000000000000",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "00000000-0000-0000-0000-000000000000",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            ConcurrencyStamp = "00000000-0000-0000-0000-000000000000",
+                            Name = "Member",
+                            NormalizedName = "MEMBER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -139,6 +162,57 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "string1",
+                            Email = "manager@manager.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER@MANAGER.COM",
+                            NormalizedUserName = "MANAGER@MANAGER.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEjaR1E/iGB+XaDSNNdZM9zczIFeTGpmlEUnvqlvTy29qthma6iq/xtToIGSjS5bYw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "656ddfb3-19a6-4b93-85a4-a60418b96559",
+                            TwoFactorEnabled = false,
+                            UserName = "manager@manager.com"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "string2",
+                            Email = "employee@employee.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "EMPLOYEE@EMPLOYEE.COM",
+                            NormalizedUserName = "EMPLOYEE@EMPLOYEE.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIh8sUdEg/CJLKzRbuB7qA1p3LRc02ZAjOMtc2pttFiFbxISUy/u0N9gPS3xfmabRw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "656ddfb3-19a6-4b93-85a4-a60418b96559",
+                            TwoFactorEnabled = false,
+                            UserName = "employee@employee.com"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "string3",
+                            Email = "member@member.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MEMBER@MEMBER.COM",
+                            NormalizedUserName = "MEMBER@MEMBER.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEL2BSRUHQM9fCh0jb+mYgX4H+MYYLnYhFdx/1ePZn6q00SRtRboczPPvkyo2ysL3FA==",
+                            PhoneNumber = "167761930",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "656ddfb3-19a6-4b93-85a4-a60418b96559",
+                            TwoFactorEnabled = false,
+                            UserName = "member@member.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -203,6 +277,23 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "2",
+                            RoleId = "2"
+                        },
+                        new
+                        {
+                            UserId = "3",
+                            RoleId = "3"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -246,6 +337,26 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("Areas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Main",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Outside",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Balcony",
+                            RestaurantId = 1
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.Person", b =>
@@ -289,6 +400,44 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.ToTable("People");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Person");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "g@g.com",
+                            FirstName = "Damien",
+                            LastName = "Antonietti",
+                            PhoneNumber = "015723892",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "h@h.com",
+                            FirstName = "Andrew",
+                            LastName = "Gardner",
+                            PhoneNumber = "015656165",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Email = "j@j.com",
+                            FirstName = "Brendan",
+                            LastName = "Chappell",
+                            PhoneNumber = "015723832",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Email = "k@k.com",
+                            FirstName = "Conor",
+                            LastName = "O'Neill",
+                            PhoneNumber = "015725832",
+                            RestaurantId = 1
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.Reservation", b =>
@@ -331,6 +480,41 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasIndex("SittingId");
 
                     b.ToTable("Reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Comments = "By the balcony, please.",
+                            CustomerId = 5,
+                            Guests = 3,
+                            ReservationOriginId = 1,
+                            ReservationStatusId = 1,
+                            SittingId = 1,
+                            StartTime = new DateTime(2022, 7, 13, 9, 30, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Comments = "",
+                            CustomerId = 8,
+                            Guests = 4,
+                            ReservationOriginId = 2,
+                            ReservationStatusId = 2,
+                            SittingId = 2,
+                            StartTime = new DateTime(2022, 7, 13, 12, 30, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Comments = "",
+                            CustomerId = 6,
+                            Guests = 5,
+                            ReservationOriginId = 3,
+                            ReservationStatusId = 3,
+                            SittingId = 3,
+                            StartTime = new DateTime(2022, 7, 13, 18, 30, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.ReservationOrigin", b =>
@@ -348,6 +532,23 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasKey("Id");
 
                     b.ToTable("ReservationOrigins");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Online"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Phone"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Walk-in"
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.ReservationStatus", b =>
@@ -365,6 +566,23 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasKey("Id");
 
                     b.ToTable("ReservationStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Pending"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Confirmed"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Cancelled"
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.Restaurant", b =>
@@ -393,6 +611,16 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "12 Springfield rd",
+                            DefaultCapacity = 100,
+                            Name = "Bean Scene",
+                            PhoneNumber = "12345678"
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.Sitting", b =>
@@ -438,6 +666,47 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasIndex("SittingTypeId");
 
                     b.ToTable("Sittings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Capacity = 100,
+                            EndTime = new DateTime(2022, 7, 13, 11, 30, 0, 0, DateTimeKind.Unspecified),
+                            IsClosed = false,
+                            PeopleBooked = 3,
+                            ResDuration = 45,
+                            RestaurantId = 1,
+                            SittingTypeId = 1,
+                            StartTime = new DateTime(2022, 7, 13, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Breakfast"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Capacity = 100,
+                            EndTime = new DateTime(2022, 7, 13, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IsClosed = false,
+                            PeopleBooked = 4,
+                            ResDuration = 0,
+                            RestaurantId = 1,
+                            SittingTypeId = 2,
+                            StartTime = new DateTime(2022, 7, 13, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Lunch"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Capacity = 100,
+                            EndTime = new DateTime(2022, 7, 13, 21, 30, 0, 0, DateTimeKind.Unspecified),
+                            IsClosed = false,
+                            PeopleBooked = 5,
+                            ResDuration = 0,
+                            RestaurantId = 1,
+                            SittingTypeId = 3,
+                            StartTime = new DateTime(2022, 7, 13, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Dinner"
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.SittingType", b =>
@@ -458,6 +727,26 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasKey("Id");
 
                     b.ToTable("SittingTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Breakfast",
+                            ResDuration = 45
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Lunch",
+                            ResDuration = 60
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Dinner",
+                            ResDuration = 90
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.Table", b =>
@@ -483,6 +772,218 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasIndex("AreaId");
 
                     b.ToTable("Tables");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AreaId = 1,
+                            TableCapacity = 5,
+                            TableName = "M1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AreaId = 1,
+                            TableCapacity = 3,
+                            TableName = "M2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AreaId = 1,
+                            TableCapacity = 4,
+                            TableName = "M3"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AreaId = 1,
+                            TableCapacity = 2,
+                            TableName = "M4"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AreaId = 1,
+                            TableCapacity = 5,
+                            TableName = "M5"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AreaId = 1,
+                            TableCapacity = 3,
+                            TableName = "M6"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AreaId = 1,
+                            TableCapacity = 3,
+                            TableName = "M7"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AreaId = 1,
+                            TableCapacity = 3,
+                            TableName = "M8"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AreaId = 1,
+                            TableCapacity = 3,
+                            TableName = "M9"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AreaId = 1,
+                            TableCapacity = 3,
+                            TableName = "M10"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O1"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O2"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O3"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O4"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O5"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O6"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O7"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O8"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O9"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            AreaId = 2,
+                            TableCapacity = 3,
+                            TableName = "O10"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B1"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B2"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B3"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B4"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B5"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B6"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B7"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B8"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B9"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            AreaId = 3,
+                            TableCapacity = 3,
+                            TableName = "B10"
+                        });
                 });
 
             modelBuilder.Entity("ReservationTable", b =>
@@ -505,6 +1006,45 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                     b.HasBaseType("ReservationSystem.Data.Person");
 
                     b.HasDiscriminator().HasValue("Customer");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 5,
+                            Email = "emilyd@d.com",
+                            FirstName = "Emily",
+                            LastName = "Smith",
+                            PhoneNumber = "023462343",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Email = "c.c@c.com",
+                            FirstName = "Frederique",
+                            LastName = "Corbyn",
+                            PhoneNumber = "0232341789",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Email = "b.b@b.com",
+                            FirstName = "John",
+                            LastName = "Smith",
+                            PhoneNumber = "3644253462",
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Email = "a.a@a.com",
+                            FirstName = "William",
+                            LastName = "Kemshell",
+                            PhoneNumber = "023456789",
+                            RestaurantId = 1,
+                            UserId = "1"
+                        });
                 });
 
             modelBuilder.Entity("ReservationSystem.Data.Employee", b =>
@@ -515,6 +1055,48 @@ namespace ReservationSystem.Migrations.TestingDbMigrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Employee");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Email = "t@k.com",
+                            FirstName = "Kaleena",
+                            LastName = "Byrne",
+                            PhoneNumber = "023457123",
+                            RestaurantId = 1,
+                            EmployeeId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "ok@k.com",
+                            FirstName = "Kathleen",
+                            LastName = "Smith",
+                            PhoneNumber = "0298833412",
+                            RestaurantId = 1,
+                            EmployeeId = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Email = "pat@k.com",
+                            FirstName = "Jim",
+                            LastName = "Jones",
+                            PhoneNumber = "023465123",
+                            RestaurantId = 1,
+                            EmployeeId = 3
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Email = "johndoe@k.com",
+                            FirstName = "John",
+                            LastName = "Doe",
+                            PhoneNumber = "023465153",
+                            RestaurantId = 1,
+                            EmployeeId = 4
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

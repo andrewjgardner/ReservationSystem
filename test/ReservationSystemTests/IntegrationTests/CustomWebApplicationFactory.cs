@@ -27,7 +27,10 @@ namespace ReservationSystemTests.IntegrationTests
 
                 services.Remove(descriptor);
 
-                services.AddDbContext<ApplicationDbContext>();
+                services.AddDbContext<TestingDbContext>(options =>
+                {
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                });
             });
 
         }
