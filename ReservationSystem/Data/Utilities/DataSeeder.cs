@@ -488,8 +488,7 @@ namespace ReservationSystem.Data.Utilities
                     new { ReservationsId = 1, TablesId = 3 },
                     new { ReservationsId = 3, TablesId = 13 },
                     new { ReservationsId = 3, TablesId = 14 },
-                    new { ReservationsId = 3, TablesId = 15 },
-                    new { ReservationsId = 4, TablesId = 28 }
+                    new { ReservationsId = 3, TablesId = 15 }
                     ));
         }
 
