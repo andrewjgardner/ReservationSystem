@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 
 namespace ReservationSystem.Services
 {

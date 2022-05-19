@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using ReservationSystem.Services;
+using ReservationSystem.Data.Context;
 
-namespace ReservationSystem.Data.Utilities
+namespace ReservationSystem.Services
 {
-    public class IdentitySeed
+    public class IdentitySeedService
     {
-        private ApplicationDbContext _context;
-        private RoleStore<IdentityRole> _roleStore;
-        private PasswordHasher<IdentityUser> _passwordHasher;
-        private UserStore<IdentityUser> _userStore;
-        private PersonService _personService;
+        private readonly ApplicationDbContext _context;
+        private readonly RoleStore<IdentityRole> _roleStore;
+        private readonly PasswordHasher<IdentityUser> _passwordHasher;
+        private readonly UserStore<IdentityUser> _userStore;
+        private readonly PersonService _personService;
 
-        public IdentitySeed(ApplicationDbContext context, PersonService personService )
+        public IdentitySeedService(ApplicationDbContext context, PersonService personService )
         {
             _context = context;
             _roleStore = new RoleStore<IdentityRole>(context);

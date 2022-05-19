@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ReservationSystemTests.IntegrationTests
 {
+
     public class CustomWebApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
@@ -25,7 +27,10 @@ namespace ReservationSystemTests.IntegrationTests
 
                 services.Remove(descriptor);
 
-                services.AddDbContext<ApplicationDbContext>();
+                services.AddDbContext<TestingDbContext>(options =>
+                {
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                });
             });
 
         }

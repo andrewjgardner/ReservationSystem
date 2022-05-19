@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ReservationSystem.Data
+namespace ReservationSystem.Data.Utilities
 {
     public class ApplicationModelBuilder
     {

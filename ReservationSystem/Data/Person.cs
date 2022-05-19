@@ -19,7 +19,7 @@ namespace ReservationSystem.Data
 
     public enum Roles
     {
-        Admin,
+        Manager,
         Employee,
         Member
     }

@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 using ReservationSystem.Services;
 
 namespace ReservationSystem.Areas.Identity.Pages.Account

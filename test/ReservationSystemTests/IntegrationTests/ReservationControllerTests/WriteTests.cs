@@ -12,37 +12,37 @@ using System.Data.Common;
 using System.Linq;
 using Xunit;
 
-namespace ReservationSystemTests.ReservationControllerTests
-{
-    public class WriteTests : IDisposable
-    {
-        private readonly DbConnection _connection;
-        protected DbContextOptions<ApplicationDbContext> _contextOptions;
-        private readonly ApplicationDbContext _context;
-        private readonly PersonService _personService;
+//namespace ReservationSystemTests.ReservationControllerTests
+//{
+    //public class WriteTests : IDisposable
+    //{
+    //    private readonly DbConnection _connection;
+    //    protected DbContextOptions<ApplicationDbContext> _contextOptions;
+    //    private readonly ApplicationDbContext _context;
+    //    private readonly PersonService _personService;
 
-        public WriteTests()
-        {
-            _connection = new SqliteConnection("DataSource=:memory:");
-            _connection.Open();
+    //    public WriteTests()
+    //    {
+    //        _connection = new SqliteConnection("DataSource=:memory:");
+    //        _connection.Open();
 
-            _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite(_connection)
-                .Options;
+    //        _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+    //            .UseSqlite(_connection)
+    //            .Options;
 
-            _context = CreateContext();
-            _context.Database.EnsureCreated();
+    //        _context = CreateContext();
+    //        _context.Database.EnsureCreated();
 
-            _personService = new PersonService(_context);
-        }
+    //        _personService = new PersonService(_context);
+    //    }
 
-        public void Dispose()
-        {
-            _connection.Dispose();
-        }
+    //    public void Dispose()
+    //    {
+    //        _connection.Dispose();
+    //    }
 
-        public ApplicationDbContext CreateContext()
-            => new ApplicationDbContext(_contextOptions);
+    //    public ApplicationDbContext CreateContext()
+    //        => new ApplicationDbContext(_contextOptions);
 
         //[Fact]
         //public async void Sitting_ReturnsAViewResult_IfSittingsIsEmpty()
@@ -50,7 +50,6 @@ namespace ReservationSystemTests.ReservationControllerTests
         //    //Arrange
         //    using var context = CreateContext();
         //    var controller = new ReservationController(context,_personService);
-
         //    //Act
         //    var result = await controller.Sittings();
 
@@ -62,5 +61,5 @@ namespace ReservationSystemTests.ReservationControllerTests
         //    Assert.Equal(new List<Sittings>(), model);
         //}
 
-    }
-}
+//    }
+//}
