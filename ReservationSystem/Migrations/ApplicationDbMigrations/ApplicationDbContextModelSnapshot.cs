@@ -334,7 +334,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Areas", (string)null);
 
                     b.HasData(
                         new
@@ -395,7 +395,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("People");
+                    b.ToTable("People", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Person");
 
@@ -477,7 +477,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("SittingId");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
 
                     b.HasData(
                         new
@@ -529,7 +529,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReservationOrigins");
+                    b.ToTable("ReservationOrigins", (string)null);
 
                     b.HasData(
                         new
@@ -563,7 +563,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReservationStatuses");
+                    b.ToTable("ReservationStatuses", (string)null);
 
                     b.HasData(
                         new
@@ -608,7 +608,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurants");
+                    b.ToTable("Restaurants", (string)null);
 
                     b.HasData(
                         new
@@ -663,7 +663,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("SittingTypeId");
 
-                    b.ToTable("Sittings");
+                    b.ToTable("Sittings", (string)null);
 
                     b.HasData(
                         new
@@ -724,7 +724,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SittingTypes");
+                    b.ToTable("SittingTypes", (string)null);
 
                     b.HasData(
                         new
@@ -769,7 +769,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("Tables");
+                    b.ToTable("Tables", (string)null);
 
                     b.HasData(
                         new
@@ -996,7 +996,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("TablesId");
 
-                    b.ToTable("ReservationTable");
+                    b.ToTable("ReservationTable", (string)null);
 
                     b.HasData(
                         new
