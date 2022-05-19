@@ -24,9 +24,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
 
-builder.Services.AddTransient<IdentitySeedService>();
-builder.Services.AddTransient<SeedSQL>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,18 +67,6 @@ app.MapControllerRoute(
 
 
 app.MapRazorPages();
-
-using (var scope = app.Services.CreateScope())
-{
-    //var identitySeedService = scope.ServiceProvider.GetService<IdentitySeed>();
-    //await identitySeedService.SeedManager();
-    //await identitySeedService.SeedEmployee();
-    //await identitySeedService.SeedMember();
-
-    //var sqlService = scope.ServiceProvider.GetService<SeedSQL>();
-    //await sqlService.SeedAll();
-}
-
 
 app.Run();
 
