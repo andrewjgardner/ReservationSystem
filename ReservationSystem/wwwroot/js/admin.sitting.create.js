@@ -17,7 +17,6 @@
 		}
 		else {
 			$('#recurring-form-container').hide();
-
 		}
 	});
 
@@ -39,18 +38,21 @@
 		disableRecurringDay();
 	});
 
-	/*
-	for (i = 0; i < 7; i++) {
-		$('#recur-checkbox-day-' + i).change((e) => {
-			$('#recur-hidden-day-' + i).toggle;
-		});
-    }
-	*/
+	//If there is a change in a variable with id starting with 'recur-checkbox-day-'
+	//Update the hidden input with the corresponding number to be the same value
+	$("[id^='recur-checkbox-day-']").change(function(e) {
+		var id = "#recur-hidden-day-" + this.id.slice(19);
+		if (e.currentTarget.checked) {
+			$("#recur-hidden-day-" + this.id.slice(19)).val(true);
+		}
+		else {
+			$("#recur-hidden-day-" + this.id.slice(19)).val(false);
+		}
+	});
 
 	function calculateEndDate(date, recurringType, sliderval) {
 		
 		date = new Date(date);
-		var endDate;
 		if (recurringType == "Daily") {
 			date.setDate(date.getDate() + (sliderval-1));
 		}
