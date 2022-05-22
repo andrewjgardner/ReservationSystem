@@ -12,10 +12,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString).EnableSensitiveDataLogging()); 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-var testingConnectionString = builder.Configuration.GetConnectionString("TestingConnection");
-builder.Services.AddDbContext<TestingDbContext>(options =>
-    options.UseSqlServer(testingConnectionString));
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -54,13 +50,6 @@ app.MapControllerRoute(
   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
 
-
-/*
-app.MapAreaControllerRoute(
-            name: "AdminArea",
-            areaName: "Admin",
-            pattern: "Admin/{action=Index}/{id?}");
-*/
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
