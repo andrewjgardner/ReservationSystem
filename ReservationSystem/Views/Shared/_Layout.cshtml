@@ -22,7 +22,7 @@
                         @if(User.IsInRole("Employee") || User.IsInRole("Manager"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Staff Home</a>
+                                <a id="admin" class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Staff Home</a>
                             </li>
                         }
                         else
