@@ -13,13 +13,12 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReservationSystemTests.IntegrationTests
+namespace ReservationSystemTests.Utilities
 {
 
     public class InMemoryWebApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
-        private const string ConnectionString = @"Server=(localdb)\mssqllocaldb;Database=;Trusted_Connection=True";
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
