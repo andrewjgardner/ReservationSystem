@@ -14,25 +14,13 @@ namespace ReservationSystem.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly int _restaurantId;
+        private UserService _userService;
 
-        public UserController(ApplicationDbContext context)
+        public UserController(ApplicationDbContext context, UserService userService)
         {
-
             _context = context;
             _restaurantId = 1;
-        }
-
-        public List<string> GetUserRoles(string userid)
-        {
-            var roles = _context.UserRoles
-                .Where(ur => ur.UserId == userid)
-                .Join(_context.Roles,
-                    ur => ur.RoleId,
-                    r => r.Id,
-                    (ur, r) => r.Name
-                )
-                .ToList();
-            return roles;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
@@ -43,11 +31,15 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     .Select(u => new Models.User.Details
                     {
                         Id = u.Id,
-                        Email = u.Email,
-                        Roles = GetUserRoles(u.Id)
+                        Email = u.Email
                     })
                     .ToArrayAsync()
             };
+
+            foreach (var user in m.Users)
+            {
+                user.Roles = await _userService.GetUserRolesAsync(user.Id);
+            }
 
             return View(m);
 
@@ -56,6 +48,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            var m = new Models.User.Create
+            {
+
+            };
+
             return View();
         }
     }

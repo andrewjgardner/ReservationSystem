@@ -23,6 +23,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
+builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 

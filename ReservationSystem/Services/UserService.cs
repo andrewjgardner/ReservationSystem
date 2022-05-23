@@ -13,7 +13,7 @@ namespace ReservationSystem.Services
             _context = context;
         }
 
-        public List<string> GetUserRoles(string userid)
+        public Task<List<string>> GetUserRolesAsync(string userid)
         {
             var roles = _context.UserRoles
                 .Where(ur => ur.UserId == userid)
@@ -22,8 +22,13 @@ namespace ReservationSystem.Services
                     r => r.Id,
                     (ur, r) => r.Name
                 )
-                .ToList();
+                .ToListAsync();
             return roles;
+        }
+
+        public int CreateUserAsync()
+        {
+            return 0;
         }
     }
 }
