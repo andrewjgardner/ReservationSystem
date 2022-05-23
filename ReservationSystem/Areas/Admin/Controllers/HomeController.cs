@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 using ReservationSystem.Models.Reservation;
 using ReservationSystem.Services;
 
@@ -16,7 +17,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         private readonly ApplicationDbContext _context;
         private readonly PersonService _personService;
 
-        public HomeController (ApplicationDbContext context, PersonService personService)
+        public HomeController(ApplicationDbContext context, PersonService personService)
         {
             _personService = personService;
             _context = context;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 using ReservationSystem.Models.SittingsAPI;
 
 namespace ReservationSystem.Controllers

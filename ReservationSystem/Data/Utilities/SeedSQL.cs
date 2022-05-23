@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using ReservationSystem.Data.Context;
 
 namespace ReservationSystem.Data.Utilities
 {

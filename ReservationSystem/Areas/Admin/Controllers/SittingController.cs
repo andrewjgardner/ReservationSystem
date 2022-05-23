@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
+using ReservationSystem.Data.Context;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
@@ -99,7 +100,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var restaurant = await _context.Restaurants.FirstOrDefaultAsync(r => r.Id == _restaurantId);
-
             if (restaurant == null)
             {
                 return NotFound();
@@ -107,7 +107,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             try
             {
-
                 var m = new Models.Sitting.Create
                 {
                     SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description"),
@@ -116,7 +115,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     IsClosed = false,
                     RecurringTypes = getRecurringTypes(),
                     StartTime = DateTime.Now.Date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute),
-                    EndTime = DateTime.Now.Date.AddHours(DateTime.Now.Hour+4).AddMinutes(DateTime.Now.Minute)
+                    EndTime = DateTime.Now.Date.AddHours(DateTime.Now.Hour + 4).AddMinutes(DateTime.Now.Minute)
                 };
 
                 return View(m);
@@ -128,9 +127,9 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
-        private Sitting createSitting(Models.Sitting.Create m,SittingType sittingtype)
+        private Sitting createSitting(Models.Sitting.Create m, SittingType sittingtype)
         {
-            var sitting = new Sitting
+            return new Sitting
             {
                 Title = m.Title,
                 StartTime = m.StartTime,
@@ -142,11 +141,9 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 SittingType = sittingtype,
                 ResDuration = sittingtype.ResDuration,
             };
-            return sitting;
-
         }
 
-        [Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Models.Sitting.Create m)
         {
@@ -160,26 +157,41 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     if (m.IsRecurring)
                     {
                         var sittings = new List<Sitting>();
-                        for (int i = 0; i < m.NumberToSchedule; i++)
+                        var firstStartTime = m.StartTime;
+                        var firstEndTime = m.EndTime;
+                        //Starts with day of first sitting, and loops over
+                        //E.g. If the Sitting start time is Thursday, first loop will start with Thursday, and end with Wednesday
+                        for (int i = 0; i < 7; i++)
                         {
-                            var sitting = createSitting(m, sittingtype);
+                            int dayindex = (int)m.StartTime.DayOfWeek;
+                            if (m.RecurringDays[dayindex])
+                            {
+                                for (int j = 0; j < m.NumberToSchedule; j++)
+                                {
+                                    var sitting = createSitting(m, sittingtype);
 
-                            sittings.Add(sitting);
+                                    sittings.Add(sitting);
 
-                            if (m.RecurringType == "Daily")
-                            {
-                                m.StartTime = m.StartTime.AddDays(1);
-                                m.EndTime = m.EndTime.AddDays(1);
+                                    if (m.RecurringType == "Daily")
+                                    {
+                                        m.StartTime = m.StartTime.AddDays(1);
+                                        m.EndTime = m.EndTime.AddDays(1);
+                                    }
+                                    else if (m.RecurringType == "Weekly")
+                                    {
+                                        m.StartTime = m.StartTime.AddDays(7);
+                                        m.EndTime = m.EndTime.AddDays(7);
+                                    }
+                                    else
+                                    {
+                                        ModelState.AddModelError("m.RecurringType", "Recurring Type can not be " + m.RecurringType);
+                                    }
+                                }
                             }
-                            else if (m.RecurringType == "Weekly")
-                            {
-                                m.StartTime = m.StartTime.AddDays(7);
-                                m.EndTime = m.EndTime.AddDays(7);
-                            }
-                            else
-                            {
-                                ModelState.AddModelError("m.RecurringType", "Recurring Type can not be " + m.RecurringType);
-                            }
+                            firstStartTime = firstStartTime.AddDays(1);
+                            firstEndTime = firstEndTime.AddDays(1);
+                            m.StartTime = firstStartTime;
+                            m.EndTime = firstEndTime;
                         }
                         _context.Sittings.AddRange(sittings);
 
@@ -199,12 +211,13 @@ namespace ReservationSystem.Areas.Admin.Controllers
                 }
             }
 
+            m.RecurringDays = new bool[7];
             m.RecurringTypes = getRecurringTypes();
             m.SittingTypes = new SelectList(await _context.SittingTypes.ToListAsync(), "Id", "Description");
             return View(m);
         }
 
-        [Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Edit(int sittingId)
         {
@@ -240,7 +253,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             }
         }
 
-        [Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Sitting.Edit m)
         {
@@ -282,35 +295,35 @@ namespace ReservationSystem.Areas.Admin.Controllers
             return View(m);
         }
 
-		[Authorize(Roles = "Manager")]
-		[HttpGet] //id = sitting id
-		public async Task<IActionResult> Close(int id)
-		{
-			try
-			{
-				var sittingtypes = await _context.SittingTypes.ToListAsync();
-				var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == id);
-				if (sitting == null)
-				{
-					TempData["ErrorMessage"] = "Sitting not found";
-					return NotFound();
-				}
-				var m = new Areas.Admin.Models.Sitting.Close
-				{
-					SittingId = sitting.Id,
-					IsClosed = sitting.IsClosed
-				};
+        [Authorize(Roles = "Manager")]
+        [HttpGet] //id = sitting id
+        public async Task<IActionResult> Close(int id)
+        {
+            try
+            {
+                var sittingtypes = await _context.SittingTypes.ToListAsync();
+                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == id);
+                if (sitting == null)
+                {
+                    TempData["ErrorMessage"] = "Sitting not found";
+                    return NotFound();
+                }
+                var m = new Areas.Admin.Models.Sitting.Close
+                {
+                    SittingId = sitting.Id,
+                    IsClosed = sitting.IsClosed
+                };
 
-				return PartialView("_AdminCloseSittingPartial", m);
-			}
-			catch (Exception ex)
-			{
-				TempData["ErrorMessage"] = ex.Message;
-				return NotFound();
-			}
-		}
+                return PartialView("_AdminCloseSittingPartial", m);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return NotFound();
+            }
+        }
 
-		[Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Close(Areas.Admin.Models.Sitting.Close m)
         {
