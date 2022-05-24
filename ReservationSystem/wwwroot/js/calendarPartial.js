@@ -1,7 +1,7 @@
 ﻿
 $(function () {
     const currentDate = new Date();
-    onPageLoadGetSittings(currentDate);  
+    GetSittings(currentDate);  
 });
 
 async function getSittingsOnMonth(date) {
@@ -19,12 +19,15 @@ function getSittingsOnDay(selectedDate, sittings) {
     });
 }
 
-async function onPageLoadGetSittings(date) {
+async function GetSittings(date) {
 
     const sittings = await getSittingsOnMonth(date);
-
+    let s = getSittingsOnDay(date, sittings);
+    if (s.length == 0) {
+        $("#sittings-partial").html("");
+    }
     for (let s of getSittingsOnDay(date,sittings)) {
-
+        
         let interval = new Date(s.startTime);
         let endTime = new Date(s.endTime)
 
@@ -38,17 +41,14 @@ async function onPageLoadGetSittings(date) {
             el.find('#sitting-times-accordian-body').append(btn);
             interval.setMinutes(interval.getMinutes() + 15)
         }
-        $("#sittings-partial").append(el); 
+        $("#sittings-partial").html(el); 
     } 
 }
 
 function selectSittingInterval(date) {
- 
     let d = new Date(date);
-    //2022-05-19T09:21:00.000
-    let x = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}T${d.getHours()}:${d.getMinutes()}:00.000`;
-    debugger;
-    $("#ReservationForm_DateTime").val(x);
+    const format = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
+    $("#ReservationForm_DateTime").val(format);
 }
 
 function selectDate(date) {
@@ -59,40 +59,16 @@ function selectDate(date) {
 }
 
 async function updateSessionPartial(date) {
-    const selectedDate = new Date(date);
-    const sittings = JSON.parse(sessionStorage.getItem('sittings'))
-    const sittingsOnDay = getSittingsOnDay(selectedDate, sittings);
-    var sittingmap = sittingsOnDay.map(s => {
-        var intervals = new Date(s.startTime);
-        var endTime = new Date(s.endTime)
-        var intervalList = ``;
-        while (intervals < endTime.setMinutes(endTime.getMinutes() - s.resDuration)) {
-            intervalList += `<button> ${intervals} </button>`
-            intervals.setMinutes(intervals.getMinutes() + 15)
-        }
-        return `<div class="accordion" id="accordionExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        ${s.title} - ${s.startTime} - ${s.endTime}
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                        ${intervalList}
-                        </div>
-                    </div>
-                 </div>
-                 </div>`
-
-    });
-    $(".sittings-partial").html(sittingmap);        
+    var d = new Date(date);
+    GetSittings(d);
+        
 }
 
 const calendar = $('.calendar-container').calendar({
     weekDayLength: 1,
     date: new Date(),
     onClickDate: selectDate,
+    onChangeMonth: updateSessionPartial,
     showYearDropdown: true,
     startOnMonday: false,
     prevButton: "<",
