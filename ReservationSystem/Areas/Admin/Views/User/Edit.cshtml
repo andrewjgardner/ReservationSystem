@@ -18,11 +18,11 @@
 			</div>
 			<div class="form-group">
 				<label for="email">Password</label>
-				<input asp-for=Password class="form-control" placeholder="Enter new password" required>
+				<input asp-for=Password type="password" class="form-control" id="password" placeholder="Enter new password" required>
 			</div>
 			<div class="form-group">
 				<label for="confirmpassword">Confirm Password</label>
-				<input class="form-control" placeholder="Confirm password" required>
+				<input class="form-control" type="password" id="confirmPassword" placeholder="Confirm password" required>
 			</div>
 			<div class="form-group">
 				<p>Role: </p>
@@ -31,8 +31,12 @@
 		</div>
 		<br/>
 		<div>
-			<button type="submit" class="btn btn-primary">Submit</button>
+			<button type="submit" class="btn btn-primary" id="submit">Submit</button>
 		</div>
 		<input type="hidden" asp-for=Id />
 	</form>
 </div>
+
+@section Scripts {
+	<script src="~/js/admin.user.passwordvalidate.js"></script>
+}

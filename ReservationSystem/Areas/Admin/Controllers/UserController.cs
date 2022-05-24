@@ -64,24 +64,31 @@ namespace ReservationSystem.Areas.Admin.Controllers
         {
             try
             {
-                var user = new IdentityUser
+                if (ModelState.IsValid)
                 {
-                    UserName = m.Email,
-                    NormalizedUserName = _userManager.NormalizeName(m.Email),
-                    Email = m.Email,
-                    PhoneNumber = m.Phone,
-                    NormalizedEmail = _userManager.NormalizeEmail(m.Email),
-                    EmailConfirmed = true
-                };
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, m.Password);
-                await _userManager.CreateAsync(user);
-                await _userManager.AddToRoleAsync(user, m.RoleName);
-                return RedirectToAction("Index");
+                    var user = new IdentityUser
+                    {
+                        UserName = m.Email,
+                        NormalizedUserName = _userManager.NormalizeName(m.Email),
+                        Email = m.Email,
+                        PhoneNumber = m.Phone,
+                        NormalizedEmail = _userManager.NormalizeEmail(m.Email),
+                        EmailConfirmed = true,
+                        LockoutEnd = null
+                    };
+                    user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, m.Password);
+                    await _userManager.CreateAsync(user);
+                    await _userManager.AddToRoleAsync(user, m.RoleName);
+                    return RedirectToAction("Index");
+                }
             }
-            catch
+            catch(Exception ex)
             {
-                return View(m);
+                ModelState.AddModelError("Error", ex.InnerException?.Message ?? ex.Message);
             }
+            //If anything goes wrong, return View
+            m.Roles = new SelectList(await _userService.GetRolesAsync(), "Name", "Name");
+            return View(m);
         }
 
         [HttpGet]
