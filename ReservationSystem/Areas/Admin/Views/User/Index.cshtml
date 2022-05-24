@@ -13,6 +13,7 @@
 				<th>Email</th>
 				<th>Roles</th>
 				<th>Edit</th>
+				<th>Remove</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,6 +24,9 @@
 				<td>@u.Roles[0]</td>
 				<td>
 					<a type="button" class="btn btn-primary" asp-controller="User" asp-action="Edit" asp-route-UserId = "@u.Id" >Edit User</a>
+				</td>
+				<td>
+					<a type="button" class="btn btn-danger" asp-controller="User" asp-action="Remove" asp-route-UserId = "@u.Id" >Remove User</a>
 				</td>
 			</tr>
 			}

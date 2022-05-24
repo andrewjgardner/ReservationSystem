@@ -14,14 +14,12 @@ namespace ReservationSystem.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly int _restaurantId;
         private UserService _userService;
         private UserManager<IdentityUser> _userManager;
 
         public UserController(ApplicationDbContext context, UserService userService, UserManager<IdentityUser> userManager)
         {
             _context = context;
-            _restaurantId = 1;
             _userService = userService;
             _userManager = userManager;
         }
@@ -31,6 +29,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             var m = new Models.User.Index
             {
                 Users = await _context.Users
+                    .Where(u=>u.LockoutEnd!=DateTime.MaxValue)
                     .Select(u => new Models.User.Details
                     {
                         Id = u.Id,
@@ -63,19 +62,26 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Models.User.Create m)
         {
-            var user = new IdentityUser
+            try
             {
-                UserName = m.Email,
-                NormalizedUserName = _userManager.NormalizeName(m.Email),
-                Email = m.Email,
-                PhoneNumber = m.Phone,
-                NormalizedEmail = _userManager.NormalizeEmail(m.Email),
-                EmailConfirmed = true
-            };
-            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, m.Password);
-            await _userManager.CreateAsync(user);
-            await _userManager.AddToRoleAsync(user, m.RoleName);
-            return RedirectToAction("Index");
+                var user = new IdentityUser
+                {
+                    UserName = m.Email,
+                    NormalizedUserName = _userManager.NormalizeName(m.Email),
+                    Email = m.Email,
+                    PhoneNumber = m.Phone,
+                    NormalizedEmail = _userManager.NormalizeEmail(m.Email),
+                    EmailConfirmed = true
+                };
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, m.Password);
+                await _userManager.CreateAsync(user);
+                await _userManager.AddToRoleAsync(user, m.RoleName);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View(m);
+            }
         }
 
         [HttpGet]
@@ -119,6 +125,20 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Remove(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            user.LockoutEnabled = true;
+            user.LockoutEnd = DateTime.MaxValue;
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction("Index");
+        }
+
 
     }
 }
