@@ -2,8 +2,9 @@
 
 namespace ReservationSystem.Areas.Admin.Models.User
 {
-    public class Create
+    public class Edit
     {
+        public string Id { get; set; }
         public string RoleName { get; set; }
         public SelectList Roles { get; set; }
         public string Email { get; set; }

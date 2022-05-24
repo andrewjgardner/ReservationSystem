@@ -26,9 +26,10 @@ namespace ReservationSystem.Services
             return roles;
         }
 
-        public int CreateUserAsync()
+        public async Task<List<IdentityRole>> GetRolesAsync()
         {
-            return 0;
+            var roles = await _context.Roles.ToListAsync();
+            return roles;
         }
     }
 }

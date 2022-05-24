@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data.Context;
 using ReservationSystem.Services;
@@ -15,12 +16,14 @@ namespace ReservationSystem.Areas.Admin.Controllers
         private readonly ApplicationDbContext _context;
         private readonly int _restaurantId;
         private UserService _userService;
+        private UserManager<IdentityUser> _userManager;
 
-        public UserController(ApplicationDbContext context, UserService userService)
+        public UserController(ApplicationDbContext context, UserService userService, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _restaurantId = 1;
             _userService = userService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -48,12 +51,74 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            
             var m = new Models.User.Create
             {
-
+                Roles = new SelectList(await _userService.GetRolesAsync(), "Name", "Name")
             };
 
-            return View();
+            return View(m);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Models.User.Create m)
+        {
+            var user = new IdentityUser
+            {
+                UserName = m.Email,
+                NormalizedUserName = _userManager.NormalizeName(m.Email),
+                Email = m.Email,
+                PhoneNumber = m.Phone,
+                NormalizedEmail = _userManager.NormalizeEmail(m.Email),
+                EmailConfirmed = true
+            };
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, m.Password);
+            await _userManager.CreateAsync(user);
+            await _userManager.AddToRoleAsync(user, m.RoleName);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var m = new Models.User.Edit
+            {
+                Id = user.Id,
+                Roles = new SelectList(await _userService.GetRolesAsync(), "Name", "Name"),
+                RoleName = (await _userManager.GetRolesAsync(user))[0],
+                Email = user.Email,
+                Phone = user.PhoneNumber
+            };
+
+            return View(m);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Models.User.Edit m)
+        {
+            var user = await _userManager.FindByIdAsync(m.Id);
+
+            user.UserName = m.Email;
+            user.NormalizedUserName = _userManager.NormalizeName(m.Email);
+            user.Email = m.Email;
+            user.PhoneNumber = m.Phone;
+            user.NormalizedEmail = _userManager.NormalizeEmail(m.Email);
+            user.EmailConfirmed = true;
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, m.Password);
+
+            await _userManager.UpdateAsync(user);
+
+            var oldrole = (await _userManager.GetRolesAsync(user))[0];
+            if (oldrole != m.RoleName)
+            {
+                await _userManager.RemoveFromRoleAsync(user, oldrole);
+                await _userManager.AddToRoleAsync(user, m.RoleName);
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
