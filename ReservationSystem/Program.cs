@@ -4,6 +4,7 @@ using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
 using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -24,6 +25,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
 builder.Services.AddScoped<UserService>();
+//builder.Services.AddScoped<EmailService>();
+
+//EmailService.Main();
+
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+});
 
 var app = builder.Build();
 
