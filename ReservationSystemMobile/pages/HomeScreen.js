@@ -1,12 +1,9 @@
-import { View, Text, Button } from "react-native";
+import { View, Text, Button } from 'react-native'
 
-export function HomeScreen({navigation}) {
+export function HomeScreen({ navigation }) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button
-          title="Log In"
-          onPress={() => navigation.}/>
-        <Text>Home Screen</Text>
-      </View>
-    );
-  }
+        <View>
+            <Text>Home Screen</Text>
+        </View>
+    )
+}

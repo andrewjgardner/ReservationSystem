@@ -1,21 +1,63 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
 using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString).EnableSensitiveDataLogging()); 
+    options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(o =>
+{
+    o.DefaultScheme = "JWT_OR_COOKIE";
+    o.DefaultChallengeScheme = "JWT_OR_COOKIE";
+})
+        .AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+                RequireExpirationTime = true,
+
+                ClockSkew = TimeSpan.Zero
+            };
+        })
+        .AddPolicyScheme("JWT_OR_COOKIE", null, o =>
+        {
+            o.ForwardDefaultSelector = c =>
+            {
+                string auth = c.Request.Headers[HeaderNames.Authorization];
+                if (!string.IsNullOrWhiteSpace(auth) && auth.StartsWith("Bearer "))
+                {
+                    return JwtBearerDefaults.AuthenticationScheme;
+                }
+
+                return IdentityConstants.ApplicationScheme;
+            };
+        });
 
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();

@@ -1,15 +1,25 @@
-import { View, Text, Button } from "react-native";
+import { useState } from 'react'
+import { View, Text, Button, TextInput, Pressable } from 'react-native'
 
-export function LogInScreen({navigation}) {
+export function LogInScreen({ navigation }) {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button
-                title="Go to Home Screen"
-                     onPress={() => navigation.navigate('Home')}
-
-
+        <View>
+            <Text>Email</Text>
+            <TextInput
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
             />
-            <Text>Log In Screen</Text>
+            <Text>Password</Text>
+            <TextInput
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={true}
+            />
+            <Button title='Log In' />
         </View>
-    );
-  }
+    )
+}

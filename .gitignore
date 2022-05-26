@@ -351,8 +351,6 @@ MigrationBackup/
 .ionide/
 
 
-appsettings.json
-
 # React Native project files
 node_modules/
 .expo/
