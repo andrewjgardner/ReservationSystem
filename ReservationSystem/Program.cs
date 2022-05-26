@@ -21,48 +21,55 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthentication(o =>
-{
-    o.DefaultScheme = "JWT_OR_COOKIE";
-    o.DefaultChallengeScheme = "JWT_OR_COOKIE";
-})
-        .AddJwtBearer(options =>
-        {
-            options.RequireHttpsMetadata = false;
-            options.SaveToken = true;
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-
-                RequireExpirationTime = true,
-
-                ClockSkew = TimeSpan.Zero
-            };
-        })
-        .AddPolicyScheme("JWT_OR_COOKIE", null, o =>
-        {
-            o.ForwardDefaultSelector = c =>
-            {
-                string auth = c.Request.Headers[HeaderNames.Authorization];
-                if (!string.IsNullOrWhiteSpace(auth) && auth.StartsWith("Bearer "))
-                {
-                    return JwtBearerDefaults.AuthenticationScheme;
-                }
-
-                return IdentityConstants.ApplicationScheme;
-            };
-        });
-
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
 
+builder.Services.AddAuthentication(o =>
+    {
+        o.DefaultScheme = "JWT_OR_COOKIE";
+        o.DefaultChallengeScheme = "JWT_OR_COOKIE";
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+            RequireExpirationTime = true,
+
+            ClockSkew = TimeSpan.Zero
+        };
+    })
+    .AddPolicyScheme("JWT_OR_COOKIE", null, o =>
+    {
+        o.ForwardDefaultSelector = c =>
+        {
+            string auth = c.Request.Headers[HeaderNames.Authorization];
+            if (!string.IsNullOrWhiteSpace(auth) && auth.StartsWith("Bearer "))
+            {
+                return JwtBearerDefaults.AuthenticationScheme;
+            }
+
+            return IdentityConstants.ApplicationScheme;
+        };
+    });
+
 var app = builder.Build();
+
+app.UseCors(policy =>
+{
+    policy.AllowAnyOrigin();
+    policy.AllowAnyHeader();
+    policy.AllowAnyMethod();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
