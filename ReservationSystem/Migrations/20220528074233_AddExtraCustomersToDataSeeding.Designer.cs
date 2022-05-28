@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservationSystem.Data.Context;
 
@@ -11,9 +12,10 @@ using ReservationSystem.Data.Context;
 namespace ReservationSystem.Migrations.ApplicationDbMigrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220528074233_AddExtraCustomersToDataSeeding")]
+    partial class AddExtraCustomersToDataSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,7 +353,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Areas", (string)null);
+                    b.ToTable("Areas");
 
                     b.HasData(
                         new
@@ -412,7 +414,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("People", (string)null);
+                    b.ToTable("People");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Person");
 
@@ -494,7 +496,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("SittingId");
 
-                    b.ToTable("Reservations", (string)null);
+                    b.ToTable("Reservations");
 
                     b.HasData(
                         new
@@ -546,7 +548,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReservationOrigins", (string)null);
+                    b.ToTable("ReservationOrigins");
 
                     b.HasData(
                         new
@@ -580,7 +582,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReservationStatuses", (string)null);
+                    b.ToTable("ReservationStatuses");
 
                     b.HasData(
                         new
@@ -625,7 +627,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurants", (string)null);
+                    b.ToTable("Restaurants");
 
                     b.HasData(
                         new
@@ -680,7 +682,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("SittingTypeId");
 
-                    b.ToTable("Sittings", (string)null);
+                    b.ToTable("Sittings");
 
                     b.HasData(
                         new
@@ -741,7 +743,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SittingTypes", (string)null);
+                    b.ToTable("SittingTypes");
 
                     b.HasData(
                         new
@@ -786,7 +788,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("Tables", (string)null);
+                    b.ToTable("Tables");
 
                     b.HasData(
                         new
@@ -1013,7 +1015,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("TablesId");
 
-                    b.ToTable("ReservationTable", (string)null);
+                    b.ToTable("ReservationTable");
 
                     b.HasData(
                         new

@@ -1,9 +1,21 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { View, Text, Button, TextInput, Pressable } from 'react-native'
+import { AuthContext } from '../App'
 
-export function LogInScreen({ navigation }) {
+export function SignInScreen({ navigation }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+
+    const { signIn } = useContext(AuthContext)
+
+    async function handleSignIn() {
+        try {
+            await signIn({ email, password })
+        } catch (e) {
+            setError(e.message)
+        }
+    }
 
     return (
         <View>
@@ -19,7 +31,8 @@ export function LogInScreen({ navigation }) {
                 onChangeText={setPassword}
                 secureTextEntry={true}
             />
-            <Button title='Log In' />
+            <Button title="Sign In" onPress={() => handleSignIn()} />
+            <Text>{error}</Text>
         </View>
     )
 }
