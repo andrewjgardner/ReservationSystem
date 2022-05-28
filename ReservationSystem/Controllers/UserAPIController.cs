@@ -64,7 +64,8 @@ namespace ReservationSystem.Controllers
                 {
                     StartTime = r.StartTime,
                     Guests = r.Guests,
-                    Comments = r.Comments ?? ""
+                    Comments = r.Comments ?? "",
+                    ReservationId = r.Id
                 }) ?? new List<Models.UserAPI.Reservation>();
         }
     }
