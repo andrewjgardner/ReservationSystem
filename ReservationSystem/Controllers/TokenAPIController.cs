@@ -38,7 +38,6 @@ namespace ReservationSystem.Controllers
             IdentityUser user = await _userManager.FindByEmailAsync(signInDto.Email);
             List<Claim> claims = new()
             {
-                // Originally, this used strings with incorrect names as claim types
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
