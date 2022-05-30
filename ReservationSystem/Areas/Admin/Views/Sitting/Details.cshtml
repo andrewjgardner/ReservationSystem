@@ -71,5 +71,16 @@
 			}
 		</tbody>
 	</table>
-
+	<div id="assignable-tables-list">
+		<h2 class="bg-dark text-white m-0 p-1">Assign Tables</h2>
+		@foreach(var tableItem in Model.AllTables ){
+			<div class="draggable ui-widget-content border bg-light" data-table-id="@tableItem.Id">
+				@tableItem.TableName
+			</div>
+		}
+	</div>
 </div>
+
+@section scripts{
+    <script src="~/js/admin.sitting.details.js"></script>
+}
