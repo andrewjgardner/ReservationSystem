@@ -51,7 +51,7 @@ namespace ReservationSystemUITests
             {
                 driver.Quit();
             }
-            
+
         }
 
         [TestMethod]
@@ -67,14 +67,15 @@ namespace ReservationSystemUITests
                 Thread.Sleep(500);
                 ReadOnlyCollection<IWebElement> navItems = driver.FindElements(By.ClassName("form-group"));
                 Assert.IsTrue(navItems.Count >= 6, "At least 6 navigation items are expected");
-            }finally
+            }
+            finally
             {
                 driver.Quit();
             }
-          
-            
+
+
         }
-        
+
         [TestMethod]
         public void ChromeTuteLink()
         {
