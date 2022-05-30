@@ -223,39 +223,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpGet] //id = reservation id
-        public async Task<IActionResult> AssignTables(int id)
-        {
-            try
-            {
-                var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == id);
-                var allTables = await _context.Tables.ToListAsync();
-                if (reservation == null)
-                {
-                    TempData["ErrorMessage"] = "Reservation not found";
-                    return NotFound();
-                }
-                var m = new Models.Reservation.AssignTables
-                {
-                    ReservationId = id,
-                    ReservationTables = reservation.Tables,
-                    AllTables = allTables
-                };
-
-                return View(m);
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = ex.Message;
-                return NotFound();
-            }
-        }
-
-        [Authorize(Roles = "Manager")]
         [HttpPost]
-        public async Task<IActionResult> AssignTables(Models.Reservation.AssignTables m)
+        public async Task<IActionResult> AssignTables(Models.Reservation.AssignTable m)
         {
-            return View(m);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

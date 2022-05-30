@@ -4,5 +4,8 @@
 });
 
 function handleOnDropped(e, ui) {
-    alert("Table with id: " + ui.draggable.data('table-id') + " has been assigned to reservation with id: " + $(e.target).data('reservation-id'));
+    var tableId = $(e.target).data('table-id');
+    var reservationId = ui.draggable.data('reservation-id');
+    alert("Table with id: " + tableId + " has been assigned to reservation with id: " + reservationId);
+    $.post(`/admin/reservation/assignTables/`, { TableId: tableId, ReservationId: reservationId }, function () { alert("Success!")});
 }

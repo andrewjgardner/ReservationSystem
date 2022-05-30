@@ -34,15 +34,12 @@
 				<th>
 					Cancel
 				</th>
-				<th>
-					Assign Tables
-				</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in Model.ReservationList)
 			{	
-			<tr> 
+			<tr class="draggable ui-widget-content" data-reservation-id="@item.Id"> 
 				<td>
 					@Html.DisplayFor(modelItem => item.StartTime)
 				</td>
@@ -64,9 +61,6 @@
 				<td>
 					<a type="button" class="btn btn-danger" asp-controller="Reservation" asp-route-reservationId = "@item.Id" >Cancel Reservation</a>
 				</td>
-				<td>
-					<button type="button" class="btn btn-primary">Assign Tables</button>
-				</td>
 			</tr>
 			}
 		</tbody>
@@ -74,8 +68,8 @@
 	<div id="assignable-tables-list">
 		<h2 class="bg-dark text-white m-0 p-1">Assign Tables</h2>
 		@foreach(var tableItem in Model.AllTables ){
-			<div class="draggable ui-widget-content border bg-light" data-table-id="@tableItem.Id">
-				@tableItem.TableName
+			<div class="droppable border bg-light p-1" data-table-id="@tableItem.Id">
+				@tableItem.Name
 			</div>
 		}
 	</div>
