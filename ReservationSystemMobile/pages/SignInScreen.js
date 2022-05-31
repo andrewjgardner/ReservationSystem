@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { View, Text, Button, TextInput, Pressable } from 'react-native'
-import { AuthContext } from '../App'
+import { AuthContext } from '../components'
 
 export function SignInScreen({ navigation }) {
     const [email, setEmail] = useState('')
@@ -13,6 +13,7 @@ export function SignInScreen({ navigation }) {
         try {
             await signIn({ email, password })
         } catch (e) {
+            console.log(e)
             setError(e.message)
         }
     }

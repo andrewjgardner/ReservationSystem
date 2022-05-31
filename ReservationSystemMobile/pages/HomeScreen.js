@@ -1,13 +1,13 @@
 import { View, Text, Button, FlatList } from 'react-native'
 import { useContext, useState } from 'react'
-import { AuthContext } from '../App'
+import { AuthContext } from '../components'
 import { apiFetch } from '../services/FetchService'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { renderReservation } from '../components/Reservation'
 
 export function HomeScreen({ navigation }) {
     const { signOut, getRoles, getLoggedInUser, getReservations } =
         useContext(AuthContext)
+
     const [result, setResult] = useState('')
     const [reservations, setReservations] = useState([])
 
@@ -15,10 +15,10 @@ export function HomeScreen({ navigation }) {
         const data = await f()
         setResult(JSON.stringify(data))
     }
-    
-    async function handleClickReservations(){
+
+    async function handleClickReservations() {
         const data = await getReservations()
-        setReservations(data)        
+        setReservations(data)
     }
 
     return (
@@ -37,10 +37,9 @@ export function HomeScreen({ navigation }) {
             <Text>{result}</Text>
             <FlatList
                 data={reservations}
-                renderItem={({item}) => renderReservation(item)}
+                renderItem={({ item }) => renderReservation(item)}
                 keyExtractor={(item) => item.id}
             />
-            
         </View>
     )
 }
