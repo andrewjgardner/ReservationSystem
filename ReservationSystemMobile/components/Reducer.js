@@ -1,4 +1,7 @@
-export function reducer(prevState = initialState, action) {
+
+import { apiFetch } from "../services/FetchService"
+
+export function reducer(prevState, action) {
     switch (action.type) {
         case 'RESTORE_TOKEN':
             return {
@@ -70,6 +73,7 @@ export const authActions = {
         try {
             userToken = await AsyncStorage.getItem('userToken')
         } catch (e) {}
+        console.log(userToken)
         dispatch({ type: 'RESTORE_TOKEN', token: userToken })
         return userToken
     },

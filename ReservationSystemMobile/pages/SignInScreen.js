@@ -1,17 +1,21 @@
 import { useState, useContext } from 'react'
 import { View, Text, Button, TextInput, Pressable } from 'react-native'
-import { AuthContext } from '../components'
+import { AuthContext, useAuthContext } from '../components'
 
 export function SignInScreen({ navigation }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
 
-    const { signIn } = useContext(AuthContext)
+    const {
+        authState,
+        dispatch,
+        actions: { signIn, signUp, signOut },
+    } = useAuthContext()
 
     async function handleSignIn() {
         try {
-            await signIn({ email, password })
+            await signIn({ email, password })(dispatch)
         } catch (e) {
             console.log(e)
             setError(e.message)

@@ -1,5 +1,5 @@
 import { createContext, useReducer, useContext, useEffect, memo } from 'react'
-import { authActions, initialState, reducer } from './Reducer'
+import { authActions as pActions, initialState, reducer } from './Reducer'
 
 const authContext = createContext({
     state: {},
@@ -11,11 +11,13 @@ function AuthContext({ children }) {
     const [authState, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
-        authActions.restoreToken()
+        pActions.restoreToken()(dispatch)
     }, [])
 
     return (
-        <authContext.Provider value={{ authState, dispatch, authActions }}>
+        <authContext.Provider
+            value={{ authState, dispatch, actions: pActions }}
+        >
             {children}
         </authContext.Provider>
     )
