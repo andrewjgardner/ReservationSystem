@@ -1,23 +1,15 @@
 import { View, Text, Button, FlatList } from 'react-native'
 import { useContext, useState } from 'react'
 import { AuthContext } from '../App'
-import { apiFetch } from '../services/FetchService'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { apiFetch, getReservations } from '../services/FetchService'
 import { renderReservation } from '../components/Reservation'
 
 export function HomeScreen({ navigation }) {
-    const { signOut, getRoles, getLoggedInUser, getReservations } =
-        useContext(AuthContext)
+    const { signOut } = useContext(AuthContext)
     const [result, setResult] = useState('')
     const [reservations, setReservations] = useState([])
 
-    async function handleClick(f) {
-        const data = await f()
-        setResult(JSON.stringify(data))
-    }
-
     async function handleClickReservations() {
-        console.log(authState)
         const data = await getReservations()
         setReservations(data)
     }
@@ -26,11 +18,6 @@ export function HomeScreen({ navigation }) {
         <View>
             <Text>Home Screen</Text>
             <Button title="Sign Out" onPress={signOut} />
-            <Button title="Get Roles" onPress={() => handleClick(getRoles)} />
-            <Button
-                title="Get User Details"
-                onPress={() => handleClick(getLoggedInUser)}
-            />
             <Button
                 title="Get Reservations"
                 onPress={() => handleClickReservations()}

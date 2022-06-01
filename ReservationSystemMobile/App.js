@@ -90,26 +90,6 @@ export default function App() {
                 console.log(authState)
                 console.log(dispatch({ type: 'STATE' }))
             },
-            getLoggedInUser: async () => {
-                const jwt = await AsyncStorage.getItem('userToken')
-                const response = await apiFetch('user/me', 'GET', null, jwt)
-                return await response.json()
-            },
-            getRoles: async () => {
-                const jwt = await AsyncStorage.getItem('userToken')
-                const response = await apiFetch('user/roles', 'GET', null, jwt)
-                return await response.json()
-            },
-            getReservations: async () => {
-                const jwt = await AsyncStorage.getItem('userToken')
-                const response = await apiFetch(
-                    'user/reservations',
-                    'GET',
-                    null,
-                    jwt
-                )
-                return await response.json()
-            },
         }),
         []
     )

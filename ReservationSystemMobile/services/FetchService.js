@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const endpoint = 'https://localhost:7156/api/'
 
 //Arthur's fetch function
@@ -16,4 +17,20 @@ export async function apiFetch(url, method, body, jwt) {
             statusText: error.message,
         })
     })
+}
+
+export async function getLoggedInUser() {
+    const jwt = await AsyncStorage.getItem('userToken')
+    const response = await apiFetch('user/me', 'GET', null, jwt)
+    return await response.json()
+}
+export async function getRoles() {
+    const jwt = await AsyncStorage.getItem('userToken')
+    const response = await apiFetch('user/roles', 'GET', null, jwt)
+    return await response.json()
+}
+export async function getReservations() {
+    const jwt = await AsyncStorage.getItem('userToken')
+    const response = await apiFetch('user/reservations', 'GET', null, jwt)
+    return await response.json()
 }
