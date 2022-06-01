@@ -15,10 +15,11 @@ export function HomeScreen({ navigation }) {
         const data = await f()
         setResult(JSON.stringify(data))
     }
-    
-    async function handleClickReservations(){
+
+    async function handleClickReservations() {
+        console.log(authState)
         const data = await getReservations()
-        setReservations(data)        
+        setReservations(data)
     }
 
     return (
@@ -37,10 +38,9 @@ export function HomeScreen({ navigation }) {
             <Text>{result}</Text>
             <FlatList
                 data={reservations}
-                renderItem={({item}) => renderReservation(item)}
+                renderItem={({ item }) => renderReservation(item)}
                 keyExtractor={(item) => item.id}
             />
-            
         </View>
     )
 }

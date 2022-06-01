@@ -13,6 +13,7 @@ import {
     createContext,
     useMemo,
 } from 'react'
+import { DrawerNavigator } from './components/DrawerNavigator'
 
 const Stack = createNativeStackNavigator()
 export const AuthContext = createContext()
@@ -39,6 +40,8 @@ export default function App() {
                         isSignOut: true,
                         userToken: null,
                     }
+                case 'STATE':
+                    return prevState
             }
         },
         {
@@ -81,6 +84,12 @@ export default function App() {
             signUp: async (data) => {
                 dispatch({ type: 'SIGN_IN', token: 'test' })
             },
+            getState: async () => {
+                console.log(authState)
+                dispatch({ type: 'STATE' })
+                console.log(authState)
+                console.log(dispatch({ type: 'STATE' }))
+            },
             getLoggedInUser: async () => {
                 const jwt = await AsyncStorage.getItem('userToken')
                 const response = await apiFetch('user/me', 'GET', null, jwt)
@@ -110,24 +119,25 @@ export default function App() {
             <NavigationContainer>
                 <Stack.Navigator>
                     {authState.isLoading ? (
-                        // We haven't finished checking for the token yet
                         <Stack.Screen name="Splash" component={SplashScreen} />
                     ) : authState.userToken == null ? (
-                        // No token found, user isn't signed in
                         <Stack.Screen
                             name="SignIn"
                             component={SignInScreen}
                             options={{
                                 title: 'Sign In',
-                                // When logging out, a pop animation feels intuitive
                                 animationTypeForReplace: authState.isSignOut
                                     ? 'pop'
                                     : 'push',
                             }}
                         />
                     ) : (
-                        // User is signed in
-                        <Stack.Screen name="Home" component={HomeScreen} />
+                        //User is Signed in
+                        <Stack.Screen
+                            name="Drawer"
+                            component={DrawerNavigator}
+                            options={{ headerShown: false }}
+                        />
                     )}
                 </Stack.Navigator>
             </NavigationContainer>
