@@ -12,10 +12,11 @@
 		<thead class="table-primary">
 			<tr>
 				<th> Date </th>
-				<th> Start Time </th>
+				<th> @Html.ActionLink("Start Time", "Index", new { sortOrder = ViewBag.DateTimeSortParam }) </th>
 				<th> End Time </th>
 				<th> Title </th>
 				<th> PercentFull </th>
+				<th> @Html.ActionLink("Closed", "Index", new { sortOrder = ViewBag.IsClosedSortParam }) </th>
 				<th> View Sitting Details </th>
 				@if(User.IsInRole("Manager")){
 					<th> Edit Sitting Details </th>
@@ -32,6 +33,7 @@
 					<td> @Html.DisplayFor(modelItem => r.EndTime) </td>
 					<td> @r.Title </td>
 					<td> @r.PercentFull </td>
+					<td> @r.IsClosed </td>
 					<td>
 						<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Details", "Sitting", new {sittingId = r.SittingID})'">View Details</button>
 					</td>

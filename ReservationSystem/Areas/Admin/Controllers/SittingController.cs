@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
+using PagedList;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
@@ -21,8 +22,11 @@ namespace ReservationSystem.Areas.Admin.Controllers
             _restaurantId = 1;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+            ViewBag.DateTimeSortParam = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.IsClosedSortParam = sortOrder == "closed" ? "opened" : "closed";
+
             var m = new Models.Sitting.Index
             {
                 Sittings = await _context.Sittings
@@ -40,6 +44,28 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     .OrderBy(s => s.StartTime)
                     .ToArrayAsync()
             };
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                m.Sittings = m.Sittings.Where(s => s.StartTime.ToString().Contains(searchString)
+                                                || s.Date.ToString().Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "Date":
+                    m.Sittings = m.Sittings.OrderBy(s => s.StartTime).ToArray();
+                    break;
+                case "date_desc":
+                    m.Sittings = m.Sittings.OrderByDescending(s => s.StartTime).ToArray();
+                    break;
+                case "closed":
+                    m.Sittings = m.Sittings.OrderBy(s => s.IsClosed).ToArray();
+                    break;
+                case "opened":
+                    m.Sittings = m.Sittings.OrderByDescending(s => s.IsClosed).ToArray();
+                    break;
+            }
 
             return View(m);
 
