@@ -34,6 +34,10 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "ReservationSystem": {
+      "commandName": "Project",
+      "launchBrowser": true
     }
   }
 }

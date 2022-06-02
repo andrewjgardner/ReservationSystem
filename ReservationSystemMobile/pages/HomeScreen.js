@@ -16,6 +16,7 @@ export function HomeScreen({ navigation }) {
         }
         setResult('')
         setReservations(data)
+        console.log(splitArrayOnDays(data))
     }
 
     useEffect(() => {
@@ -32,4 +33,27 @@ export function HomeScreen({ navigation }) {
             />
         </View>
     )
+}
+
+function splitArrayOnDays(array) {
+    debugger
+    let days = []
+    let day = []
+    array.forEach((p) => {
+        if (day.length === 0) {
+            day.push(p)
+        } else {
+            if (
+                new Date(day[0].date).getDate() === new Date(p.date).getDate()
+            ) {
+                day.push(p)
+            } else {
+                days.push(day)
+                day = []
+                day.push(p)
+            }
+        }
+    })
+    days.push(day)
+    return days
 }

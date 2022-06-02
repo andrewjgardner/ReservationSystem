@@ -15,7 +15,7 @@ export function DrawerNavigator() {
                 <CustomDrawerContent {...props} user={user} />
             )}
         >
-            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Reservations" component={HomeScreen} />
         </Drawer.Navigator>
     )
 }
