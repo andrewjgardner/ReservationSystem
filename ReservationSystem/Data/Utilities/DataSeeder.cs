@@ -102,7 +102,21 @@ namespace ReservationSystem.Data.Utilities
                     PasswordHash = "AQAAAAEAACcQAAAAEL2BSRUHQM9fCh0jb+mYgX4H+MYYLnYhFdx/1ePZn6q00SRtRboczPPvkyo2ysL3FA==",
                     SecurityStamp = "656ddfb3-19a6-4b93-85a4-a60418b96559",
                     ConcurrencyStamp = "string3"
+                }, new IdentityUser
+                {
+                    Id = "4",
+                    UserName = "mobile@man.com",
+                    NormalizedUserName = "MOBILE@MAN.COM",
+                    Email = "mobile@man.com",
+                    NormalizedEmail = "MOBILE@MAN.COM",
+                    PhoneNumber = "167761930",
+                    EmailConfirmed = true,
+                    LockoutEnabled = false,
+                    PasswordHash = "AQAAAAEAACcQAAAAEL2BSRUHQM9fCh0jb+mYgX4H+MYYLnYhFdx/1ePZn6q00SRtRboczPPvkyo2ysL3FA==",
+                    SecurityStamp = "656ddfb3-19a6-4b93-85a4-a60418b96559",
+                    ConcurrencyStamp = "string4"
                 }
+
                 );
         }
 
@@ -417,7 +431,7 @@ namespace ReservationSystem.Data.Utilities
                     SittingId = 1,
                     ReservationStatusId = 1,
                     ReservationOriginId = 1,
-                    CustomerId = 5,
+                    CustomerId = 13,
                 }, new Reservation
                 {
                     Id = 2,
@@ -427,7 +441,7 @@ namespace ReservationSystem.Data.Utilities
                     SittingId = 2,
                     ReservationStatusId = 2,
                     ReservationOriginId = 2,
-                    CustomerId = 8,
+                    CustomerId = 13,
                 }, new Reservation
                 {
                     Id = 3,
@@ -437,8 +451,60 @@ namespace ReservationSystem.Data.Utilities
                     SittingId = 3,
                     ReservationStatusId = 3,
                     ReservationOriginId = 3,
-                    CustomerId = 6,
-                });
+                    CustomerId = 13,
+                }
+                , new Reservation
+                {
+                    Id = 4,
+                    StartTime = new DateTime(2022, 07, 13, 19, 30, 00),
+                    Comments = "WOW!",
+                    Guests = 5,
+                    SittingId = 3,
+                    ReservationStatusId = 3,
+                    ReservationOriginId = 3,
+                    CustomerId = 14,
+                }, new Reservation
+                {
+                    Id = 5,
+                    StartTime = new DateTime(2022, 07, 13, 10, 30, 00),
+                    Comments = "WOW!",
+                    Guests = 5,
+                    SittingId = 1,
+                    ReservationStatusId = 3,
+                    ReservationOriginId = 3,
+                    CustomerId = 14,
+                }, new Reservation
+                {
+                    Id = 6,
+                    StartTime = new DateTime(2022, 07, 13, 13, 30, 00),
+                    Comments = "WOW!",
+                    Guests = 5,
+                    SittingId = 2,
+                    ReservationStatusId = 3,
+                    ReservationOriginId = 3,
+                    CustomerId = 14,
+                }, new Reservation
+                {
+                    Id = 7,
+                    StartTime = new DateTime(2022, 07, 13, 14, 30, 00),
+                    Comments = "WOW!",
+                    Guests = 5,
+                    SittingId = 2,
+                    ReservationStatusId = 3,
+                    ReservationOriginId = 3,
+                    CustomerId = 14,
+                }, new Reservation
+                {
+                    Id = 8,
+                    StartTime = new DateTime(2022, 07, 13, 15, 30, 00),
+                    Comments = "WOW!",
+                    Guests = 5,
+                    SittingId = 3,
+                    ReservationStatusId = 3,
+                    ReservationOriginId = 3,
+                    CustomerId = 14,
+                }
+                );
         }
 
         public void SeedReservationOrigin()
@@ -609,8 +675,26 @@ namespace ReservationSystem.Data.Utilities
                     PhoneNumber = "023456789",
                     RestaurantId = 1,
                     Email = "a.a@a.com",
-                    UserId = "1"
-                });
+                }, new Customer
+                {
+                    Id = 13,
+                    FirstName = "Mobile",
+                    LastName = "Man",
+                    PhoneNumber = "777747774777",
+                    RestaurantId = 1,
+                    Email = "mobile@man.com",
+                    UserId = "4"
+                }, new Customer
+                {
+                    Id = 14,
+                    FirstName = "Default",
+                    LastName = "Member",
+                    PhoneNumber = "42513513245",
+                    RestaurantId = 1,
+                    Email = "member@member.com",
+                    UserId = "3"
+                }
+                );
         }
 
     }
