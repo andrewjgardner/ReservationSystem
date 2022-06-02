@@ -221,37 +221,5 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             return View(m);
         }
-
-        [Authorize(Roles = "Manager")]
-        [HttpPost]
-        public async Task<IActionResult> AssignTables(Models.Reservation.AssignTable m)
-        {
-            try
-            {
-                var reservation = await _context.Reservations.FirstOrDefaultAsync(r => r.Id == m.ReservationId);
-                if (reservation == null) return NotFound();
-
-                var table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == m.TableId);
-                if (table == null) return NotFound();
-
-                if (reservation.Tables.Count <= 0)
-                {
-                    reservation.Tables.Add(table);
-                }
-                else
-                {
-                    bool tableAlreadyAssigned = reservation.Tables.Any(t => t.Id == m.TableId);
-                    if (!tableAlreadyAssigned) reservation.Tables.Add(table);
-                }
-            }
-            catch(Exception e)
-            {
-                TempData["ErrorMessage"] = e.InnerException?.Message ?? e.Message;
-                return RedirectToAction("Exception", "Error");
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
     }
 }

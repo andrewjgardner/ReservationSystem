@@ -6,6 +6,16 @@
 function handleOnDropped(e, ui) {
     var tableId = $(e.target).data('table-id');
     var reservationId = ui.draggable.data('reservation-id');
-    alert("Table with id: " + tableId + " has been assigned to reservation with id: " + reservationId);
-    $.post(`/admin/reservation/assignTables/`, { TableId: tableId, ReservationId: reservationId }, function () { alert("Success!")});
+    $.post(`/api/admin/reservations/assign-table/${reservationId}/${tableId}`)
+        .then(function (response) {
+            var tableName = response.tableName;
+            var reservationCustomerName = response.reservationCustomerName;
+            var reservationTime = response.reservationTime;
+            if (!response.tableAlreadyAssigned) {
+                alert("Table " + tableName + " was assigned to " + reservationCustomerName + "'s reservation at " + reservationTime + ".");
+            }
+            else {
+                alert("Table " + tableName + " is already assigned to " + reservationCustomerName + "'s reservation at " + reservationTime + ".");
+            }
+        });
 }
