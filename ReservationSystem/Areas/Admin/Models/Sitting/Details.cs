@@ -23,6 +23,8 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         public List<ReservationListItem> ReservationList { get; set; }
         public int SittingId { get; set; }
+
+        public List<TableData> AllTables { get; set; }
     }
 
     public class ReservationListItem
@@ -44,5 +46,11 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         [Display(Name = "Comments")]
         public string? Comments { get; set; }
+    }
+
+    public class TableData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

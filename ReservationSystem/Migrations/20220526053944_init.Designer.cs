@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservationSystem.Data.Context;
 
@@ -11,9 +12,10 @@ using ReservationSystem.Data.Context;
 namespace ReservationSystem.Migrations.ApplicationDbMigrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220526053944_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,23 +212,6 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
                             SecurityStamp = "656ddfb3-19a6-4b93-85a4-a60418b96559",
                             TwoFactorEnabled = false,
                             UserName = "member@member.com"
-                        },
-                        new
-                        {
-                            Id = "4",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "string4",
-                            Email = "mobile@man.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "MOBILE@MAN.COM",
-                            NormalizedUserName = "MOBILE@MAN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL2BSRUHQM9fCh0jb+mYgX4H+MYYLnYhFdx/1ePZn6q00SRtRboczPPvkyo2ysL3FA==",
-                            PhoneNumber = "167761930",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "656ddfb3-19a6-4b93-85a4-a60418b96559",
-                            TwoFactorEnabled = false,
-                            UserName = "mobile@man.com"
                         });
                 });
 
@@ -351,7 +336,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Areas", (string)null);
+                    b.ToTable("Areas");
 
                     b.HasData(
                         new
@@ -412,7 +397,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("People", (string)null);
+                    b.ToTable("People");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Person");
 
@@ -494,14 +479,14 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("SittingId");
 
-                    b.ToTable("Reservations", (string)null);
+                    b.ToTable("Reservations");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Comments = "By the balcony, please.",
-                            CustomerId = 13,
+                            CustomerId = 5,
                             Guests = 3,
                             ReservationOriginId = 1,
                             ReservationStatusId = 1,
@@ -512,7 +497,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
                         {
                             Id = 2,
                             Comments = "",
-                            CustomerId = 13,
+                            CustomerId = 8,
                             Guests = 4,
                             ReservationOriginId = 2,
                             ReservationStatusId = 2,
@@ -523,7 +508,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
                         {
                             Id = 3,
                             Comments = "",
-                            CustomerId = 13,
+                            CustomerId = 6,
                             Guests = 5,
                             ReservationOriginId = 3,
                             ReservationStatusId = 3,
@@ -546,7 +531,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReservationOrigins", (string)null);
+                    b.ToTable("ReservationOrigins");
 
                     b.HasData(
                         new
@@ -580,7 +565,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReservationStatuses", (string)null);
+                    b.ToTable("ReservationStatuses");
 
                     b.HasData(
                         new
@@ -625,7 +610,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurants", (string)null);
+                    b.ToTable("Restaurants");
 
                     b.HasData(
                         new
@@ -680,7 +665,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("SittingTypeId");
 
-                    b.ToTable("Sittings", (string)null);
+                    b.ToTable("Sittings");
 
                     b.HasData(
                         new
@@ -741,7 +726,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SittingTypes", (string)null);
+                    b.ToTable("SittingTypes");
 
                     b.HasData(
                         new
@@ -786,7 +771,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("Tables", (string)null);
+                    b.ToTable("Tables");
 
                     b.HasData(
                         new
@@ -1013,7 +998,7 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.HasIndex("TablesId");
 
-                    b.ToTable("ReservationTable", (string)null);
+                    b.ToTable("ReservationTable");
 
                     b.HasData(
                         new
@@ -1089,27 +1074,8 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
                             FirstName = "William",
                             LastName = "Kemshell",
                             PhoneNumber = "023456789",
-                            RestaurantId = 1
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Email = "mobile@man.com",
-                            FirstName = "Mobile",
-                            LastName = "Man",
-                            PhoneNumber = "777747774777",
                             RestaurantId = 1,
-                            UserId = "4"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Email = "member@member.com",
-                            FirstName = "Default",
-                            LastName = "Member",
-                            PhoneNumber = "42513513245",
-                            RestaurantId = 1,
-                            UserId = "3"
+                            UserId = "1"
                         });
                 });
 

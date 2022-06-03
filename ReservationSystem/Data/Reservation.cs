@@ -22,6 +22,6 @@ namespace ReservationSystem.Data
         public Customer Customer { get; set; }
         public int CustomerId { get; set; }
 
-        public List<Table> Tables { get; set; }
+        public List<Table> Tables { get; set; } = new List<Table>();
     }
 }

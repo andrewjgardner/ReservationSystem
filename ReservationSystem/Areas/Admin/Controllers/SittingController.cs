@@ -72,6 +72,18 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     reservations.Add(reservationVM);
                 }
 
+                var tables = new List<Models.Sitting.TableData>();
+
+                foreach (Table table in _context.Tables)
+                {
+                    var tableVM = new Models.Sitting.TableData
+                    {
+                        Id = table.Id,
+                        Name = table.TableName
+                    };
+                    tables.Add(tableVM);
+                }
+
                 var sittingVM = new Models.Sitting.Details
                 {
                     SittingId = sittingId,
@@ -79,7 +91,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     EndTime = sitting.EndTime,
                     Title = sitting.Title,
                     SittingType = sitting.SittingType.Description,
-                    ReservationList = reservations
+                    ReservationList = reservations,
+                    AllTables = tables
                 };
                 return View(sittingVM);
             }
