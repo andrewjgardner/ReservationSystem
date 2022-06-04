@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-if (builder.Environment.IsProduction())
+if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
