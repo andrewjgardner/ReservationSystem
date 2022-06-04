@@ -20,7 +20,7 @@ function getSittingsOnDay(selectedDate, sittings) {
 }
 
 async function GetSittings(date) {
-
+    $("#sittings-partial").html("");
     const sittings = await getSittingsOnMonth(date);
     let s = getSittingsOnDay(date, sittings);
     if (s.length == 0) {
