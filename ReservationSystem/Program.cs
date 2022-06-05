@@ -7,6 +7,7 @@ using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
 using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
+using System.Globalization;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,12 +79,12 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error");
+   // app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
 }
 
-app.UseStatusCodePagesWithRedirects("/Error/{0}");
+//app.UseStatusCodePagesWithRedirects("/Error/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -105,6 +106,10 @@ app.MapControllerRoute(
 
 
 app.MapRazorPages();
+
+var cultureInfo = new CultureInfo("en-AU");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 app.Run();
 

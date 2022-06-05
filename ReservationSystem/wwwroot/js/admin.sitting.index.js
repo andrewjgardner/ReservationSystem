@@ -5,7 +5,7 @@
 
 function closeSitting(id) {
 
-    debugger; 
+    //debugger; 
     $.get(`/admin/sitting/close/${id}`, (data) => {
         $('.modal-footer').html(data);
     });
