@@ -1,27 +1,30 @@
 import { View, Text, Button, FlatList } from 'react-native'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../App'
 import { apiFetch, getReservations } from '../services/FetchService'
 import { renderReservation } from '../components/Reservation'
 
 export function HomeScreen({ navigation }) {
-    const { signOut } = useContext(AuthContext)
     const [result, setResult] = useState('')
     const [reservations, setReservations] = useState([])
 
-    async function handleClickReservations() {
+    async function handleGetReservations() {
         const data = await getReservations()
+        if (data.length == 0) {
+            setResult('No reservations found')
+            return
+        }
+        setResult('')
         setReservations(data)
+        console.log(splitArrayOnDays(data))
     }
+
+    useEffect(() => {
+        handleGetReservations()
+    }, [])
 
     return (
         <View>
-            <Text>Home Screen</Text>
-            <Button title="Sign Out" onPress={signOut} />
-            <Button
-                title="Get Reservations"
-                onPress={() => handleClickReservations()}
-            />
             <Text>{result}</Text>
             <FlatList
                 data={reservations}
@@ -30,4 +33,27 @@ export function HomeScreen({ navigation }) {
             />
         </View>
     )
+}
+
+function splitArrayOnDays(array) {
+    debugger
+    let days = []
+    let day = []
+    array.forEach((p) => {
+        if (day.length === 0) {
+            day.push(p)
+        } else {
+            if (
+                new Date(day[0].date).getDate() === new Date(p.date).getDate()
+            ) {
+                day.push(p)
+            } else {
+                days.push(day)
+                day = []
+                day.push(p)
+            }
+        }
+    })
+    days.push(day)
+    return days
 }
