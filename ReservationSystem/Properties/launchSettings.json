@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ReservationSystem": {
+    "ReservationSystem-Dev": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
