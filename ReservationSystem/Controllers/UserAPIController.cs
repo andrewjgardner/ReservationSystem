@@ -50,7 +50,7 @@ namespace ReservationSystem.Controllers
 
         [HttpGet("reservations")]
         public async Task<IEnumerable<Models.UserAPI.Reservation>> GetReservations()
-        {
+        {            
             IdentityUser? user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
