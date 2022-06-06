@@ -3,10 +3,13 @@
 
 <h1>Admin Home</h1>
 
-@if(User.IsInRole("Manager")){
-    <a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
-    <br/>
+@if (User.IsInRole("Manager"))
+{
+	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+	<br />
+	<a type="button" class="btn btn-primary" asp-controller="Report" asp-action="Index">Reports</a>
+	<br />
 }
 <a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Index">View Sittings</a>
-<br/>
+<br />
 <a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Index">View Reservations</a>
