@@ -9,6 +9,11 @@ using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
 using System.Globalization;
 using System.Text;
+using NLog;
+using NLog.Web;
+
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +68,14 @@ builder.Services.AddAuthentication(o =>
             return IdentityConstants.ApplicationScheme;
         };
     });
+
+#region NLog: Setup NLog for Dependency injection
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
+
+#endregion
 
 var app = builder.Build();
 
