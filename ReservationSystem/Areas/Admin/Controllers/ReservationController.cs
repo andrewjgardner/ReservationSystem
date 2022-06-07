@@ -221,6 +221,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     Debug.WriteLineIf(reservation.Id == m.Id, $"Id does match, id is {m.Id}");
                     Debug.Assert(Regex.IsMatch(reservation.Customer.Email, "^\\S+@\\S+$", RegexOptions.IgnoreCase), "Email entered does meet email format");
                     Debug.WriteLineIf(Regex.IsMatch(reservation.Customer.Email, "^\\S+@\\S+$", RegexOptions.IgnoreCase), "Email entered does meet email format.");
+                    Debug.WriteLine("End of reservation Edit post request debugging");
                     Trace.Close();
                     return RedirectToAction(nameof(Index));
                 }
