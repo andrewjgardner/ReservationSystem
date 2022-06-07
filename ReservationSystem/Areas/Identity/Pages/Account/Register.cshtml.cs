@@ -146,7 +146,7 @@ namespace ReservationSystem.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     //TODO: Add restaurantId programmatically
-                    var customer = await _personService.FindOrCreateCustomerAsync(1, Input.PhoneNumber, Input.FirstName, Input.LastName, Input.Email);
+                    var customer = await _personService.FindOrCreateCustomerAsync(1, Input.FirstName, Input.LastName, Input.Email, Input.PhoneNumber);
                     var userId = await _userManager.GetUserIdAsync(user);
                     customer.UserId = userId;
                     await _context.SaveChangesAsync();

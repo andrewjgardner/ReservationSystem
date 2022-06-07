@@ -32,9 +32,9 @@ namespace ReservationSystem.Services
             return person;
         }
 
-        public async Task<Customer> FindOrCreateCustomerAsync(int restaurantId, string phoneNumber, string firstName, string lastName, string email)
+        public async Task<Customer> FindOrCreateCustomerAsync(int restaurantId, string firstName, string lastName, string email, string? phoneNumber=null)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber);
+            var customer = await _context.Customers.FirstOrDefaultAsync(p => p.Email == email);
             if (customer == null )
             {
                 customer = new Customer 

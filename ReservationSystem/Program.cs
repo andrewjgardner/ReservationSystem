@@ -17,12 +17,12 @@ var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurre
 logger.Debug("init main");
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));;
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -38,8 +38,8 @@ builder.Services.AddScoped<UserService>();
 
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    googleOptions.ClientId = builder.Configuration["Google:Id"];
+    googleOptions.ClientSecret = builder.Configuration["Google:Secret"];
 });
 
 builder.Services.AddAuthentication(o =>
