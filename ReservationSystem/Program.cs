@@ -38,8 +38,8 @@ builder.Services.AddScoped<UserService>();
 
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    googleOptions.ClientId = builder.Configuration["GoogleAuth:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"];
 });
 
 builder.Services.AddAuthentication(o =>
