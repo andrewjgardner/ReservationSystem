@@ -1,17 +1,48 @@
 ﻿@{
 }
 
-<h1>Admin Home</h1>
+<h1 class="text-center">Admin Home</h1>
+<div class="container d-flex justify-content-center">
+    <div class="row">
+        <div class="col">
+            @if (User.IsInRole("Manager"))
+            {
+                <div class="card" style="width: 18rem; height: 18rem;">
+                    <div class="card-header">
+                        Manager:
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+                            <br/>
+                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="Reservation" asp-action="Create">Add Reservation</a>
+                            <br/>
+                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="Report" asp-action="Index">Reports</a>
+                            <br/>
+                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="User" asp-action="Index">User Management</a>
+                        </li>
 
-@if (User.IsInRole("Manager"))
-{
-	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
-	<br />
-	<a type="button" class="btn btn-primary" asp-controller="Report" asp-action="Index">Reports</a>
-	<br />
-    <a type="button" class="btn btn-primary" asp-controller="User" asp-action="Index">User Management</a>
-    <br/>
-}
-<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Index">View Sittings</a>
-<br />
-<a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Index">View Reservations</a>
+                    </ul>
+                </div>
+            }
+        </div>
+        <div class="col">
+            <div class="card" style="width: 18rem; height: 18rem;">
+                <div class="card-header">
+                    Staff:
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a type="button" class="btn btn-outline-primary m-1" asp-controller="Sitting" asp-action="Index">View Sittings</a>
+                        <br/>
+                        <a type="button" class="btn btn-outline-primary m-1" asp-controller="Reservation" asp-action="Index">View Reservations</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
