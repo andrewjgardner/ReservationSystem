@@ -53,7 +53,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create(int? sittingId)
+        public async Task<IActionResult> Create()
         {
             try
             {
@@ -66,20 +66,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
                         ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description")
                     },
                 };
-
-                if (sittingId.HasValue)
-                {
-                    var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
-                    m.SittingId = (int)sittingId;
-                    m.StartTime = sitting.StartTime;
-                    m.EndTime = sitting.EndTime;
-                    m.ReservationForm.DateTime = sitting.StartTime;
-                }
-                else
-                {
-                    var sittings = await _context.Sittings.ToListAsync();
-                    m.Sittings = new SelectList(sittings, "Id", "StartTime");
-                }
                 return View(m);
             }
             catch (Exception ex)

@@ -39,8 +39,8 @@ async function GetSittings(date) {
         el.find('.accordion-collapse.collapse.show').attr('id', `collpase${i}`);
         while (interval < endTime.setMinutes(endTime.getMinutes() - s.resDuration)) {
 
-            let btn = $(`<button type="button" class="btn btn-outline-primary m-1" data-sitting-time="${interval}"> ${interval} </button>`);
-            btn.click((e) => selectSittingInterval($(e.target).data('sitting-time')));
+            let btn = $(`<button type="button" class="btn btn-outline-primary m-1" data-sitting-time="${interval}" data-sitting-id="${s.id}"> ${interval} </button>`);
+            btn.click((e) => selectSittingInterval($(e.target).data('sitting-time'),$(e.target).data('sitting-id')));
             el.find('#sitting-times-accordian-body').append(btn);
             interval.setMinutes(interval.getMinutes() + 15)
         }
@@ -48,11 +48,13 @@ async function GetSittings(date) {
     } 
 }
 
-function selectSittingInterval(date) {
+function selectSittingInterval(date, id) {
     let d = new Date(date);
     const format = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
     $("#ReservationForm_DateTime").val(format);
+    $("#SittingId").val(id);
     console.log(format);
+    console.log(id);
 }
 
 function selectDate(date) {
