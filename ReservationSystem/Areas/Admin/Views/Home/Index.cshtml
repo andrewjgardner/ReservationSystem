@@ -5,12 +5,23 @@
 
 @if (User.IsInRole("Manager"))
 {
-	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
-	<br />
-	<a type="button" class="btn btn-primary" asp-controller="Report" asp-action="Index">Reports</a>
-	<br />
-    <a type="button" class="btn btn-primary" asp-controller="User" asp-action="Index">User Management</a>
+<div class="card" style="width: 18rem;">
+  <div class="card-header">
+    Manager:
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+    <a type="button" class="btn btn-outline-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
     <br/>
+	<a type="button" class="btn btn-outline-primary" asp-controller="Reservation" asp-action="Create">Add Reservation</a>
+    <br/>
+	<a type="button" class="btn btn-outline-primary" asp-controller="Report" asp-action="Index">Reports</a>
+    <br/>
+    <a type="button" class="btn btn-outline-primary" asp-controller="User" asp-action="Index">User Management</a>
+    </li>
+    
+  </ul>
+</div>
 }
 <a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Index">View Sittings</a>
 <br />
