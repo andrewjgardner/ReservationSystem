@@ -7,9 +7,6 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
     public class Create
     {
 
-        //[DisplayFormat(DataFormatString = "{0:dddd dd/MM/yyyy}")]
-        //public DateTime Date { get; set; }
-
         [DisplayFormat(DataFormatString = "{0:t}")]
         [Display(Name = "Start time")]
         public DateTime StartTime { get; set; }
@@ -19,16 +16,21 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
         public DateTime EndTime { get; set; }
 
         [Display(Name = "Name")]
+        [Required]
         public string Title { get; set; }
 
-        public SelectList ?SittingTypes { get; set; }
+        public SelectList? SittingTypes { get; set; }
 
+        [Required]
         public int SittingTypeId { get; set; }
 
+        [Required]
         public int RestaurantId { get; set; }
 
+        [Required]
         public int Capacity { get; set; }
 
+        [Required]
         public bool IsClosed { get; set; }
 
         //Recurring
@@ -47,28 +49,44 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
         {
             if (StartTime > EndTime)
             {
-                modelState.AddModelError("Create.EndTime", "End Time must be after Start Time");
+                modelState.AddModelError("EndTime", "End Time must be after Start Time");
             }
-            else if (EndTime < DateTime.Now)
+            else if (EndTime < DateTime.Now && EndTime != DateTime.MinValue)
             {
-                modelState.AddModelError("Create.EndTime", "Sitting can not be in the past");
+                modelState.AddModelError("EndTime", "Sitting can not be in the past");
+            }
+            if (StartTime == DateTime.MinValue)
+            {
+                modelState.AddModelError("StartTime", "Start Time must be set");
+            }
+            if (EndTime == DateTime.MinValue)
+            {
+                modelState.AddModelError("EndTime", "End Time must be set");
+            }
+            if (RestaurantId == 0)
+            {
+                modelState.AddModelError("RestaurantId", "Restaurant must be set");
+            }
+            if (SittingTypeId == 0)
+            {
+                modelState.AddModelError("SittingTypeId", "Sitting Type must be set");
             }
             if (IsRecurring)
             {
                 if (RecurringType == null)
                 {
-                    modelState.AddModelError("Create.RecurringType", "Recurring Type can not be null");
+                    modelState.AddModelError("RecurringType", "Recurring Type can not be null");
                 }
                 if (NumberToSchedule <= 0 || NumberToSchedule == null)
                 {
-                    modelState.AddModelError("Create.NumberToSchedule", "Recurring Type must be a positive integer");
+                    modelState.AddModelError("NumberToSchedule", "Recurring Type must be a positive integer");
                 }
 
-                if (RecurringType=="Weekly")
+                if (RecurringType == "Weekly")
                 {
                     if (RecurringDays.Length != 7)
                     {
-                        modelState.AddModelError("Create.RecurringDays", "RecurringDays must have one bool for each day of the week.");
+                        modelState.AddModelError("RecurringDays", "RecurringDays must have one bool for each day of the week.");
                     }
 
                     bool atLeastOneDaySet = false;
@@ -83,7 +101,7 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
                     }
                     if (!atLeastOneDaySet)
                     {
-                        modelState.AddModelError("Create.RecurringDays", "At least one day must be set.");
+                        modelState.AddModelError("RecurringDays", "At least one day must be set.");
                     }
                 }
             }

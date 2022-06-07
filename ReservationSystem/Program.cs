@@ -1,20 +1,27 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
 using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
+using System.Globalization;
+using System.Text;
+using NLog;
+using NLog.Web;
+
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString).EnableSensitiveDataLogging()); 
+    options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-var testingConnectionString = builder.Configuration.GetConnectionString("TestingConnection");
-builder.Services.AddDbContext<TestingDbContext>(options =>
-    options.UseSqlServer(testingConnectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -25,7 +32,60 @@ builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
 builder.Services.AddScoped<UserService>();
 
+builder.Services.AddAuthentication(o =>
+    {
+        o.DefaultScheme = "JWT_OR_COOKIE";
+        o.DefaultChallengeScheme = "JWT_OR_COOKIE";
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+            RequireExpirationTime = true,
+
+            ClockSkew = TimeSpan.Zero
+        };
+    })
+    .AddPolicyScheme("JWT_OR_COOKIE", null, o =>
+    {
+        o.ForwardDefaultSelector = c =>
+        {
+            string auth = c.Request.Headers[HeaderNames.Authorization];
+            if (!string.IsNullOrWhiteSpace(auth) && auth.StartsWith("Bearer "))
+            {
+                return JwtBearerDefaults.AuthenticationScheme;
+            }
+
+            return IdentityConstants.ApplicationScheme;
+        };
+    });
+
+#region NLog: Setup NLog for Dependency injection
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
+
+#endregion
+
 var app = builder.Build();
+
+app.UseCors(policy =>
+{
+    policy.AllowAnyOrigin();
+    policy.AllowAnyHeader();
+    policy.AllowAnyMethod();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -35,7 +95,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -55,19 +114,16 @@ app.MapControllerRoute(
   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
 
-
-/*
-app.MapAreaControllerRoute(
-            name: "AdminArea",
-            areaName: "Admin",
-            pattern: "Admin/{action=Index}/{id?}");
-*/
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
 app.MapRazorPages();
+
+var cultureInfo = new CultureInfo("en-AU");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 app.Run();
 

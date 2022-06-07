@@ -1,0 +1,72 @@
+﻿<div class="row justify-content-center">
+	<div class="col-md-8">
+		<canvas id="myChart" width="300" height="200">
+		</canvas>
+	</div>
+</div>
+
+
+@section Scripts{
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+	<script>
+		const ctx = $('#myChart');
+
+		$(() => {
+			getSittingData()
+		})
+
+		async function getSittingData() {
+			await fetch(
+				'report/sittingdata',
+				{
+					method: 'GET',
+					dataType: 'json'
+				}
+			)
+				.then(response => response.json())
+				.then(data => drawSittingGraph(data))
+		}
+
+		function drawSittingGraph(data) {
+			new Chart(ctx, {
+				type: 'line',
+				data: {
+					datasets: [{
+						label: 'Guests per month',
+						data: data,
+						fill: true,
+						backgroundColor: '#0d47a1'
+					}]
+				},
+				options: {
+					scales: {
+						x: {
+							type: 'time',
+							time: {
+								unit: 'month'
+							}
+						}
+					},
+					parsing: {
+						xAxisKey: 'month',
+						yAxisKey: 'peopleBooked'
+					},
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 24
+								}
+							}
+						}
+					}
+				}
+			});
+
+		}
+
+
+	</script>
+}
