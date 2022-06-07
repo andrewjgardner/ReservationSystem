@@ -1,6 +1,7 @@
 ﻿@using System.Security.Policy
 @model ReservationSystem.Areas.Admin.Models.User.Index
 @{
+	var users = Model.Users;
 	ViewData["Title"] = "Users";
 }
 
@@ -21,7 +22,15 @@
 			{	
 			<tr> 
 				<td>@u.Email</td>
-				<td>@u.Roles[0]</td>
+				<td>
+					@if (u.Roles.Count > 0)
+					{
+						<p>@u.Roles[0]</p>
+					}
+					else {
+						<p>None</p>
+					}
+				</td>
 				<td>
 					<a type="button" class="btn btn-primary" asp-controller="User" asp-action="Edit" asp-route-UserId = "@u.Id" >Edit User</a>
 				</td>
