@@ -30,6 +30,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddAuthentication(o =>
     {
