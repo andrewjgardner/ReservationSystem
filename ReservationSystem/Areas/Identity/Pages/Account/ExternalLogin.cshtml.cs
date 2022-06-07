@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ReservationSystem.Services;
 using ReservationSystem.Data.Context;
+using ReservationSystem.Data;
 
 namespace ReservationSystem.Areas.Identity.Pages.Account
 {
@@ -175,6 +176,8 @@ namespace ReservationSystem.Areas.Identity.Pages.Account
                     var customer = await _personService.FindOrCreateCustomerAsync(1, firstName, lastName, Input.Email);
                     customer.UserId = await _userManager.GetUserIdAsync(user);
                     await _context.SaveChangesAsync();
+
+                    await _userManager.AddToRoleAsync(user, Roles.Member.ToString());
 
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
