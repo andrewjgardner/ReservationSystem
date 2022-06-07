@@ -101,7 +101,7 @@ namespace ReservationSystem.Services
                 await _userStore.CreateAsync(user);
                 await _userStore.AddToRoleAsync(user, "Member");
 
-                var customer = await _personService.FindOrCreateCustomerAsync(1, user.PhoneNumber, "John", "Smith", user.Email);
+                var customer = await _personService.FindOrCreateCustomerAsync(1, "John", "Smith", user.Email, user.PhoneNumber);
                 customer.UserId = await _userStore.GetUserIdAsync(user);
 
                 await _context.SaveChangesAsync();

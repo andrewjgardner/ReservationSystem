@@ -89,7 +89,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
             {
                 try
                 {
-                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.Phone, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email);
+                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email, m.ReservationForm.Phone);
                     var reservation = new Reservation
                     {
                         StartTime = m.ReservationForm.DateTime,

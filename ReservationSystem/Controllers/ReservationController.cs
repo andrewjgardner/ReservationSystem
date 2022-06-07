@@ -110,7 +110,7 @@ namespace ReservationSystem.Controllers
                     var reservationStatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
                     var reservationOrigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
 
-                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.Phone, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email);
+                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email, m.ReservationForm.Phone);
                     var reservation = new Reservation
                     {
                         StartTime = m.ReservationForm.DateTime,
