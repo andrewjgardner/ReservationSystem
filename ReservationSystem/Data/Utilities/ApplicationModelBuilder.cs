@@ -14,7 +14,7 @@ namespace ReservationSystem.Data.Utilities
             ModelRestaurant();
             ModelSitting();
             ModelTable();
-            ModelReservation();
+            //ModelReservation();
             //ModelReservationTable();
         }
 

@@ -9,12 +9,14 @@ using ReservationSystem.Data.Utilities;
 using ReservationSystem.Services;
 using System.Globalization;
 using System.Text;
+using NLog;
+using NLog.Web;
+
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
 var builder = WebApplication.CreateBuilder(args);
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddUserSecrets<Program>();
-}
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,6 +30,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddAuthentication(o =>
     {
@@ -67,6 +70,14 @@ builder.Services.AddAuthentication(o =>
         };
     });
 
+#region NLog: Setup NLog for Dependency injection
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+builder.Host.UseNLog();
+
+#endregion
+
 var app = builder.Build();
 
 app.UseCors(policy =>
@@ -83,12 +94,11 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-   // app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    //app.UseHsts();
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
-//app.UseStatusCodePagesWithRedirects("/Error/{0}");
+app.UseStatusCodePagesWithRedirects("/Error/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

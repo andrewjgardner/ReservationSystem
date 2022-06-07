@@ -1,0 +1,42 @@
+﻿@model ReservationSystem.Areas.Admin.Models.User.Edit
+
+@{
+	ViewData["Title"] = "Add User";
+}
+<h1 class="display-4 text-primary pb-4 fw-4">Add User</h1>
+
+<div class="col-md-6 offset-md-3">
+	<form asp-action=Edit>
+		<div class="user-details">
+			<div class="form-group">
+				<label for="email">E-Mail</label>
+				<input asp-for=Email type="email" class="form-control" value="@Model.Email" required>
+			</div>
+			<div class="form-group">
+				<label for="phone">Phone Number</label>
+				<input asp-for=Phone class="form-control" value="@Model.Phone">
+			</div>
+			<div class="form-group">
+				<label for="email">Password</label>
+				<input asp-for=Password type="password" class="form-control" id="password" placeholder="Enter new password" required>
+			</div>
+			<div class="form-group">
+				<label for="confirmpassword">Confirm Password</label>
+				<input class="form-control" type="password" id="confirmPassword" placeholder="Confirm password" required>
+			</div>
+			<div class="form-group">
+				<p>Role: </p>
+				<select asp-for=RoleName asp-items=Model.Roles></select>
+			</div>
+		</div>
+		<br/>
+		<div>
+			<button type="submit" class="btn btn-primary" id="submit">Submit</button>
+		</div>
+		<input type="hidden" asp-for=Id />
+	</form>
+</div>
+
+@section Scripts {
+	<script src="~/js/admin.user.passwordvalidate.js"></script>
+}

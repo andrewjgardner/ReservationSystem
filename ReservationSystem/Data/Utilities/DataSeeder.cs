@@ -453,57 +453,6 @@ namespace ReservationSystem.Data.Utilities
                     ReservationOriginId = 3,
                     CustomerId = 13,
                 }
-                , new Reservation
-                {
-                    Id = 4,
-                    StartTime = new DateTime(2022, 07, 13, 19, 30, 00),
-                    Comments = "WOW!",
-                    Guests = 5,
-                    SittingId = 3,
-                    ReservationStatusId = 3,
-                    ReservationOriginId = 3,
-                    CustomerId = 14,
-                }, new Reservation
-                {
-                    Id = 5,
-                    StartTime = new DateTime(2022, 07, 13, 10, 30, 00),
-                    Comments = "WOW!",
-                    Guests = 5,
-                    SittingId = 1,
-                    ReservationStatusId = 3,
-                    ReservationOriginId = 3,
-                    CustomerId = 14,
-                }, new Reservation
-                {
-                    Id = 6,
-                    StartTime = new DateTime(2022, 07, 13, 13, 30, 00),
-                    Comments = "WOW!",
-                    Guests = 5,
-                    SittingId = 2,
-                    ReservationStatusId = 3,
-                    ReservationOriginId = 3,
-                    CustomerId = 14,
-                }, new Reservation
-                {
-                    Id = 7,
-                    StartTime = new DateTime(2022, 07, 13, 14, 30, 00),
-                    Comments = "WOW!",
-                    Guests = 5,
-                    SittingId = 2,
-                    ReservationStatusId = 3,
-                    ReservationOriginId = 3,
-                    CustomerId = 14,
-                }, new Reservation
-                {
-                    Id = 8,
-                    StartTime = new DateTime(2022, 07, 13, 15, 30, 00),
-                    Comments = "WOW!",
-                    Guests = 5,
-                    SittingId = 3,
-                    ReservationStatusId = 3,
-                    ReservationOriginId = 3,
-                    CustomerId = 14,
-                }
                 );
         }
 
