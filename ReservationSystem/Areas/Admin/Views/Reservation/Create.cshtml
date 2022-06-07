@@ -18,13 +18,6 @@
 		<form asp-area=Admin asp-controller=Reservation asp-action=Create>
 			<partial name="_ReservationFormPartial" for="ReservationForm" />
 			<partial name="_AdminReservationFormPartial" for="AdminReservationForm" />
-			@if (Model.SittingId == 0)
-			{
-				<div class="form-group">
-					<p>Sitting: </p>
-					<select asp-for=SittingId asp-items=Model.Sittings></select>
-				</div>
-			}
 			<div>
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</div>

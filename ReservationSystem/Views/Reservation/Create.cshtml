@@ -1,16 +1,24 @@
 ﻿@model ReservationSystem.Models.Reservation.Create
 
 <div class="row text-center">
-	<h1 class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
-	<h2>@Model.StartTime - @Model.EndTime</h2>
+    <h1 class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
 </div>
 
-<div class="col-md-6 offset-md-3">
-	<form asp-action=Create>
-		<partial name="_ReservationFormPartial" for="ReservationForm" />
-		<div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</div>
-		<input asp-for=SittingId />
-	</form>
+<div class="row">
+    <div class="col-md-5 offset-md-1">
+        <partial name="_Calendar" />
+    </div>
+    <div class="col-md-5">
+        <form asp-action=Create>
+            <partial name="_ReservationFormPartial" for="ReservationForm" />
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <input type="hidden" asp-for=SittingId />
+        </form>
+    </div>
 </div>
+@section Scripts{
+<script src="/js/calendar.js"></script>
+<script src="~/js/calendarPartial.js"></script>
+}

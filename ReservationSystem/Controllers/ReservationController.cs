@@ -54,26 +54,15 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create(int sittingId)
+        public async Task<IActionResult> Create()
         {
             try
             {
-                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
-
-                if (sitting == null)
-                {
-                    return NotFound();
-                }
 
                 var m = new Models.Reservation.Create
                 {
-                    ReservationForm = new Models.Reservation.ReservationForm()
-                    {
-                        DateTime = sitting.StartTime
-                    },
-                    SittingId = sittingId,
-                    StartTime = sitting.StartTime,
-                    EndTime = sitting.EndTime
+                    ReservationForm = new Models.Reservation.ReservationForm(),
+                    
                 };
 
                 if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Roles.Member)))

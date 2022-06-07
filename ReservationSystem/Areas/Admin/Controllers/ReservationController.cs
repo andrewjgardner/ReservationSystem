@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
 using ReservationSystem.Services;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
@@ -26,6 +28,9 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            Trace.Listeners.Add(new TextWriterTraceListener("MyOutput.log"));
+            Debug.WriteLine("Debugging has started in reservation index");
+            Debug.WriteLine("Checking if Reservations are in index");
             var m = new Models.Reservation.Index
             {
                 Reservations = await _context.Reservations
@@ -39,12 +44,16 @@ namespace ReservationSystem.Areas.Admin.Controllers
                     })
                     .ToArrayAsync()
             };
-
+            Debug.Assert(m is { }, "reservations is null");
+            Debug.WriteLineIf(m is null, "Reservations is null");
+            Debug.WriteLineIf(m is { }, $"number of reservations = {m.Reservations.Length}");
+            Debug.WriteLine("End of reservation index debugging");
+            Trace.Close();
             return View(m);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create(int? sittingId)
+        public async Task<IActionResult> Create()
         {
             try
             {
@@ -57,20 +66,6 @@ namespace ReservationSystem.Areas.Admin.Controllers
                         ReservationOrigin = new SelectList(await _context.ReservationOrigins.ToListAsync(), "Id", "Description")
                     },
                 };
-
-                if (sittingId.HasValue)
-                {
-                    var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
-                    m.SittingId = (int)sittingId;
-                    m.StartTime = sitting.StartTime;
-                    m.EndTime = sitting.EndTime;
-                    m.ReservationForm.DateTime = sitting.StartTime;
-                }
-                else
-                {
-                    var sittings = await _context.Sittings.ToListAsync();
-                    m.Sittings = new SelectList(sittings, "Id", "StartTime");
-                }
                 return View(m);
             }
             catch (Exception ex)
@@ -180,6 +175,9 @@ namespace ReservationSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Models.Reservation.Edit m)
         {
+            Trace.Listeners.Add(new TextWriterTraceListener("MyOutput.log"));
+            Debug.WriteLine("Debugging in Edit Post request.");
+            Debug.WriteLine("Checking to make sure no errors occur");
             var reservation = await _context.Reservations.Include(c => c.Customer).FirstOrDefaultAsync(r => r.Id == m.Id);
             var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == m.SittingId);
             if (reservation == null || sitting == null)
@@ -205,7 +203,12 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
                     _context.Reservations.Update(reservation);
                     await _context.SaveChangesAsync();
-
+                    Debug.Assert(reservation.Id == m.Id, "Id does not match");
+                    Debug.WriteLineIf(reservation.Id == m.Id, $"Id does match, id is {m.Id}");
+                    Debug.Assert(Regex.IsMatch(reservation.Customer.Email, "^\\S+@\\S+$", RegexOptions.IgnoreCase), "Email entered does meet email format");
+                    Debug.WriteLineIf(Regex.IsMatch(reservation.Customer.Email, "^\\S+@\\S+$", RegexOptions.IgnoreCase), "Email entered does meet email format.");
+                    Debug.WriteLine("End of reservation Edit post request debugging");
+                    Trace.Close();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception e)
