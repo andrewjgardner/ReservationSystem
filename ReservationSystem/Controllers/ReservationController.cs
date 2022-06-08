@@ -54,26 +54,15 @@ namespace ReservationSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create(int sittingId)
+        public async Task<IActionResult> Create()
         {
             try
             {
-                var sitting = await _context.Sittings.FirstOrDefaultAsync(s => s.Id == sittingId);
-
-                if (sitting == null)
-                {
-                    return NotFound();
-                }
 
                 var m = new Models.Reservation.Create
                 {
-                    ReservationForm = new Models.Reservation.ReservationForm()
-                    {
-                        DateTime = sitting.StartTime
-                    },
-                    SittingId = sittingId,
-                    StartTime = sitting.StartTime,
-                    EndTime = sitting.EndTime
+                    ReservationForm = new Models.Reservation.ReservationForm(),
+                    
                 };
 
                 if (User.Identity.IsAuthenticated && User.IsInRole(nameof(Roles.Member)))
@@ -121,7 +110,7 @@ namespace ReservationSystem.Controllers
                     var reservationStatus = await _context.ReservationStatuses.Where(rs => rs.Description == "Pending").FirstOrDefaultAsync();
                     var reservationOrigin = await _context.ReservationOrigins.Where(ro => ro.Description == "Online").FirstOrDefaultAsync();
 
-                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.Phone, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email);
+                    var customer = await _personService.FindOrCreateCustomerAsync(_restaurantId, m.ReservationForm.FirstName, m.ReservationForm.LastName, m.ReservationForm.Email, m.ReservationForm.Phone);
                     var reservation = new Reservation
                     {
                         StartTime = m.ReservationForm.DateTime,

@@ -22,7 +22,7 @@ namespace ReservationSystem.Controllers
         {
             return _context.Sittings
                 .Where(m => m.StartTime.Year == date.Year && m.StartTime.Month == date.Month)
-                .Select(s => new Get { Id = s.Id,Title = s.Title, StartTime = s.StartTime, EndTime = s.EndTime})
+                .Select(s => new Get { Id = s.Id,Title = s.Title, StartTime = s.StartTime, EndTime = s.EndTime, resDuration = s.ResDuration})
                 .ToList();
         }
     }
