@@ -1,4 +1,4 @@
-import { View, Text, Button, FlatList } from 'react-native'
+import { View, Text, Button, FlatList, StyleSheet } from 'react-native'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../App'
 import { apiFetch, getReservations } from '../services/FetchService'
@@ -16,7 +16,6 @@ export function HomeScreen({ navigation }) {
         }
         setResult('')
         setReservations(data)
-        console.log(splitArrayOnDays(data))
     }
 
     useEffect(() => {
@@ -25,7 +24,7 @@ export function HomeScreen({ navigation }) {
 
     return (
         <View>
-            <Text>{result}</Text>
+            <Text style={styles.text}>{result}</Text>
             <FlatList
                 data={reservations}
                 renderItem={({ item }) => renderReservation(item)}
@@ -35,25 +34,11 @@ export function HomeScreen({ navigation }) {
     )
 }
 
-function splitArrayOnDays(array) {
-    debugger
-    let days = []
-    let day = []
-    array.forEach((p) => {
-        if (day.length === 0) {
-            day.push(p)
-        } else {
-            if (
-                new Date(day[0].date).getDate() === new Date(p.date).getDate()
-            ) {
-                day.push(p)
-            } else {
-                days.push(day)
-                day = []
-                day.push(p)
-            }
-        }
-    })
-    days.push(day)
-    return days
-}
+const styles = StyleSheet.create({
+    text: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+})
