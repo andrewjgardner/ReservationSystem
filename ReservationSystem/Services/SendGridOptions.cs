@@ -1,6 +1,6 @@
 ﻿namespace ReservationSystem.Services
 {
-    public class EmailSenderOptions
+    public class SendGridOptions
     {
         public string? SendGridKey { get; set; }
     }
