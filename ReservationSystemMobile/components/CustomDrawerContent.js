@@ -3,7 +3,7 @@ import {
     DrawerItemList,
     DrawerItem,
 } from '@react-navigation/drawer'
-import { View } from 'react-native-web'
+import { View, StyleSheet } from 'react-native'
 import { UserDetails } from './UserDetails'
 import { useContext } from 'react'
 import { AuthContext } from '../App'
@@ -19,10 +19,20 @@ export function CustomDrawerContent(props) {
                 <UserDetails />
                 <DrawerItemList {...props} />
             </View>
-            <DrawerItem
-                label="Sign Out"
-                onPress={() => signOut()} 
-            />
+            <View style={styles.signOutDrawerItem}>
+                <DrawerItem label="Sign Out" onPress={() => signOut()} />
+            </View>
         </DrawerContentScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    signOutDrawerItem: {
+        textAlign: 'center',
+        marginVertical: 10,
+        marginHorizontal: 10,
+        paddingVertical: 10,
+        borderRadius: 4,
+        backgroundColor: '#e0efff',
+    },
+})

@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));;
+    options.UseSqlServer(connectionString)); ;
 
 // Add services to the container.
 
@@ -37,11 +37,6 @@ builder.Services.Configure<EmailSenderOptions>(builder.Configuration);
 
 //EmailService.Main();
 
-builder.Services.AddAuthentication().AddGoogle(googleOptions =>
-{
-    googleOptions.ClientId = builder.Configuration["Google:Id"];
-    googleOptions.ClientSecret = builder.Configuration["Google:Secret"];
-});
 
 builder.Services.AddAuthentication(o =>
     {
@@ -79,7 +74,12 @@ builder.Services.AddAuthentication(o =>
 
             return IdentityConstants.ApplicationScheme;
         };
-    });
+    }).AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Google:Id"];
+    googleOptions.ClientSecret = builder.Configuration["Google:Secret"];
+});
+
 
 #region NLog: Setup NLog for Dependency injection
 

@@ -1,10 +1,11 @@
+import 'react-native-gesture-handler'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { NavigationContainer, StackActions } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { HomeScreen, SignInScreen, SplashScreen } from './pages'
-import { apiFetch } from './services/FetchService'
+import { apiFetch, getLoggedInUser } from './services/FetchService'
 import {
     useState,
     useContext,
@@ -58,6 +59,12 @@ export default function App() {
                 userToken = await AsyncStorage.getItem('userToken')
             } catch (e) {}
             dispatch({ type: 'RESTORE_TOKEN', token: userToken })
+
+            try {
+                let userDetails = await getLoggedInUser()
+            } catch (e) {
+                dispatch({ type: 'SIGN_OUT' })
+            }
         }
         bootstrapAsync()
     }, [])
@@ -99,13 +106,17 @@ export default function App() {
             <NavigationContainer>
                 <Stack.Navigator>
                     {authState.isLoading ? (
-                        <Stack.Screen name="Splash" component={SplashScreen} />
+                        <Stack.Screen
+                            name="Splash"
+                            component={SplashScreen}
+                            options={{ headerShown: false }}
+                        />
                     ) : authState.userToken == null ? (
                         <Stack.Screen
                             name="SignIn"
                             component={SignInScreen}
                             options={{
-                                title: 'Sign In',
+                                headerShown: false,
                                 animationTypeForReplace: authState.isSignOut
                                     ? 'pop'
                                     : 'push',
