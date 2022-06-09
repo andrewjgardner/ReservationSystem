@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/homePage.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/jquery-ui-1.13.1/jquery-ui.css">
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>

@@ -1,8 +1,7 @@
 ﻿@{
 }
 
-<h1 class="text-center">Admin Home</h1>
-<div class="container d-flex justify-content-center">
+<div class="container d-flex justify-content-center py-3">
     <div class="row">
         <div class="col">
             @if (User.IsInRole("Manager"))
@@ -11,18 +10,13 @@
                     <div class="card-header">
                         Manager:
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
-                            <br/>
-                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="Reservation" asp-action="Create">Add Reservation</a>
-                            <br/>
-                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="Report" asp-action="Index">Reports</a>
-                            <br/>
-                            <a type="button" class="btn btn-outline-primary m-1" asp-controller="User" asp-action="Index">User Management</a>
-                        </li>
+                    <div>
+                        <a type="button" class="btn btn-primary x" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+                        <a type="button" class="btn btn-primary x" asp-controller="Reservation" asp-action="Create">Add Reservation</a>
+                        <a type="button" class="btn btn-primary x" asp-controller="Report" asp-action="Index">Reports</a>
+                        <a type="button" class="btn btn-primary x" asp-controller="User" asp-action="Index">User Management</a>
+                    </div>
 
-                    </ul>
                 </div>
             }
         </div>
@@ -31,18 +25,18 @@
                 <div class="card-header">
                     Staff:
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <a type="button" class="btn btn-outline-primary m-1" asp-controller="Sitting" asp-action="Index">View Sittings</a>
-                        <br/>
-                        <a type="button" class="btn btn-outline-primary m-1" asp-controller="Reservation" asp-action="Index">View Reservations</a>
-                    </li>
-
-                </ul>
+                <div>
+                    <a type="button" class="btn btn-primary x" asp-controller="Sitting" asp-action="Index">View Sittings</a>
+                    <br/>
+                    <a type="button" class="btn btn-primary x" asp-controller="Reservation" asp-action="Index">View Reservations</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/cardButtons.css" />
+}
 
 
