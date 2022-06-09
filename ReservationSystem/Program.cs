@@ -32,7 +32,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ReservationService>();
 builder.Services.AddScoped<UserService>();
-//builder.Services.AddScoped<EmailService>();
+builder.Services.AddTransient<EmailService>();
+builder.Services.Configure<EmailSenderOptions>(builder.Configuration);
 
 //EmailService.Main();
 
