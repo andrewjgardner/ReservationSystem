@@ -63,7 +63,6 @@ export default function App() {
             try {
                 let userDetails = await getLoggedInUser()
             } catch (e) {
-                console.log(e)
                 dispatch({ type: 'SIGN_OUT' })
             }
         }
