@@ -1,0 +1,26 @@
+﻿
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../lib/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+$primary:#2f6f4f; 
+$backup:#447d61;
+$button-color:#2f6f4f;
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../lib/bootstrap/scss/variables";
+@import "../lib/bootstrap/scss/mixins";
+
+// 4. Include any optional Bootstrap components as you like
+@import "../lib/bootstrap/scss/root";
+@import "../lib/bootstrap/scss/reboot";
+@import "../lib/bootstrap/scss/type";
+@import "../lib/bootstrap/scss/images";
+@import "../lib/bootstrap/scss/containers";
+@import "../lib/bootstrap/scss/grid";
+
+// 5. Add additional custom code here
+
+.btn-primary {
+    @include button-variant($primary, darken($primary, 10%), color-contrast($primary), lighten($primary,5%), lighten($primary, 5%), color-contrast($primary));
+}
