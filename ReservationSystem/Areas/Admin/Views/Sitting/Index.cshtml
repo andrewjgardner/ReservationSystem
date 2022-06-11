@@ -7,7 +7,9 @@
 
 <div class="container text-center">
 	<h1 class="display-4 text-primary pb-4 fw-4">Sittings</h1>
-	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+	<div class="d-flex justify-content-end mb-4">
+		<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+	</div>
 	<table class="table table-hover table-striped">
 		<thead class="table-primary">
 			<tr>
@@ -17,7 +19,8 @@
 				<th> Title </th>
 				<th> PercentFull </th>
 				<th> View Sitting Details </th>
-				@if(User.IsInRole("Manager")){
+				@if (User.IsInRole("Manager"))
+				{
 					<th> Edit Sitting Details </th>
 					<th> Close Sitting </th>
 				}
@@ -40,9 +43,10 @@
 						<td>
 							<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Sitting", new {sittingId = r.SittingID})'">Edit Details</button>
 						</td>
-						@if(!r.IsClosed){
+						@if (!r.IsClosed)
+						{
 							<td>
-								<button type="button" class="btn btn-primary btn-close-sitting" data-sitting-id="@r.SittingID"   data-bs-toggle="modal" data-bs-target="#closeSittingModal">Close Sitting</button>
+								<button type="button" class="btn btn-primary btn-close-sitting" data-sitting-id="@r.SittingID" data-bs-toggle="modal" data-bs-target="#closeSittingModal">Close Sitting</button>
 							</td>
 						}
 						else
@@ -76,5 +80,5 @@
 </div>
 
 @section scripts{
-    <script src="~/js/admin.sitting.index.js"></script>
+	<script src="~/js/admin.sitting.index.js"></script>
 }

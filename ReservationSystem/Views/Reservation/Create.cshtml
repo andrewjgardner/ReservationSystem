@@ -1,24 +1,26 @@
 ﻿@model ReservationSystem.Models.Reservation.Create
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+
 <div class="row text-center">
-    <h1 class="display-4 text-primary pb-4 fw-4">Reservation Form</h1>
+	<h1 class="fs-2 mt-3 text-primary">Book a Reservation</h1>
 </div>
 
-<div class="row">
-    <div class="col-md-5 offset-md-1">
-        <partial name="_Calendar" />
-    </div>
-    <div class="col-md-5">
-        <form asp-action=Create>
-            <partial name="_ReservationFormPartial" for="ReservationForm" />
-            <div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-            <input type="hidden" asp-for=SittingId />
-        </form>
-    </div>
+<div class="justify-content-center d-flex p-4">
+	<div class="col-md-4 me-4">
+		<partial name="_Calendar" class="border border-2" />
+	</div>
+	<div class="col-md-4">
+		<form asp-action=Create>
+			<partial name="_ReservationFormPartial" for="ReservationForm" />
+			<div class="d-grid gap-2">
+				<button type="submit" class="btn btn-success">Submit</button>
+			</div>
+			<input type="hidden" asp-for=SittingId />
+		</form>
+	</div>
 </div>
 @section Scripts{
-<script src="/js/calendar.js"></script>
-<script src="~/js/calendarPartial.js"></script>
+	<script src="/js/calendar.js"></script>
+	<script src="~/js/calendarPartial.js"></script>
 }
