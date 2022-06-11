@@ -6,14 +6,14 @@
 	<h1 class="display-4 text-primary pb-4 fw-4">Book a Reservation</h1>
 </div>
 
-<div class="row justify-content-center h-75">
+<div class="justify-content-center d-flex p-4 m-4">
 	<div class="col-md-4 me-4">
 		<partial name="_Calendar" class="border border-2" />
 	</div>
 	<div class="col-md-4">
 		<form asp-action=Create>
 			<partial name="_ReservationFormPartial" for="ReservationForm" />
-			<div>
+			<div class="d-grid gap-2">
 				<button type="submit" class="btn btn-success">Submit</button>
 			</div>
 			<input type="hidden" asp-for=SittingId />

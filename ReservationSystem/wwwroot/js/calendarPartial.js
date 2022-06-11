@@ -43,10 +43,10 @@ async function GetSittings(date) {
         el.find('.accordion-collapse.collapse').attr('id', `collpase${i}`);
         while (interval < endTime.setMinutes(endTime.getMinutes() - s.resDuration)) {
 
-            let btn = $(`<button type="button" class="btn btn-outline-primary m-1 time-slot" data-sitting-time="${interval}" data-sitting-id="${s.id}"> ${interval.toLocaleTimeString('en-AU', { hour: 'numeric', minute: 'numeric', hour12: true })} </button>`);
+            let btn = $(`<button type="button" class="btn btn-secondary m-1 time-slot" data-sitting-time="${interval}" data-sitting-id="${s.id}"> ${interval.toLocaleTimeString('en-AU', { hour: 'numeric', minute: 'numeric', hour12: true })} </button>`);
             btn.click((e) => {
-                $('.time-slot').removeClass('selected-time-slot');
-                $(e.target).addClass('selected-time-slot');
+                $('.time-slot').removeClass('btn-success');
+                $(e.target).addClass('btn-success');
                 selectSittingInterval($(e.target).data('sitting-time'), $(e.target).data('sitting-id'));
             });
             el.find('#sitting-times-accordian-body').append(btn);

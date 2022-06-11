@@ -21,8 +21,8 @@ namespace ReservationSystem.Controllers
         public ICollection<Get> Get(DateTime date)
         {
             return _context.Sittings
-                .Where(m => m.StartTime.Year == date.Year && m.StartTime.Month == date.Month)
-                .Select(s => new Get { Id = s.Id,Title = s.Title, StartTime = s.StartTime, EndTime = s.EndTime, resDuration = s.ResDuration})
+                .Where(m => m.StartTime.Year == date.Year && m.StartTime.Month == date.Month && !m.IsClosed && m.StartTime > DateTime.Now)
+                .Select(s => new Get { Id = s.Id, Title = s.Title, StartTime = s.StartTime, EndTime = s.EndTime, resDuration = s.ResDuration })
                 .ToList();
         }
     }
