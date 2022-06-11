@@ -61,8 +61,6 @@ function selectSittingInterval(date, id) {
     const format = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
     $("#ReservationForm_DateTime").val(format);
     $("#SittingId").val(id);
-    console.log(format);
-    console.log(id);
 }
 
 function selectDate(date) {
@@ -72,34 +70,41 @@ function selectDate(date) {
     });
     $('.calendar-container').hide();
     $('#calendar-show').show();
-    $('#calendar-show').html(d.toLocaleDateString());
-    updateSessionPartial(date);
+    $('#sitting-date').show();
+    $('#sitting-date-card').show();
+    $('#sitting-date').text(`${d.toLocaleDateString()}`);
+    GetSittings(d);
 }
 
 $("#calendar-show").click(() => {
     $('#calendar-show').hide();
+    $('#sitting-date').hide();
+    $('#sitting-date-card').hide();
     $('.calendar-container').show();
     $("#sittings-partial").html("");
 })
 
-async function updateSessionPartial(date) {
-    var d = new Date(date);
-    d.setHours(14);
+async function updateSessionPartialMonth(date) {
+    let d = new Date(date);
+    const current = new Date();
+    if (d.getMonth() == current.getMonth() && d.getFullYear() == current.getFullYear()) {
+        d = current;
+    }
     const sittings = await getSittingsOnMonth(d);
     $('.calendar-container').updateCalendarOptions({
-        date: date,
+        date: d,
         disable: disableDates
     });
-    GetSittings(d);
+    $("#sittings-partial").html("");
 }
 
 const calendar = $('.calendar-container').calendar({
     weekDayLength: 1,
     date: new Date(),
     onClickDate: selectDate,
-    onChangeMonth: updateSessionPartial,
-    onClickMonthNext: updateSessionPartial,
-    onClickMonthPrev: updateSessionPartial,
+    onChangeMonth: updateSessionPartialMonth,
+    onClickMonthNext: updateSessionPartialMonth,
+    onClickMonthPrev: updateSessionPartialMonth,
     startOnMonday: false,
     prevButton: "<",
     nextButton: ">",
@@ -110,7 +115,7 @@ function disableDates(date) {
     const sittings = JSON.parse(sessionStorage.getItem('sittings'));
     for (var i = 0; i < sittings.length; i++) {
         let day = new Date(sittings[i].startTime);
-        if (day.getDate() == date.getDate()) {
+        if (day.getDate() == date.getDate() && day.getMonth() == date.getMonth()) {
             return false;
         }
     }

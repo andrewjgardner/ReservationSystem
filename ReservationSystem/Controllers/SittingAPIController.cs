@@ -20,8 +20,9 @@ namespace ReservationSystem.Controllers
         [HttpGet("{date}")]
         public ICollection<Get> Get(DateTime date)
         {
+            var d = date.ToLocalTime();
             return _context.Sittings
-                .Where(m => m.StartTime.Year == date.Year && m.StartTime.Month == date.Month && !m.IsClosed && m.StartTime > DateTime.Now)
+                .Where(m => m.StartTime.Year == d.Year && m.StartTime.Month == d.Month && !m.IsClosed && m.StartTime > DateTime.Now)
                 .Select(s => new Get { Id = s.Id, Title = s.Title, StartTime = s.StartTime, EndTime = s.EndTime, resDuration = s.ResDuration })
                 .ToList();
         }
