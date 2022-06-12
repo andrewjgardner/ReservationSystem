@@ -10,7 +10,7 @@ using System.Linq;
 namespace ReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Employee, Manager")]
+    [Authorize(Roles = "Manager")]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;

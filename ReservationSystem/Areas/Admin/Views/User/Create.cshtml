@@ -3,35 +3,35 @@
 @{
 	ViewData["Title"] = "Add User";
 }
-<h1 class="display-4 text-primary pb-4 fw-4">Add User</h1>
+<h1 class="display-4 text-center text-primary pb-4 fw-4">Add User</h1>
 
 <div class="col-md-6 offset-md-3">
 	<form asp-action=Create>
 		<div class="user-details">
-			<div class="form-group">
-				<label for="email">E-Mail</label>
+			<div class="form-group mb-3">
+				<label class="form-label" for="email">E-Mail</label>
 				<input asp-for=Email type="email" class="form-control" placeholder="Enter email" required>
 			</div>
-			<div class="form-group">
-				<label for="phone">Phone Number</label>
+			<div class="form-group mb-3">
+				<label class="form-label" for="phone">Phone Number</label>
 				<input asp-for=Phone class="form-control" placeholder="Enter phone number">
 			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input asp-for=Password class="form-control" id="password" placeholder="Enter password" required>
+			<div class="form-group mb-3">
+				<label class="form-label" for="password">Password</label>
+				<input type="password" asp-for=Password class="form-control" id="password" placeholder="Enter password" required>
 			</div>
-			<div class="form-group">
-				<label for="confirmpassword">Confirm Password</label>
-				<input class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+			<div class="form-group mb-3">
+				<label class="form-label" for="confirmpassword">Confirm Password</label>
+				<input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
 			</div>
-			<div class="form-group">
-				<p>Role: </p>
-				<select asp-for=RoleName asp-items=Model.Roles></select>
+			<div class="form-group mb-3">
+				<label class="form-label">Role</label>
+				<select class="form-select" asp-for=RoleName asp-items=Model.Roles></select>
 			</div>
 		</div>
-		<br/>
-		<div>
-			<button type="submit" id="submit" class="btn btn-primary">Submit</button>
+		<br />
+		<div class="d-grid gap-2 my-3">
+			<button id="submit" type="submit" class="btn btn-success">Submit</button>
 		</div>
 	</form>
 </div>
