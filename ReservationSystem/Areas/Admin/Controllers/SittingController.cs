@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
+using ReservationSystem.Utilities;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
@@ -13,33 +16,55 @@ namespace ReservationSystem.Areas.Admin.Controllers
     public class SittingController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
         private readonly int _restaurantId;
 
-        public SittingController(ApplicationDbContext context)
+        public SittingController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             _restaurantId = 1;
+            _configuration = configuration;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, int? pageIndex)
         {
-            var m = new Models.Sitting.Index
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateTimeSortParam = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.IsClosedSortParam = sortOrder == "closed" ? "opened" : "closed";
+
+            IQueryable<Summary> sittings = _context.Sittings
+                .Include(s => s.SittingType)
+                .Select(s => new Summary
+                {
+                    SittingID = s.Id,
+                    Date = s.StartTime,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime,
+                    Title = s.Title,
+                    PercentFull = s.PeopleBooked,
+                    IsClosed = s.IsClosed
+                })
+                .OrderBy(s => s.StartTime)
+                .AsQueryable();
+
+            switch (sortOrder)
             {
-                Sittings = await _context.Sittings
-                    .Include(s => s.SittingType)
-                    .Select(s => new Summary
-                    {
-                        SittingID = s.Id,
-                        Date = s.StartTime,
-                        StartTime = s.StartTime,
-                        EndTime = s.EndTime,
-                        Title = s.Title,
-                        PercentFull = s.PeopleBooked,
-                        IsClosed = s.IsClosed
-                    })
-                    .OrderBy(s => s.StartTime)
-                    .ToArrayAsync()
-            };
+                case "Date":
+                    sittings = sittings.OrderBy(s => s.StartTime);
+                    break;
+                case "date_desc":
+                    sittings = sittings.OrderByDescending(s => s.StartTime);
+                    break;
+                case "closed":
+                    sittings = sittings.OrderBy(s => s.IsClosed);
+                    break;
+                case "opened":
+                    sittings = sittings.OrderByDescending(s => s.IsClosed);
+                    break;
+            }
+
+            var pageSize = _configuration.GetValue("PageSize", 4);
+            var m = new Models.Sitting.Index { Sittings = await PaginatedList<Summary>.CreateAsync(sittings, pageIndex ?? 1, pageSize) };
 
             return View(m);
 
