@@ -3,11 +3,14 @@
 
 @{
 	ViewData["Title"] = "Sittings";
+    var prevDisabled = !Model.Sittings.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Sittings.HasNextPage ? "disabled" : "";
 }
 
 <div class="container text-center">
 	<h1 class="display-4 text-primary pb-4 fw-4">Sittings</h1>
 	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+
 	<table class="table table-hover table-striped">
 		<thead class="table-primary">
 			<tr>
@@ -58,6 +61,8 @@
 			}
 		</tbody>
 	</table>
+	<br>
+
 	<!-- Close Sitting Modal -->
 	<div class="col-md-6 offset-md-3">
 		<div class="modal fade" id="closeSittingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -75,7 +80,10 @@
 			</div>
 		</div>
 	</div>
+
 </div>
+
+
 
 @section scripts{
     <script src="~/js/admin.sitting.index.js"></script>

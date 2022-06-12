@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Areas.Admin.Models;
 using ReservationSystem.Data;
 using ReservationSystem.Data.Context;
-using PagedList;
+using ReservationSystem.Utilities;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace ReservationSystem.Areas.Admin.Controllers
 {
@@ -14,58 +16,55 @@ namespace ReservationSystem.Areas.Admin.Controllers
     public class SittingController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
         private readonly int _restaurantId;
 
-        public SittingController(ApplicationDbContext context)
+        public SittingController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             _restaurantId = 1;
+            _configuration = configuration;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, int? pageIndex)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.DateTimeSortParam = sortOrder == "Date" ? "date_desc" : "Date";
             ViewBag.IsClosedSortParam = sortOrder == "closed" ? "opened" : "closed";
 
-            var m = new Models.Sitting.Index
-            {
-                Sittings = await _context.Sittings
-                    .Include(s => s.SittingType)
-                    .Select(s => new Summary
-                    {
-                        SittingID = s.Id,
-                        Date = s.StartTime,
-                        StartTime = s.StartTime,
-                        EndTime = s.EndTime,
-                        Title = s.Title,
-                        PercentFull = s.PeopleBooked,
-                        IsClosed = s.IsClosed
-                    })
-                    .OrderBy(s => s.StartTime)
-                    .ToArrayAsync()
-            };
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                m.Sittings = m.Sittings.Where(s => s.StartTime.ToString().Contains(searchString)
-                                                || s.Date.ToString().Contains(searchString));
-            }
+            IQueryable<Summary> sittings = _context.Sittings
+                .Include(s => s.SittingType)
+                .Select(s => new Summary
+                {
+                    SittingID = s.Id,
+                    Date = s.StartTime,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime,
+                    Title = s.Title,
+                    PercentFull = s.PeopleBooked,
+                    IsClosed = s.IsClosed
+                })
+                .OrderBy(s => s.StartTime)
+                .AsQueryable();
 
             switch (sortOrder)
             {
                 case "Date":
-                    m.Sittings = m.Sittings.OrderBy(s => s.StartTime).ToArray();
+                    sittings = sittings.OrderBy(s => s.StartTime);
                     break;
                 case "date_desc":
-                    m.Sittings = m.Sittings.OrderByDescending(s => s.StartTime).ToArray();
+                    sittings = sittings.OrderByDescending(s => s.StartTime);
                     break;
                 case "closed":
-                    m.Sittings = m.Sittings.OrderBy(s => s.IsClosed).ToArray();
+                    sittings = sittings.OrderBy(s => s.IsClosed);
                     break;
                 case "opened":
-                    m.Sittings = m.Sittings.OrderByDescending(s => s.IsClosed).ToArray();
+                    sittings = sittings.OrderByDescending(s => s.IsClosed);
                     break;
             }
+
+            var pageSize = _configuration.GetValue("PageSize", 4);
+            var m = new Models.Sitting.Index { Sittings = await PaginatedList<Summary>.CreateAsync(sittings, pageIndex ?? 1, pageSize) };
 
             return View(m);
 
