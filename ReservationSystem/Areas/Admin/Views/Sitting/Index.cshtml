@@ -3,19 +3,23 @@
 
 @{
 	ViewData["Title"] = "Sittings";
+    var prevDisabled = !Model.Sittings.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Sittings.HasNextPage ? "disabled" : "";
 }
 
 <div class="container text-center">
 	<h1 class="display-4 text-primary pb-4 fw-4">Sittings</h1>
 	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+
 	<table class="table table-hover table-striped">
 		<thead class="table-primary">
 			<tr>
 				<th> Date </th>
-				<th> Start Time </th>
+				<th> @Html.ActionLink("Start Time", "Index", new { sortOrder = ViewBag.DateTimeSortParam }) </th>
 				<th> End Time </th>
 				<th> Title </th>
 				<th> PercentFull </th>
+				<th> @Html.ActionLink("Closed", "Index", new { sortOrder = ViewBag.IsClosedSortParam }) </th>
 				<th> View Sitting Details </th>
 				@if(User.IsInRole("Manager")){
 					<th> Edit Sitting Details </th>
@@ -32,6 +36,7 @@
 					<td> @Html.DisplayFor(modelItem => r.EndTime) </td>
 					<td> @r.Title </td>
 					<td> @r.PercentFull </td>
+					<td> @r.IsClosed </td>
 					<td>
 						<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Details", "Sitting", new {sittingId = r.SittingID})'">View Details</button>
 					</td>
@@ -56,6 +61,8 @@
 			}
 		</tbody>
 	</table>
+	<br>
+
 	<!-- Close Sitting Modal -->
 	<div class="col-md-6 offset-md-3">
 		<div class="modal fade" id="closeSittingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -73,7 +80,10 @@
 			</div>
 		</div>
 	</div>
+
 </div>
+
+
 
 @section scripts{
     <script src="~/js/admin.sitting.index.js"></script>

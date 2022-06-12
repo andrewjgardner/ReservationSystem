@@ -23,7 +23,7 @@ export function UserDetails() {
 const styles = StyleSheet.create({
     details: {
         flex: 1,
-        justifyContent: 'centerf',
+        justifyContent: 'center',
         alignContent: 'center',
         textAlign: 'center',
         marginHorizontal: 10,
