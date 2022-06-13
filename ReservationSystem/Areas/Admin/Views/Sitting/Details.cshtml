@@ -10,13 +10,26 @@
 	<h2>@Model.StartTime.ToLongDateString()</h2>
 	<h4>@Model.StartTime.ToShortTimeString() - @Model.EndTime.ToShortTimeString()</h4>
 	<h4>Sitting Type: @Model.SittingType</h4>
-	<div class="d-flex justify-content-start mb-4">
-		<a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Create" asp-route-sittingId="@Model.SittingId">Add Reservation</a>
+	<div class="d-flex justify-content-end mb-4">
+		<a type="button" class="btn btn-success" asp-controller="Reservation" asp-action="Create" asp-route-sittingId="@Model.SittingId">Add Reservation</a>
 	</div>
 	<div class="row">
-		<div class="col-8">
+		<div class="col-6">
+			<div id="assignable-tables-list">
+				<div class="row">
+					<h2 class="bg-success text-white m-0 p-4 col-12">Assign Tables</h2>
+					@foreach (var tableItem in Model.AllTables)
+					{
+						<span class="droppable border bg-light p-4 col-6" data-table-id="@tableItem.Id">
+							@tableItem.Name
+						</span>
+					}
+				</div>
+			</div>
+		</div>
+		<div class="col-6">
 			<table class="table table-hover table-striped">
-				<thead class="table-primary">
+				<thead class="table-success">
 					<tr>
 						<th>
 							Arrival Time
@@ -61,28 +74,18 @@
 								@Html.DisplayFor(modelItem => item.Comments)
 							</td>
 							<td>
-								<a type="button" class="btn btn-primary text-white" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId="@item.Id">Edit Reservation</a>
+								<a type="button" class="btn btn-primary text-white" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId="@item.Id">Edit</a>
 							</td>
 							<td>
-								<a type="button" class="btn btn-danger text-white" asp-controller="Reservation" asp-route-reservationId="@item.Id">Cancel Reservation</a>
+								<a type="button" class="btn btn-danger text-white" asp-controller="Reservation" asp-route-reservationId="@item.Id">Cancel</a>
 							</td>
 						</tr>
 					}
 				</tbody>
 			</table>
 		</div>
-		<div class="col-3">
-			<div id="assignable-tables-list">
-				<h2 class="bg-dark text-white m-0 p-1">Assign Tables</h2>
-				@foreach (var tableItem in Model.AllTables)
-				{
-					<div class="droppable border bg-light p-2" data-table-id="@tableItem.Id">
-						@tableItem.Name
-					</div>
-				}
-			</div>
-		</div>
 	</div>
+	<br>
 </div>
 
 @section scripts{

@@ -9,7 +9,9 @@
 
 <div class="container text-center">
 	<h1 class="fs-2 mt-3 text-primary">Sittings</h1>
-	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+	<div class="d-flex justify-content-end mb-4">
+		<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+	</div>
 
 	<table class="table table-hover table-striped">
 		<thead class="table-primary">
@@ -61,6 +63,22 @@
 			}
 		</tbody>
 	</table>
+	<div>
+		<a asp-page="/Index"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Sittings.PageIndex - 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="btn btn-primary @prevDisabled">
+			Previous
+		</a>
+		<a asp-page="/Index"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Sittings.PageIndex + 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="btn btn-primary @nextDisabled">
+			Next
+		</a>
+	</div>
 	<br>
 
 	<!-- Close Sitting Modal -->
