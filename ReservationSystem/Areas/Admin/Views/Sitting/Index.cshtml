@@ -61,6 +61,22 @@
 			}
 		</tbody>
 	</table>
+	<div>
+		<a asp-page="/Index"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Sittings.PageIndex - 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="btn btn-primary @prevDisabled">
+			Previous
+		</a>
+		<a asp-page="/Index"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Sittings.PageIndex + 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="btn btn-primary @nextDisabled">
+			Next
+		</a>
+	</div>
 	<br>
 
 	<!-- Close Sitting Modal -->
