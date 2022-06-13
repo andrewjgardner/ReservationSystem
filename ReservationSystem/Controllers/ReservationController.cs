@@ -37,22 +37,6 @@ namespace ReservationSystem.Controllers
             return sittings;
         }
 
-        public async Task<IActionResult> Sittings()
-        {
-            //This is going to be deleted anyway once we consolidate into a single view, no point refactoring
-            var sittings = await GetSittings();
-            List<Models.Reservation.Sittings> m = sittings.Select(s => new Models.Reservation.Sittings
-            {
-                SittingID = s.Id,
-                Date = s.StartTime,
-                StartTime = s.StartTime,
-                EndTime = s.EndTime,
-                Title = s.Title
-            }).ToList();
-
-            return View(m);
-        }
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {
