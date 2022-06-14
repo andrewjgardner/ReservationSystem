@@ -224,5 +224,14 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
             return View(m);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var reservation = await _context.Reservations.FirstOrDefaultAsync(r=>r.Id == id);
+            reservation.ReservationStatus = await _context.ReservationStatuses.FirstOrDefaultAsync(r => r.Description == "Cancelled");
+            _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -85,6 +85,7 @@ namespace ReservationSystem.Areas.Admin.Controllers
 
                 foreach (Reservation reservation in sitting.Reservations)
                 {
+                    reservation.ReservationStatus = (await _context.Reservations.Include(r => r.ReservationStatus).FirstOrDefaultAsync(r =>r.Id == reservation.Id)).ReservationStatus;
                     var reservationVM = new Models.Sitting.ReservationListItem
                     {
                         Id = reservation.Id,
@@ -92,7 +93,8 @@ namespace ReservationSystem.Areas.Admin.Controllers
                         Name = reservation.Customer.FullName(),
                         Phone = reservation.Customer.PhoneNumber,
                         Comments = reservation.Comments,
-                        Guests = reservation.Guests
+                        Guests = reservation.Guests,
+                        Status = reservation.ReservationStatus.Description
                     };
                     reservations.Add(reservationVM);
                 }

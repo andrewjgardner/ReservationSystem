@@ -57,29 +57,32 @@
 				<tbody>
 					@foreach (var item in Model.ReservationList)
 					{
-						<tr class="draggable ui-widget-content" data-reservation-id="@item.Id">
-							<td>
-								@Html.DisplayFor(modelItem => item.StartTime)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.Name)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.Phone)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.Guests)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.Comments)
-							</td>
-							<td>
-								<a type="button" class="btn btn-primary text-white" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId="@item.Id">Edit</a>
-							</td>
-							<td>
-								<a type="button" class="btn btn-danger text-white" asp-controller="Reservation" asp-route-reservationId="@item.Id">Cancel</a>
-							</td>
-						</tr>
+						@if (item.Status != "Cancelled")
+						{
+							<tr class="draggable ui-widget-content" data-reservation-id="@item.Id">
+								<td>
+									@Html.DisplayFor(modelItem => item.StartTime)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Name)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Phone)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Guests)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Comments)
+								</td>
+								<td>
+									<a type="button" class="btn btn-primary text-white" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId="@item.Id">Edit</a>
+								</td>
+								<td>
+									<a type="button" class="btn btn-danger" onclick="confirmDelete(@item.Id)">Cancel</a>
+								</td>
+							</tr>
+						}
 					}
 				</tbody>
 			</table>
@@ -90,4 +93,13 @@
 
 @section scripts{
 	<script src="~/js/admin.sitting.details.js"></script>
+	<script>
+		function confirmDelete(id) {
+			confirmed = confirm("Are you sure you want to cancel this reservation?");
+			if (confirmed) {
+				window.location.href = '@Url.Action("Delete", "Reservation")/' + id;
+				return window;
+			}
+		}
+	</script>
 }
