@@ -366,3 +366,7 @@ web-build/
 
 # macOS
 .DS_Store
+
+#Appsettings (contains all API Keys)
+
+ReservationSystem/appsettings.json
