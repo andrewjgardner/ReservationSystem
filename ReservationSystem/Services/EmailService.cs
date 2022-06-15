@@ -1,31 +1,48 @@
-﻿using SendGrid;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Options;
+using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Threading.Tasks;
 
 namespace ReservationSystem.Services
 {
-    public class EmailService
+    public class EmailService : IEmailSender
     {
-        private string _apiKey;
+        public SendGridOptions Options { get; set; }
 
-        public static void Main()
+
+        public EmailService(IOptions<SendGridOptions> optionsAccessor)
         {
-            Execute().Wait();
+            Options = optionsAccessor.Value;
         }
 
-        static async Task Execute()
+        public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
-            //TODO: Move API key to appsettings.json
-            var apiKey = "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";
-            //var apiKey = Environment.GetEnvironmentVariable("test-key");
+            if (string.IsNullOrEmpty(Options.SendGridKey))
+            {
+                throw new Exception("Null SendGridKey");
+            }
+            await ExecuteWithSendGrid(Options.SendGridKey, subject, message, toEmail);
+
+
+        }
+
+        public async Task ExecuteWithSendGrid(string apiKey, string subject, string message, string toEmail)
+        {
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("conor.oneill9@studytafensw.edu.au", "Conor");
-            var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("conor.oneill9@studytafensw.edu.au", "Conor2");
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("donotreply@caffeinatedworks.com", "Bean Scene"),
+                Subject = subject,
+                PlainTextContent = message,
+                HtmlContent = message
+            };
+            msg.AddTo(new EmailAddress(toEmail));
+
+            // Disable click tracking.
+            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
+            msg.SetClickTracking(false, false);
             var response = await client.SendEmailAsync(msg);
         }
     }

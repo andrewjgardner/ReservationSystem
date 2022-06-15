@@ -12,6 +12,7 @@ using System.Text;
 using NLog;
 using NLog.Web;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
@@ -30,10 +31,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<PersonService>();
-builder.Services.AddScoped<ReservationService>();
 builder.Services.AddScoped<UserService>();
-//builder.Services.AddScoped<EmailService>();
-
+builder.Services.AddTransient<IEmailSender, EmailService>();
+builder.Services.Configure<SendGridOptions>(builder.Configuration);
+//var EmailSenderOptions = builder.Configuration.GetSection("SendGrid").Get<EmailSenderOptions>();
 //EmailService.Main();
 
 
