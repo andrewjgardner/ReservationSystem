@@ -14,7 +14,7 @@ namespace ReservationSystem.Data.Utilities
             ModelRestaurant();
             ModelSitting();
             ModelTable();
-            //ModelReservation();
+            ModelReservation();
             //ModelReservationTable();
         }
 
@@ -49,14 +49,7 @@ namespace ReservationSystem.Data.Utilities
 
         private void ModelReservation()
         {
-            //Model building for database only entity 
-
-            //_modelBuilder.Entity<Reservation>()
-            //    .HasMany(r => r.Tables).WithMany(t => t.Reservations)
-            //    .UsingEntity<Dictionary<string, object>>(
-            //        "ReservationTables",
-            //        rt => rt.HasOne<Table>().WithMany().OnDelete(DeleteBehavior.Restrict),
-            //        rt => rt.HasOne<Reservation>().WithMany().OnDelete(DeleteBehavior.Restrict));
+            _modelBuilder.Entity<Reservation>().HasCheckConstraint("CK_Guests", "[Guests] > 0", c => c.HasName("CK_Guests_GreaterThanZero"));
         }
 
 

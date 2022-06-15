@@ -5,84 +5,84 @@
 	var starttime = Model.StartTime.ToString();
 	var endtime = Model.EndTime.ToString();
 }
-<h1 class="display-4 text-primary pb-4 fw-4">Add Sitting</h1>
 
 <div class="col-md-6 offset-md-3">
+	<h1 class="fs-2 mt-3 text-primary text-center">Add Sitting</h1>
 	<form asp-action=Create>
 		<div class="sitting-details">
-			<div class="form-group">
-				<label for="title">Name</label>
+			<div class="form-group mb-3">
+				<label class="form-label" for="title">Name</label>
 				<input asp-for=Title class="form-control" placeholder="Enter name">
 				<span asp-validation-for=Title class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<label for="StartTime">Start Time</label>
-				<input asp-for=StartTime class="form-control" id="start-time"/>
+			<div class="form-group mb-3">
+				<label for="StartTime" class="form-label">Start Time</label>
+				<input asp-for=StartTime class="form-control" id="start-time" />
 				<span asp-validation-for="StartTime" class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<label for="EndTime">End Time</label>
+			<div class="form-group mb-3">
+				<label for="EndTime" class="form-label">End Time</label>
 				<input asp-for=EndTime class="form-control" />
 				<span asp-validation-for="EndTime" class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<p>Sitting Type: </p>
-				<select asp-for=SittingTypeId asp-items=Model.SittingTypes></select>
+			<div class="form-group mb-3">
+				<label for="SittingTypeId" class="form-label">Sitting Type</label>
+				<select asp-for=SittingTypeId class="form-select" asp-items=Model.SittingTypes></select>
 				<span asp-validation-for="SittingTypeId" class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<label for="capacity">Capacity</label>
+			<div class="form-group mb-3">
+				<label for="capacity" class="form-label">Capacity</label>
 				<input asp-for=Capacity class="form-control">
 				<span asp-validation-for="Capacity" class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<label for="isClosed">Closed Sitting: </label>
-				<input asp-for=IsClosed />
+			<div class="form-group mb-3">
+				<input class="form-check-input" asp-for=IsClosed />
+				<label for="isClosed form-check-label">Closed Sitting</label>
 				<span asp-validation-for="IsClosed" class="text-danger"></span>
 			</div>
 		</div>
 		<div class="recurring-form">
-			<div class="form-group">
-				<label for="cb-show-recurring">Make Recurring? </label>
-				<input asp-for=IsRecurring type="checkbox" id="cb-show-recurring" />
+			<div class="form-group mb-2">
+				<input asp-for=IsRecurring type="checkbox" class="form-check-input" id="cb-show-recurring" />
+				<label for="cb-show-recurring form-check-label">Make Recurring? </label>
 				<span asp-validation-for="IsRecurring" class="text-danger"></span>
 			</div>
 			<div class="form-group my-4" style="display:none" id="recurring-form-container">
-				<div class="form-group" id="recurringType">
-					<label for="recurringType">Recurring Type: </label>
-					<select asp-for=RecurringType asp-items=Model.RecurringTypes id="set-recurring-type"></select>
+				<div class="form-group mb-3" id="recurringType">
+					<label for="recurringType" class="form-label">Recurring Type: </label>
+					<select asp-for=RecurringType asp-items=Model.RecurringTypes class="form-select" id="set-recurring-type"></select>
 					<span asp-validation-for="RecurringType" class="text-danger"></span>
 				</div>
 
 				<label for="numberToSchedule" class="form-label">Number to schedule:</label>
-				<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" value="8" min="1" max="60"/>
-				<div class = "card">
+				<input type="range" class="form-range" id="numberToSchedule" name="numberToSchedule" value="8" min="1" max="60" />
+				<div class="card">
 					<div class="card-body">
 						<p id="numberToScheduleText"></p>
 						<p id="endDateText"></p>
 					</div>
 				</div>
-				<div class="form-group" style="display:none" id="weekly-days-select">
+				<div class="form-group mb-3" style="display:none" id="weekly-days-select">
 					@*
-						The two inputs is not a mistake - disabling an input causes it's value not to be posted
-						The extra input is a hidden input allowing disabled checkboxes to still post their values back
-						ReadOnly does not work with checkboxes
+					The two inputs is not a mistake - disabling an input causes it's value not to be posted
+					The extra input is a hidden input allowing disabled checkboxes to still post their values back
+					ReadOnly does not work with checkboxes
 					*@
 
-					@foreach(var day in Enum.GetValues(typeof(DayOfWeek)))
+					@foreach (var day in Enum.GetValues(typeof(DayOfWeek)))
 					{
 						int i = (int)day;
 						var b = @Model.RecurringDays[@i];
-						<label for="recur-day-@(i)">@day: </label>
-						<input asp-for=@Model.RecurringDays[@i] type="checkbox" id="recur-checkbox-day-@(i)" />
+						<input class="form-check-input" asp-for=@Model.RecurringDays[@i] type="checkbox" id="recur-checkbox-day-@(i)" />
+						<label class="form-check-label" for="recur-day-@(i)">@day</label>
 						<input asp-for=@Model.RecurringDays[@i] type="hidden" id="recur-hidden-day-@(i)" />
-						<br/>
+						<br />
 					}
 				</div>
 			</div>
 		</div>
-		<div>
-			<button id="submit" type="submit" class="btn btn-primary">Submit</button>
+		<div class="d-grid gap-2 my-3">
+			<button id="submit" type="submit" class="btn btn-success">Submit</button>
 		</div>
 		<input type="hidden" asp-for=RestaurantId />
 		<span asp-validation-for=RestaurantId class="text-danger"></span>

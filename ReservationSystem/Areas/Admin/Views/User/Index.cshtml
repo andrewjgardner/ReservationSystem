@@ -6,10 +6,12 @@
 }
 
 <div class="container text-center">
-	<h1 class="display-4 text-primary pb-4 fw-4">Reservations</h1>
-	<a type="button" class="btn btn-primary" asp-controller="User" asp-action="Create">Create User</a>
-	<table class="table table-hover table-striped" >
-		<thead class="table-primary">
+	<h1 class="fs-2 mt-3 text-primary">Users</h1>
+	<div class="d-flex justify-content-end mb-4">
+		<a type="button" class="btn btn-primary" asp-controller="User" asp-action="Create">Create User</a>
+	</div>
+	<table class="table table-hover table-striped">
+		<thead class="table-success">
 			<tr>
 				<th>Email</th>
 				<th>Roles</th>
@@ -19,25 +21,26 @@
 		</thead>
 		<tbody>
 			@foreach (var u in Model.Users)
-			{	
-			<tr> 
-				<td>@u.Email</td>
-				<td>
-					@if (u.Roles.Count > 0)
-					{
-						<p>@u.Roles[0]</p>
-					}
-					else {
-						<p>None</p>
-					}
-				</td>
-				<td>
-					<a type="button" class="btn btn-primary" asp-controller="User" asp-action="Edit" asp-route-UserId = "@u.Id" >Edit User</a>
-				</td>
-				<td>
-					<a type="button" class="btn btn-danger" asp-controller="User" asp-action="Remove" asp-route-UserId = "@u.Id" >Remove User</a>
-				</td>
-			</tr>
+			{
+				<tr>
+					<td>@u.Email</td>
+					<td>
+						@if (u.Roles.Count > 0)
+						{
+							<p>@u.Roles[0]</p>
+						}
+						else
+						{
+							<p>None</p>
+						}
+					</td>
+					<td>
+						<a type="button" class="btn btn-primary" asp-controller="User" asp-action="Edit" asp-route-UserId="@u.Id">Edit User</a>
+					</td>
+					<td>
+						<a type="button" class="btn btn-danger" asp-controller="User" asp-action="Remove" asp-route-UserId="@u.Id">Remove User</a>
+					</td>
+				</tr>
 			}
 		</tbody>
 	</table>

@@ -46,6 +46,8 @@ namespace ReservationSystem.Areas.Admin.Models.Sitting
 
         [Display(Name = "Comments")]
         public string? Comments { get; set; }
+
+        public string Status { get; set; }
     }
 
     public class TableData

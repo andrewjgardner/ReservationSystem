@@ -4,6 +4,7 @@ namespace ReservationSystem.Models.Reservation
 {
     public class Receipt
     {
+        [Display(Name = "Receipt Number")]
         public int Id { get; set; }
         
         [Display( Name = "Arrival Time" )]

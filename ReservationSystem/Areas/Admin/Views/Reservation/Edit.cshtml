@@ -4,17 +4,16 @@
 	ViewData["Title"] = "Edit Reservation";
 }
 <div class="row text-center">
-	<h1 class="display-4 text-primary pb-4 fw-4">Edit Reservation</h1>
-	<h1>Reservation Time: @Model.ReservationForm.DateTime.TimeOfDay</h1>
-	<h2>Sitting Time: @Model.StartTime - @Model.EndTime</h2>
+	<h1 class="fs-2 mt-3 text-primary">Edit Reservation</h1>
+	<h1>Reservation Time: @Model.ReservationForm.DateTime</h1>
 </div>
 
 <div class="col-md-6 offset-md-3">
 	<form asp-area=Admin asp-controller=Reservation asp-action=Edit>
 		<partial name="_ReservationFormPartial" for="ReservationForm" />
 		<partial name="_AdminReservationFormPartial" for="AdminReservationForm" />
-		<div>
-			<button type="submit" class="btn btn-primary">Save</button>
+		<div class="d-grid gap-2">
+			<button type="submit" class="btn btn-success">Submit</button>
 		</div>
 		<input type="hidden" asp-for=SittingId />
 		<input type="hidden" asp-for=Id />

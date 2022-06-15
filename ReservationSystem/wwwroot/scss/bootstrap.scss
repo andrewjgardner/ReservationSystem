@@ -1,0 +1,40 @@
+﻿
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../lib/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+$primary:#2f6f4f; 
+$backup:#447d61;
+$button-color:$primary;
+/*
+$table-bg:backup;
+$table-primary:$backup;
+$table-accent-bg:rgba(49,111,79,0.5);
+
+
+.table-primary {
+    .table-header {
+        background-color: darken($table-bg,50%);
+    }
+}
+*/
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../lib/bootstrap/scss/variables";
+@import "../lib/bootstrap/scss/mixins";
+
+// 4. Include any optional Bootstrap components as you like
+@import "../lib/bootstrap/scss/root";
+@import "../lib/bootstrap/scss/containers";
+@import "../lib/bootstrap/scss/grid";
+//@import "../lib/bootstrap/scss/tables";
+
+// 5. Add additional custom code here
+
+.btn-primary {
+    @include button-variant($primary, darken($primary, 10%), color-contrast($primary), lighten($primary,5%), lighten($primary, 5%), color-contrast($primary));
+}
+
+
+

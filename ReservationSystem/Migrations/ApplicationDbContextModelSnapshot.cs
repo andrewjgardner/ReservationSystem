@@ -495,6 +495,8 @@ namespace ReservationSystem.Migrations.ApplicationDbMigrations
 
                     b.ToTable("Reservations");
 
+                    b.HasCheckConstraint("CK_Guests", "[Guests] > 0", c => c.HasName("CK_Guests_GreaterThanZero"));
+
                     b.HasData(
                         new
                         {

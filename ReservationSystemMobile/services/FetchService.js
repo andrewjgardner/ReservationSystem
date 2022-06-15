@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-const endpoint = 'https://tcs122.azurewebsites.net/api/'
+const endpoint = 'https://localhost:7156/api/'
 
 //Arthur's fetch function
 export async function apiFetch(url, method, body, jwt) {

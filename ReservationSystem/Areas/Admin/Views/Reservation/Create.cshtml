@@ -4,7 +4,7 @@
 	ViewData["Title"] = "Add Reservation";
 }
 <div class="row text-center">
-	<h1 class="display-4 text-primary pb-4 fw-4">Add Reservation</h1>
+	<h1 class="fs-2 mt-3 text-primary">Add Reservation</h1>
 	@if (Model.SittingId != 0)
 	{
 		<h2>@Model.StartTime - @Model.EndTime</h2>
@@ -18,8 +18,8 @@
 		<form asp-area=Admin asp-controller=Reservation asp-action=Create>
 			<partial name="_ReservationFormPartial" for="ReservationForm" />
 			<partial name="_AdminReservationFormPartial" for="AdminReservationForm" />
-			<div>
-				<button type="submit" class="btn btn-primary">Submit</button>
+			<div class="d-grid gap-2">
+				<button type="submit" class="btn btn-success">Submit</button>
 			</div>
 			<input type="hidden" asp-for=SittingId />
 		</form>
@@ -27,7 +27,7 @@
 </div>
 
 @section Scripts{
-<script src="/js/calendar.js"></script>
-<script src="~/js/calendarPartial.js"></script>
+	<script src="/js/calendar.js"></script>
+	<script src="~/js/calendarPartial.js"></script>
 }
 

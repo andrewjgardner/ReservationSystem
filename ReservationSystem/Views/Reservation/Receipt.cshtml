@@ -4,9 +4,7 @@
     ViewData["Title"] = "Receipt";
 }
 
-<h1 style="text-align: center">Receipt</h1>
-
-<div style="width: 50%; margin-left:auto; margin-right:auto;">
+<div style="width: 50%; margin-left:auto; margin-right:auto;" class="py-3">
     <p>Thank you. Your reservation has now been confirmed. Your reservation details are:</p>
     <dl class="row">
         <dt class = "col-sm-2">
@@ -27,12 +25,15 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Guests)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comments)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comments)
-        </dd>
+        @if (Model.Comments != "")
+        {
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Comments)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Comments)
+            </dd>            
+        }
     </dl>
     <p>To change or cancel this reservation, please contact the restaurant.</p>
 	<a type="button" class="btn btn-primary" asp-controller="Home" asp-action="Index">Back to Home</a>

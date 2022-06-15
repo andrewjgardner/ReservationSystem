@@ -3,19 +3,25 @@
 
 @{
 	ViewData["Title"] = "Sittings";
+    var prevDisabled = !Model.Sittings.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Sittings.HasNextPage ? "disabled" : "";
 }
 
 <div class="container text-center">
-	<h1 class="display-4 text-primary pb-4 fw-4">Sittings</h1>
-	<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+	<h1 class="fs-2 mt-3 text-primary">Sittings</h1>
+	<div class="d-flex justify-content-end mb-4">
+		<a type="button" class="btn btn-primary" asp-controller="Sitting" asp-action="Create">Add Sitting</a>
+	</div>
+
 	<table class="table table-hover table-striped">
-		<thead class="table-primary">
+		<thead class="table-success">
 			<tr>
 				<th> Date </th>
-				<th> Start Time </th>
+				<th> @Html.ActionLink("Start Time", "Index", new { sortOrder = ViewBag.DateTimeSortParam }) </th>
 				<th> End Time </th>
 				<th> Title </th>
 				<th> PercentFull </th>
+				<th> @Html.ActionLink("Closed", "Index", new { sortOrder = ViewBag.IsClosedSortParam }) </th>
 				<th> View Sitting Details </th>
 				@if(User.IsInRole("Manager")){
 					<th> Edit Sitting Details </th>
@@ -32,6 +38,7 @@
 					<td> @Html.DisplayFor(modelItem => r.EndTime) </td>
 					<td> @r.Title </td>
 					<td> @r.PercentFull </td>
+					<td> @r.IsClosed </td>
 					<td>
 						<button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Details", "Sitting", new {sittingId = r.SittingID})'">View Details</button>
 					</td>
@@ -56,6 +63,24 @@
 			}
 		</tbody>
 	</table>
+	<div>
+		<a asp-page="/Index"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Sittings.PageIndex - 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="btn btn-primary @prevDisabled">
+			Previous
+		</a>
+		<a asp-page="/Index"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Sittings.PageIndex + 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="btn btn-primary @nextDisabled">
+			Next
+		</a>
+	</div>
+	<br>
+
 	<!-- Close Sitting Modal -->
 	<div class="col-md-6 offset-md-3">
 		<div class="modal fade" id="closeSittingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -73,7 +98,10 @@
 			</div>
 		</div>
 	</div>
+
 </div>
+
+
 
 @section scripts{
     <script src="~/js/admin.sitting.index.js"></script>

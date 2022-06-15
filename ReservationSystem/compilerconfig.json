@@ -1,0 +1,102 @@
+﻿[
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_alert.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_alert.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_badge.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_badge.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_breadcrumb.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_breadcrumb.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_button-group.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_button-group.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_buttons.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_buttons.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_card.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_card.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_carousel.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_carousel.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_close.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_close.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_containers.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_containers.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_dropdown.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_dropdown.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_forms.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_forms.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_functions.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_functions.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_grid.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_grid.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_helpers.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_helpers.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_images.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_images.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_list-group.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_list-group.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_mixins.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_mixins.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_modal.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_modal.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_nav.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_nav.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_navbar.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_navbar.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_variables.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_variables.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_root.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_root.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_reboot.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_reboot.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/bootstrap/scss/_type.css",
+    "inputFile": "wwwroot/lib/bootstrap/scss/_type.scss"
+  },
+  {
+    "outputFile": "wwwroot/scss/bootstrap.css",
+    "inputFile": "wwwroot/scss/bootstrap.scss"
+  }
+]

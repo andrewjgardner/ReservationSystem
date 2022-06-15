@@ -5,9 +5,9 @@
 }
 
 <div class="container text-center">
-	<h1 class="display-4 text-primary pb-4 fw-4">Reservations</h1>
+	<h1 class="fs-2 mt-3 text-primary">Reservations</h1>
 	<table class="table table-hover table-striped" >
-		<thead class="table-primary">
+		<thead class="table-success">
 			<tr>
 				<th>Id</th>
 				<th>Time</th>
@@ -19,20 +19,34 @@
 		</thead>
 		<tbody>
 			@foreach (var r in Model.Reservations)
-			{	
-			<tr> 
-				<td>@r.Id</td>
-				<td>@r.DateTime</td>
-				<td>@r.Status</td>
-				<td>@r.SittingId</td>
-				<td>
-					<a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId = "@r.Id" >Edit Reservation</a>
-				</td>
-				<td>
-					<a type="button" class="btn btn-danger" asp-controller="Reservation" asp-route-reservationId = "@r.Id" >Cancel Reservation</a>
-				</td>
-			</tr>
+			{
+				@if (r.Status != "Cancelled") {
+					<tr> 
+						<td>@r.Id</td>
+						<td>@r.DateTime</td>
+						<td>@r.Status</td>
+						<td>@r.SittingId</td>
+						<td>
+							<a type="button" class="btn btn-primary" asp-controller="Reservation" asp-action="Edit" asp-route-reservationId = "@r.Id" >Edit Reservation</a>
+						</td>
+						<td>
+							<a type="button" class="btn btn-danger" onclick="confirmDelete(@r.Id)">Cancel Reservation</a>
+						</td>
+					</tr>
+				}
 			}
 		</tbody>
 	</table>
 </div>
+
+@section Scripts {
+	<script>
+		function confirmDelete(id) {
+			confirmed = confirm("Are you sure you want to cancel this reservation?");
+			if (confirmed) {
+				window.location.href = '@Url.Action("Delete", "Reservation")/' + id;
+				return window;
+			}
+		}
+	</script>
+}
