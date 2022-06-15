@@ -19,11 +19,11 @@ namespace ReservationSystem.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
-            //if (string.IsNullOrEmpty(Options.SendGridKey))
-            //{
-            //    throw new Exception("Null SendGridKey");
-            //}
-            //await ExecuteWithSendGrid(Options.SendGridKey, subject, message, toEmail);
+            if (string.IsNullOrEmpty(Options.SendGridKey))
+            {
+                throw new Exception("Null SendGridKey");
+            }
+            await ExecuteWithSendGrid(Options.SendGridKey, subject, message, toEmail);
 
 
         }
@@ -33,7 +33,7 @@ namespace ReservationSystem.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("conor.oneill9@studytafensw.edu.au", "Password Recovery"),
+                From = new EmailAddress("donotreply@caffeinatedworks.com", "Bean Scene"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
@@ -44,11 +44,6 @@ namespace ReservationSystem.Services
             // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
             msg.SetClickTracking(false, false);
             var response = await client.SendEmailAsync(msg);
-        }
-
-        public async Task ExecuteWithOutlook(string subject, string message)
-        {
-
         }
     }
 }
